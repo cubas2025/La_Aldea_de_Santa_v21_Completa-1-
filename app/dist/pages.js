@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const main=document.querySelector('main');
-  const titles={llamadas:'Llamadas de Santa',editor:'Editor de videos',inicio:'Inicio',magia:'Explora la aldea',catalogo:'Saludos personalizados',pedido:'Personaliza tu saludo','lista-buenos':'Lista de los buenos','ninos-buenos':'Niños buenos',tarjetas:'Tarjetas mágicas',juegos:'El gran reto de aprender','tarjeta-navidad':'Tarjeta Navidad',cuentos:'Cuentos con su nombre',colorear:'El taller de colores',buenos:'40 escenas de Santa',cumpleanos:'Invitaciones de cumpleaños','tarjeta-qr':'Tarjetas con QR',preguntas:'Preguntas frecuentes'};
+  const titles={llamadas:'Llamadas de Santa',editor:'Editor de videos',inicio:'Inicio',magia:'Explora la aldea',catalogo:'Saludos personalizados',pedido:'Personaliza tu saludo',paquetes:'Paquetes y precios','lista-buenos':'Lista de los buenos','ninos-buenos':'Niños buenos',tarjetas:'Tarjetas mágicas',juegos:'El gran reto de aprender','tarjeta-navidad':'Tarjeta Navidad',cuentos:'Cuentos con su nombre',colorear:'El taller de colores',buenos:'40 escenas de Santa',cumpleanos:'Invitaciones de cumpleaños','tarjeta-qr':'Tarjetas con QR',preguntas:'Preguntas frecuentes'};
   function route(){
     let key;try{key=decodeURIComponent(location.hash.slice(1))||'inicio';}catch{key='inicio';}
     if(key==='contenido')return;
