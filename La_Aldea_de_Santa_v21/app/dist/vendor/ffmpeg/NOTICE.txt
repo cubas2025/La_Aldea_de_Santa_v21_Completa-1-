@@ -1,0 +1,4 @@
+ffmpeg.wasm wrapper @ffmpeg/ffmpeg 0.12.15 (MIT), https://github.com/ffmpegwasm/ffmpeg.wasm
+Single-thread core @ffmpeg/core 0.12.10, FFmpeg with libx264 (GPL), https://github.com/ffmpegwasm/ffmpeg.wasm-core
+Sources and build scripts: https://github.com/ffmpegwasm/ffmpeg.wasm/tree/main/packages/core
+WebAssembly core split into core-1.bin and core-2.bin for asset serving; concatenated unchanged before loading.

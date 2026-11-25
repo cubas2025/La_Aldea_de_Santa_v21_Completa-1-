@@ -1,0 +1,37 @@
+{
+  "same_elf_both_profiles": true,
+  "name_insertion": "hola.wav + 0.10s + chosen name recording + 0.15s + santa body",
+  "sources": {
+    "duende": "Chica-2026-11-24-16-48-«¡Hola!-Te-llamo-desde-el-Polo-Norte.-Santa-me-e.mp3",
+    "santa1": "Papá-Noel-Doblaje-Latino-2026-11-24-16-52-«¡Hola,-[nombre]!-Soy-Santa!...-¡Espera-un-momen.mp3",
+    "santa2": "Papá-Noel-Doblaje-Latino-2026-11-24-16-59-«¡Jo,-jo,-jo!-¿Hablo-con-[nombre]-¡Qué-alegría-e.mp3",
+    "music1": "A Quiet Christmas Miracle.mp3",
+    "music2": "A Christmas Orchestral.mp3"
+  },
+  "files": {
+    "musica-2.wav": {
+      "rate": 44100,
+      "seconds": 60.0
+    },
+    "hola.wav": {
+      "rate": 44100,
+      "seconds": 0.86
+    },
+    "santa-1.wav": {
+      "rate": 44100,
+      "seconds": 37.789591836734694
+    },
+    "santa-2.wav": {
+      "rate": 44100,
+      "seconds": 38.026326530612245
+    },
+    "musica-1.wav": {
+      "rate": 44100,
+      "seconds": 60.0
+    },
+    "duende.wav": {
+      "rate": 44100,
+      "seconds": 13.766530612244898
+    }
+  }
+}

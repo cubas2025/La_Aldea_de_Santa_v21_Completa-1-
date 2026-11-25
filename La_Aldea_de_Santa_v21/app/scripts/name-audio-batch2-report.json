@@ -1,0 +1,14 @@
+{
+  "batch": 2,
+  "recordings": 200,
+  "new_unique_names": 197,
+  "existing_names_with_alternate_recordings": [
+    "Elena",
+    "Nicole",
+    "Emanuel"
+  ],
+  "catalog_names": 398,
+  "catalog_girls": 199,
+  "catalog_boys": 199,
+  "recordings_total": 401
+}

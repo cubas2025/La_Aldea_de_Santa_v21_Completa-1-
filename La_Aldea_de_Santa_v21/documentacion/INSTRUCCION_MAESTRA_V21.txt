@@ -1,0 +1,34 @@
+INSTRUCCIÓN MAESTRA PARA CONTINUAR LA ALDEA DE SANTA - VERSIÓN 21
+
+Trabaja sobre la copia incluida en app/. Conserva las funciones existentes salvo un cambio expresamente solicitado. La referencia de implementación es el código de la versión 21, no una propuesta por desarrollar. No afirmes que algo está activo sin verificarlo. Lee primero documentacion/GUIA_COMPLETA_V21.pdf y VERSION_FINAL.json.
+
+IDENTIDAD Y DISEÑO
+La app se llama La aldea de Santa. Es responsive para PC y celular, en español, con Navidad, nieve, paisajes mágicos y Santa realista. Conserva su rostro, vestuario, barba rizada blanca, ojos azules y gafas de la referencia. Los duendes de apoyo son jóvenes y nunca tienen barba. Mantén tipografía elegante, marca grande y dorada y letras de nombres gruesas, mágicas y legibles. Frase: La magia más bonita es verte sonreír. Debajo del contacto figura Cubas.AI. WhatsApp debe conservar exactamente https://w.app/cubasai y el contacto +51 917 823 560.
+
+NAVEGACIÓN Y CATÁLOGO
+La primera página muestra marca, Vive la magia de la Navidad y cuenta regresiva real; no pone precios en la portada. Explora la aldea agrupa las actividades. Conserva Saludos, Lista de los buenos, Editor y Llamadas de Santa. Mantén los 54 saludos y sus categorías, detalle emergente, formulario y pedido copiable para WhatsApp. Tarifas del código: corto 1-3 minutos S/ 3 / US$ 1; largo 5 minutos a más S/ 5 / US$ 2. El pedido no se envía hasta que el usuario lo pega y envía en WhatsApp. No hay pago automático ni generación automática del saludo largo.
+
+LISTA DE LOS BUENOS: REGLA CENTRAL
+Corrige o amplía ambas secciones de forma consistente. Las cinco escenas de Santa en movimiento exportan 12 segundos; las 40 escenas fotográficas exportan 15 segundos. Usa una sola pista de audio: anuncio de Santa completo hasta «es», pausa de 40 ms y exclusivamente el nombre elegido. No reproduzcas otras grabaciones de nombres. Calcula la aparición con las muestras reales del anuncio, no con un tiempo fijo del segundo 5. La forma del nombre aparece en polvo de estrellas al terminar «es» y enseguida Santa pronuncia el nombre. Debe terminar claramente legible, dorado y opaco. La vista previa y el MP4 comparten la misma pista y línea temporal.
+
+Usa dist/list-speech.js como sincronizador común. Sus anuncios actuales terminan en 4,20 s para niño y 3,90 s para niña. La voz del nombre empieza en 4,24 s y 3,94 s respectivamente. Mantén un reloj de audio para no adelantar las letras si el audio tarda en cargar. Usa el catálogo real de 864 nombres y WAV PCM mono de 44.100 Hz y 16 bits. Mantén la escritura exacta de Jazmin, sin tilde ni cambios. Respeta NFC, acentos y coincidencias exactas antes de los alias; evita coincidencias ambiguas. Si un nombre no tiene grabación, infórmalo y ofrece elegir uno disponible o una tarjeta sin voz cuando corresponda. No inventes voces ni nombres.
+
+MEDIOS PERSONALES Y EXPORTACIÓN
+Permite foto JPG/PNG/WebP de hasta 12 MB o video compatible de hasta 60 MB. El marco del cielo es grande, redondeado y mágico; aparece junto al nombre. El video del marco va silenciado para conservar la voz y música de Santa. El procesamiento es local y no sube material automáticamente. Mantén PNG de 1080 x 1920, MP4 vertical H.264/AAC de 720 x 1280 a 24 fps, progreso, cancelación y liberación de memoria. Cambiar nombre, escena, voz, música o archivo invalida el resultado anterior. Conserva portadas y botones para editar y compartir.
+
+ACTIVIDADES
+Mantén 25 tarjetas navideñas con cuenta regresiva según la hora local. Los archivos descargados congelan su contador. Conserva 11 pistas de música y las pistas de llamadas. Conserva 30 cuentos de seis páginas basados en plantillas e ilustraciones preparadas, datos del niño y decisiones; el narrador usa la voz española del dispositivo y no clona automáticamente la muestra. Conserva 30 libros de seis páginas para colorear: diez iniciales y veinte separados por título desde la colección de 120 páginas. Descarga personalizada con nombre y nombre en el archivo. No mezcles títulos ni reduzcas sus seis páginas.
+
+JUEGO
+Conserva 1.500 preguntas del banco, tres niveles, categorías, bloques de diez y práctica continua con variantes de razonamiento. Temporizador opcional de 15 segundos por pregunta que cambia de verde a rojo. Certificado automático: 0-5 esfuerzo, 6 avance, 7-10 felicitación y opción de preparar mensaje a Santa. Mantén PNG/PDF y compartir. No describas las variantes como una biblioteca infinita nueva de todas las materias.
+
+EDITOR Y REDES
+Conserva carga de video de hasta 300 MB, fragmentos de hasta diez minutos, formatos vertical/cuadrado/horizontal/original, texto, volúmenes, música y audio local de hasta 40 MB. El botón de red usa el menú nativo o descarga el MP4; no asegura publicar sin intervención en TikTok, WhatsApp u otras cuentas.
+
+LLAMADAS: ESTADO REAL
+La interfaz y la prueba de audio están preparadas. Dos saludos de Santa, la misma voz de duende en ambos, música distinta por saludo y nombre grabado después de Hola. La prueba local acepta el botón o tecla 1. Hay códigos para 245 países y territorios. El número que el propietario desea usar como emisor es +51 917 823 560 de Claro Perú, pero no está conectado ni verificado como emisor automático. No se ha integrado su plan ilimitado a la web. El servicio real sigue desactivado porque calls-config.js tiene endpoint vacío.
+
+El adaptador separado services/llamadas usa Twilio, KV, acceso protegido y callbacks firmados para DTMF. Antes de activar hacen falta cuenta, saldo, número admitido/verificado, destinos, secretos del servidor, despliegue del Worker y prueba autorizada. Solo Digits=1 reproduce Santa; otras teclas terminan. No pongas claves en dist ni en archivos públicos. No presentes este adaptador como conexión directa a la SIM, como servicio gratuito ni como videollamada en vivo. Sigue su README para la activación.
+
+ARQUITECTURA Y PRUEBAS
+Conserva las rutas y librerías en dist/vendor/ con sus licencias. No borres ni fusiones manualmente los dos fragmentos WASM. Carga name-audio-data.js antes de list-speech.js y antes de santa-list.js y list-video.js. Para usar en local sirve app/dist por HTTP; no file://. Para publicar usa HTTPS. Conserva la identidad del sitio existente solo en ese mismo proyecto. Ejecuta node scripts/list-speech.test.mjs y node services/llamadas/worker.test.mjs desde app/. Verifica vistas previas y un MP4 de cada sección tras cambios relevantes en voz, sincronización o exportación. No declares completo un servicio externo no configurado.

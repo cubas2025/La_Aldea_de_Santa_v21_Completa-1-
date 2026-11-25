@@ -1,0 +1,72 @@
+{
+  "titulo": "La aldea de Santa",
+  "version_publicada": 21,
+  "fecha_entrega_local": "2026-11-24",
+  "zona_horaria": "America/Lima",
+  "url_publica": "https://la-aldea-de-santa.orangemirth32.chatgpt.site",
+  "commit": "b84d0a590c2369093fb7cd3b534cd365df78a1ad",
+  "archivos_fuente_copiados": 1370,
+  "copiado_desde_git_sin_modificar_codigo": true,
+  "recursos_por_carpeta": {
+    "catalogo": {
+      "archivos": 11,
+      "bytes": 1599554
+    },
+    "nombres": {
+      "archivos": 968,
+      "bytes": 100989948
+    },
+    "colorear": {
+      "archivos": 150,
+      "bytes": 27525808
+    },
+    "musica": {
+      "archivos": 10,
+      "bytes": 6097583
+    },
+    "listas": {
+      "archivos": 82,
+      "bytes": 19624535
+    },
+    "llamadas": {
+      "archivos": 6,
+      "bytes": 18561774
+    },
+    "lista-video": {
+      "archivos": 17,
+      "bytes": 27474326
+    },
+    "navidad": {
+      "archivos": 51,
+      "bytes": 9530912
+    }
+  },
+  "contenido": {
+    "saludos": 54,
+    "nombres_grabados": 864,
+    "escenas_fotograficas": 40,
+    "escenas_en_movimiento": 5,
+    "tarjetas_navidad": 25,
+    "cuentos": 30,
+    "libros_colorear": 30,
+    "paginas_colorear": 180,
+    "preguntas": 1500,
+    "musicas_selector": 11
+  },
+  "sincronizacion": {
+    "fin_anuncio_nino": 4.2,
+    "inicio_nombre_nino": 4.24,
+    "fin_anuncio_nina": 3.9,
+    "inicio_nombre_nina": 3.94,
+    "archivo_comun": "app/dist/list-speech.js"
+  },
+  "llamadas": {
+    "prueba_local": true,
+    "servicio_telefonico_real_activado": false,
+    "videollamada_en_vivo": false,
+    "numero_deseado": "+51917823560",
+    "operador_indicado": "Claro Perú"
+  },
+  "documentos_autoritativos": "documentacion/GUIA_COMPLETA_V21.pdf e INSTRUCCION_MAESTRA_V21.txt",
+  "nota": "README.md dentro de app conserva notas históricas. No contiene credenciales ni datos de clientes."
+}

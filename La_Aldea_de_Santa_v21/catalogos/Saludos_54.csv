@@ -1,0 +1,55 @@
+﻿ID,Titulo,Categoria,Soles,Dolares,Duracion,Tipo
+largos-1,El sendero maravilloso de los animales,aventuras,5,2,5 minutos a más,Video personalizado
+largos-2,El laboratorio secreto,aventuras,5,2,5 minutos a más,Video personalizado
+largos-3,La búsqueda del tesoro,aventuras,5,2,5 minutos a más,Video personalizado
+largos-4,¡Es hora de probar los juguetes!,aventuras,5,2,5 minutos a más,Video personalizado
+largos-5,Visita la gran biblioteca,aventuras,5,2,5 minutos a más,Video personalizado
+largos-6,Aventura interactiva,aventuras,5,2,5 minutos a más,Video personalizado
+largos-7,Una pequeña actualización con Santa,habitos,5,2,5 minutos a más,Video personalizado
+largos-8,En la oficina de correos,pequenos,5,2,5 minutos a más,Video personalizado
+largos-9,¿Y tu gran libro?,pequenos,5,2,5 minutos a más,Video personalizado
+largos-10,Regalo especial listo,pequenos,5,2,5 minutos a más,Video personalizado
+largos-11,Solo para un grupo de niños y niñas,familia,5,2,5 minutos a más,Video personalizado
+largos-12,El regalo desaparecido,nochebuena,5,2,5 minutos a más,Video personalizado
+largos-13,La nueva máquina de envolver,nochebuena,5,2,5 minutos a más,Video personalizado
+largos-14,La habitación secreta de Papá Noel,nochebuena,5,2,5 minutos a más,Video personalizado
+largos-15,Preparándose,navidad,5,2,5 minutos a más,Video personalizado
+cortos-1,¿Cómo te has portado?,habitos,3,1,1 a 3 minutos,Video personalizado
+cortos-2,¿Estás en el camino correcto?,habitos,3,1,1 a 3 minutos,Video personalizado
+cortos-3,¿Cómo se han portado?,aventuras,3,1,1 a 3 minutos,Video personalizado
+cortos-4,Para los más pequeñitos de 1 a 3 años,pequenos,3,1,1 a 3 minutos,Video personalizado
+cortos-5,Para los más pequeños,pequenos,3,1,1 a 3 minutos,Video personalizado
+cortos-6,Especialmente para un grupo,familia,3,1,1 a 3 minutos,Video personalizado
+cortos-7,Para niños y niñas pequeños,aventuras,3,1,1 a 3 minutos,Video personalizado
+cortos-8,Para niños con mascotas,mascotas,3,1,1 a 3 minutos,Video personalizado
+cortos-9,Compañeros para toda la vida,mascotas,3,1,1 a 3 minutos,Video personalizado
+cortos-10,Un momento con Santa,habitos,3,1,1 a 3 minutos,Video personalizado
+cumple-1,¡Una explosión de deseos!,cumpleanos,3,1,1 a 3 minutos,Video personalizado
+cumple-2,Un dulce cumpleaños,cumpleanos,3,1,1 a 3 minutos,Video personalizado
+cumple-3,Una fiesta alegre,cumpleanos,3,1,1 a 3 minutos,Video personalizado
+cumple-4,¡Feliz cumpleaños! A partir de 5 años,cumpleanos,3,1,1 a 3 minutos,Video personalizado
+cumple-5,Un cumpleaños estrellado,cumpleanos,3,1,1 a 3 minutos,Video personalizado
+llamadas-1,Se necesita una pequeña charla con Santa,habitos,3,1,1 a 3 minutos,Videollamada
+llamadas-2,¡Sabemos que te has portado bien!,habitos,3,1,1 a 3 minutos,Videollamada
+llamadas-3,¿Te estás portando bien?,aventuras,3,1,1 a 3 minutos,Videollamada
+llamadas-4,¿Problemas para compartir?,habitos,3,1,1 a 3 minutos,Videollamada
+llamadas-5,Hagan su mejor esfuerzo,habitos,3,1,1 a 3 minutos,Videollamada
+llamadas-6,Santa está muy orgulloso,habitos,3,1,1 a 3 minutos,Videollamada
+llamadas-7,¡Sigue haciéndolo así de bien!,habitos,3,1,1 a 3 minutos,Videollamada
+llamadas-8,Sobresalir en los estudios,habitos,3,1,1 a 3 minutos,Videollamada
+llamadas-9,Un nuevo comienzo,ocasiones,3,1,1 a 3 minutos,Videollamada
+llamadas-10,Regreso a la escuela,ocasiones,3,1,1 a 3 minutos,Videollamada
+llamadas-11,Halloween divertido,ocasiones,3,1,1 a 3 minutos,Videollamada
+llamadas-12,¡Alguien los quiere!,ocasiones,3,1,1 a 3 minutos,Videollamada
+llamadas-13,San Valentín,ocasiones,3,1,1 a 3 minutos,Videollamada
+llamadas-14,Trabajando en tus regalos,navidad,3,1,1 a 3 minutos,Videollamada
+llamadas-15,La estrella polar,navidad,3,1,1 a 3 minutos,Videollamada
+llamadas-16,Santa vio sus listas de deseos,navidad,3,1,1 a 3 minutos,Videollamada
+llamadas-17,En vivo desde el trineo,navidad,3,1,1 a 3 minutos,Videollamada
+llamadas-18,¡Estamos a una noche de Navidad!,navidad,3,1,1 a 3 minutos,Videollamada
+llamadas-19,Misión cumplida,finano,3,1,1 a 3 minutos,Videollamada
+llamadas-20,Un Año Nuevo lleno de amor,finano,3,1,1 a 3 minutos,Videollamada
+empresas-1,¿En la lista de los buenos?,familia,3,1,1 a 3 minutos,Video personalizado
+empresas-2,Tus mejores deseos,ocasiones,3,1,1 a 3 minutos,Video personalizado
+empresas-3,Solo para adultos,aventuras,3,1,1 a 3 minutos,Video personalizado
+entrega-1,Entrega de regalos de Santa,pequenos,5,2,5 minutos a más,Video + tarjeta QR

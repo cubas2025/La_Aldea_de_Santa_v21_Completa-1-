@@ -1,0 +1,28 @@
+LA ALDEA DE SANTA - ENTREGA COMPLETA V21
+
+1. Extrae todo el ZIP.
+2. Lee documentacion/GUIA_COMPLETA_V21.pdf.
+3. Para Windows, instala Python 3 si hace falta y ejecuta INICIAR_WINDOWS.bat.
+4. Abre http://127.0.0.1:8080 mientras el servidor está abierto.
+5. El sitio publicado está en https://la-aldea-de-santa.orangemirth32.chatgpt.site
+
+CONTENIDO
+app/: copia completa del código y todos los recursos de la versión publicada.
+documentacion/: guía PDF, TXT/Markdown e instrucción maestra para continuar el proyecto.
+catalogos/: listas consultables de saludos, nombres, libros, cuentos, preguntas, música y escenas.
+VERSION_FINAL.json: identidad y estado de la versión.
+INVENTARIO_ARCHIVOS.csv: tamaños y SHA-256 de todos los archivos de esta entrega (excepto el propio inventario).
+
+SINCRONIZACIÓN FINAL
+Santa termina «es»; aparece el nombre con polvo de estrellas; 40 ms después se inicia su grabación.
+Se aplica a las cinco escenas en movimiento y a la galería de 40 escenas.
+Los videos ya descargados con versiones anteriores no cambian solos: hay que generarlos de nuevo.
+
+LLAMADAS
+La prueba de audio funciona dentro de la app. Las llamadas reales y videollamadas en vivo NO están activadas.
+El plan de Claro del número +51 917 823 560 no está conectado automáticamente a la web.
+El adaptador telefónico y sus instrucciones están incluidos, sin credenciales.
+
+Esta entrega conserva el código del commit b84d0a590c2369093fb7cd3b534cd365df78a1ad, versión pública 21.
+Las guías y los iniciadores son añadidos de esta entrega. El README dentro de app/ conserva notas históricas;
+para el comportamiento final usa la guía V21 y el código actual.
