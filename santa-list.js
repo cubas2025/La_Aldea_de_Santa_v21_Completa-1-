@@ -144,7 +144,7 @@
   scenes.forEach((item,index)=>{
     const o=document.createElement('option');o.value=String(index);o.textContent=item.title;scene.append(o);
     const b=document.createElement('button');b.type='button';b.className='sl-scene-card';b.dataset.index=String(index);b.setAttribute('aria-pressed',String(index===0));b.setAttribute('aria-label',`Elegir escena ${item.title}`);
-    const im=document.createElement('img');im.src=item.thumb;im.alt=`Santa esparciendo polvo de estrellas: ${item.title}`;im.width=270;im.height=480;im.loading='lazy';const label=document.createElement('strong');label.textContent=item.title;b.append(im,label);b.addEventListener('click',()=>{selectScene(index);form.scrollIntoView({behavior:'smooth',block:'start'});});$('#sl-gallery').append(b);
+    const im=document.createElement('img');im.loading='lazy';im.decoding='async';im.src=item.thumb;im.alt=`Santa esparciendo polvo de estrellas: ${item.title}`;im.width=270;im.height=480;im.loading='lazy';const label=document.createElement('strong');label.textContent=item.title;b.append(im,label);b.addEventListener('click',()=>{selectScene(index);form.scrollIntoView({behavior:'smooth',block:'start'});});$('#sl-gallery').append(b);
   });
   scene.addEventListener('change',()=>selectScene(Number(scene.value)));
   name.addEventListener('input',()=>{audioState(true);invalidate();render();});
@@ -164,5 +164,5 @@
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&animating){stopPreview();draw();}});
   window.addEventListener('aldea:navigate',()=>{if(animating){stopPreview();draw();}});
   for(const label of [...new Set(nameCatalog.flatMap(r=>[r.name,...(r.aliases||[])]))].sort((a,b)=>a.localeCompare(b,'es')))$('#sl-name-options').append(new Option(label,label));
-  musicState();audioState();render();
+  musicState();audioState();(window.ALDEA_WHEN_SHOWN||((i,f)=>f()))('buenos',render);
 })();

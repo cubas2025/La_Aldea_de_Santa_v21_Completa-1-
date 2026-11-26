@@ -285,7 +285,13 @@ function addShareBars(){
 }
 
 /* Windows no dibuja banderas con emojis: cargamos solo esos símbolos de Noto Color Emoji. */
-(()=>{const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap&text='+encodeURIComponent(COUNTRIES.map(c=>c.flag).join(''));document.head.append(l);})();
+/* Solo en Windows (los celulares ya muestran banderas) y solo al abrir pestañas con banderas. */
+let flagFontLink=null;
+function flagFont(){
+  if(flagFontLink||!/Windows/i.test(navigator.userAgent))return;
+  flagFontLink=document.createElement('link');flagFontLink.rel='stylesheet';flagFontLink.href='https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap&text='+encodeURIComponent(COUNTRIES.map(c=>c.flag).join(''));document.head.append(flagFontLink);
+}
+(window.ALDEA_WHEN_SHOWN||((i,f)=>f()))(['paquetes','pedido','catalogo','buzon'],flagFont);
 
 window.ALDEA_PAY={COUNTRIES,PACKAGES,GIFTS,TYPES,country,setCountry,currency,fmt,amount,storyPrice,booksLabel,booksText,payName,whatsappUrl,renderMethods,hasAccess,isCreator,lookup,redeem,clearAccess,toast,copy,shareBar};
 

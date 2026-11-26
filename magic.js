@@ -34,11 +34,12 @@ let quizRunId=0,quizSettings=null,quizTimed=true,quizRunning=false,quizBlocks=0,
 const shuffle=a=>{let b=[...a];for(let i=b.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
 function stopQuizClock(){if(quizInterval!==null)window.clearInterval(quizInterval);quizInterval=null;quizDeadline=0;}
 function updateLevelInfo(){
+  if(!window.SANTA_QUIZ.length){$('#quiz-level-info').textContent='Preparando las 1500 preguntas…';return;}
   const level=Number($('#quiz-level').value),category=$('#quiz-category').value;
   const count=window.SANTA_QUIZ.filter(q=>q.level===level&&(category==='all'||q.category===category)).length;
   $('#quiz-level-info').textContent=`${count} preguntas en este banco · ${window.SANTA_QUIZ_FLOW.remaining(level,category)} sin practicar · ${$('#quiz-mode').value==='continuous'?'continúa con variantes nuevas':'10 por partida'}`;
 }
-$('#quiz-mode').addEventListener('change',updateLevelInfo);
+$('#quiz-mode').addEventListener('change',updateLevelInfo);window.addEventListener('aldea:quiz-ready',updateLevelInfo);
 $('#quiz-level').addEventListener('change',updateLevelInfo);
 $('#quiz-category').addEventListener('change',updateLevelInfo);
 $('#quiz-time-toggle').addEventListener('click',()=>{
@@ -52,10 +53,11 @@ function setQuizRunning(value){
   for(const selector of ['#quiz-name','#quiz-level','#quiz-category','#quiz-time-toggle','#quiz-mode'])$(selector).disabled=value;
   $('#quiz-start').textContent=value?'Reiniciar partida':'Comenzar una partida';
 }
-$('#quiz-setup').addEventListener('submit',event=>{
+$('#quiz-setup').addEventListener('submit',async event=>{
   event.preventDefault();
   const name=$('#quiz-name').value.trim();
   if(!name){$('#quiz-name').setCustomValidity('Escribe tu nombre para preparar el certificado.');$('#quiz-name').reportValidity();return;}
+  if(!window.SANTA_QUIZ.length){const b=$('#quiz-start');b.disabled=true;b.textContent='Cargando preguntas…';try{await window.ALDEA_LAZY.quiz();}catch(e){toast(e.message);return;}finally{b.disabled=false;b.textContent='Comenzar una partida';}}
   stopQuizClock();quizRunId++;
   quizSettings={name,level:Number($('#quiz-level').value),category:$('#quiz-category').value,timed:quizTimed,continuous:$('#quiz-mode').value==='continuous'};
   quizRound=window.SANTA_QUIZ_FLOW.round(quizSettings.level,quizSettings.category,quizSettings.continuous);quizBlocks=0;quizAccumulated=0;
@@ -186,6 +188,6 @@ for(const b of window.SANTA_BOOKS)$('#color-book').append(new Option(b.title,Str
 function drawColorPage(book,index,name,atlas){const c=document.createElement('canvas');c.width=1240;c.height=1754;const ctx=c.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,1240,1754);if(book.kind==='imported'){ctx.drawImage(atlas,0,0,1240,1754);if(name){const b=book.nameBox;let size=34;ctx.font=`600 ${size}px ${sans}`;while(ctx.measureText(name).width>b.w*1240&&size>15)ctx.font=`600 ${--size}px ${sans}`;ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.fillStyle='#111';ctx.fillText(name,b.x*1240,(b.y+b.h*.75)*1754);}return c;}ctx.strokeStyle='#222';ctx.lineWidth=3;ctx.strokeRect(35,35,1170,1684);text(ctx,book.title,620,80,1060,67,'#151515','center','700');text(ctx,name?'El libro de '+name:'Mi aventura para colorear',620,180,1050,34,'#333');const cw=atlas.width/2,ch=atlas.height/3;ctx.drawImage(atlas,(index%2)*cw,Math.floor(index/2)*ch,cw,ch,75,370,1090,1090);text(ctx,`La aldea de Santa · Página ${index+1} de 6`,620,1620,1000,28,'#333');return c;}
 let colorGeneration=0;async function generateColorBook(){const generation=++colorGeneration,button=$('#color-generate');button.disabled=true;try{await document.fonts.ready;const book=window.SANTA_BOOKS[Number($('#color-book').value)],name=$('#color-name').value.trim(),pages=book.pages?await Promise.all(book.pages.map(src=>image(src))):Array(6).fill(await image('assets/colorear/libro-'+book.id+'.webp'));if(generation!==colorGeneration)return;coloringCanvases=pages.map((atlas,i)=>drawColorPage(book,i,name,atlas));currentColorTitle=book.title;currentColorName=name;$('#color-pages').replaceChildren(...coloringCanvases.map((canvas,i)=>{let d=document.createElement('div');canvas.setAttribute('aria-label',`${book.title}, lámina ${i+1} para colorear`);let p=document.createElement('p');p.textContent='Lámina '+(i+1);d.append(canvas,p);return d;}));$('#color-title').textContent=book.title+' · 6 láminas';$('#color-output').hidden=false;toast('¡Tus seis páginas están listas!');}catch(error){console.error(error);toast('No pudimos preparar las láminas. Inténtalo otra vez.');}finally{if(generation===colorGeneration)button.disabled=false;}}$('#color-generate').addEventListener('click',generateColorBook);$('#color-book').addEventListener('change',generateColorBook);$('#color-name').addEventListener('input',()=>{colorGeneration++;$('#color-generate').disabled=false;$('#color-output').hidden=true;coloringCanvases=[];});$('#color-download').addEventListener('click',()=>{if(!coloringCanvases.length)return;canvasesPDF(coloringCanvases).save(safeName(currentColorTitle+(currentColorName?'-'+currentColorName:''))+'.pdf');toast('Tu libro para colorear se ha descargado.');});
 // Show real, immediately usable previews before personalization, without exposing data.
-(async()=>{for(const [key,scene,title]of[['card','santa-correo.webp','Feliz Navidad'],['invite','santa-correo.webp','¡Estás invitado!'],['qr','santa-bosque.webp','Un regalo de Santa']]){try{const ctx=await cardBase($('#'+key+'-canvas'),scene,760);text(ctx,title,540,780,850,83,gold,'center','700');text(ctx,'Un recuerdo creado especialmente para ti',540,1030,800,47,cream);sign(ctx);}catch(e){console.error('Error al preparar la vista previa',e);}}})();
+for(const [key,scene,title,page]of[['card','santa-correo.webp','Feliz Navidad','tarjetas'],['invite','santa-correo.webp','¡Estás invitado!','cumpleanos'],['qr','santa-bosque.webp','Un regalo de Santa','tarjeta-qr']])(window.ALDEA_WHEN_SHOWN||((i,f)=>f()))(page,async()=>{try{const ctx=await cardBase($('#'+key+'-canvas'),scene,760);text(ctx,title,540,780,850,83,gold,'center','700');text(ctx,'Un recuerdo creado especialmente para ti',540,1030,800,47,cream);sign(ctx);}catch(e){console.error('Error al preparar la vista previa',e);}});
 window.addEventListener('pagehide',stopNarration);
 })();

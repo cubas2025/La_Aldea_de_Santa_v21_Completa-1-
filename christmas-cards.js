@@ -214,7 +214,7 @@
   designs.forEach((design,index) => {
     const option = document.createElement('option'); option.value=String(index); option.textContent=design.title; select.append(option);
     const button=document.createElement('button');button.type='button';button.className='nc-design-card';button.dataset.design=String(index);button.setAttribute('aria-pressed','false');button.setAttribute('aria-label',`Elegir ${design.title}`);
-    const im=document.createElement('img');im.src=design.thumb;im.alt=design.title;im.loading='lazy';im.width=270;im.height=480;
+    const im=document.createElement('img');im.loading='lazy';im.decoding='async';im.src=design.thumb;im.alt=design.title;im.loading='lazy';im.width=270;im.height=480;
     const title=document.createElement('strong');title.textContent=design.title;const caption=document.createElement('span');caption.textContent=design.phrase;
     button.append(im,title,caption);button.addEventListener('click',()=>{automatic=false;choose(index);$('#nc-form').scrollIntoView({behavior:'smooth',block:'start'});});$('#nc-gallery').append(button);
   });
@@ -244,7 +244,7 @@
   $('.nc-downloads').after(capBox);
   $('#nc-copy-caption').addEventListener('click',async()=>{const ok=await copyCaption();status.textContent=ok?'Título y hashtags copiados ✨':'Selecciona el título y cópialo.';});
   function tick(){if(exporting)return;const d=dateState();if(currentDay!==d.key){currentDay=d.key;if(automatic){active=((d.civilDay%25)+25)%25;phrase.value=designs[active].phrase;gallerySelection();}invalidateVideo();}if(!document.hidden)render();}
-  const d=dateState();currentDay=d.key;active=((d.civilDay%25)+25)%25;phraseIndex=active;phrase.value=designs[active].phrase;setDesignMusic(active);gallerySelection();$('#nc-share').disabled=false;$('#nc-caption').value=caption();render();
+  const d=dateState();currentDay=d.key;active=((d.civilDay%25)+25)%25;phraseIndex=active;phrase.value=designs[active].phrase;setDesignMusic(active);gallerySelection();$('#nc-share').disabled=false;$('#nc-caption').value=caption();(window.ALDEA_WHEN_SHOWN||((i,f)=>f()))('tarjeta-navidad',render);
   // Refresh the card only while its section is on screen; all updates use the real clock.
   let onScreen=false;new IntersectionObserver(entries=>{onScreen=entries[0].isIntersecting;if(onScreen)tick();},{rootMargin:'120px'}).observe($('#tarjeta-navidad'));
   setInterval(()=>{if(onScreen)tick();},1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden&&onScreen)tick();});window.addEventListener('pageshow',()=>{if(onScreen)tick();});
