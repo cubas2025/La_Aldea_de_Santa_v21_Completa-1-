@@ -65,7 +65,8 @@ function renderMode(){
   const lista=mode==='lista';
   $('#live-lang').hidden=!lista;$('.live-list').hidden=!lista;
   $('#live-lang-note').hidden=!lista;
-  $('#live-lang-note').textContent=lang==='en'?'English version: separate from the Spanish voice. It uses your English AI audio files when available, or the device voice.':'Solo los 864 nombres grabados con la voz de Santa en español.';
+  $('#live-lang-note').textContent=lang==='en'?'English version, separate from the Spanish voice.':'Solo los 864 nombres grabados con la voz de Santa en español.';
+  if(lang==='en')window.ALDEA_LIVE_NAMES?.englishStatus?.().then(s=>{if(lang==='en')$('#live-lang-note').textContent=`English version, separate from the Spanish voice. ${s.label}`;});
   $('#live-badge').innerHTML=lista?'<i></i>EN VIVO':'<i></i>RETRANSMISIÓN';
   $('#live-badge').classList.toggle('replay',!lista);
   $('#live-kicker').textContent=lista?'Ahora en la aldea':'Saludo grabado de Santa';

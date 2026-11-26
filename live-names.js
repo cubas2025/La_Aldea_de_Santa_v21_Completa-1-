@@ -52,26 +52,49 @@ async function alsoClip(){if(alsoAvailable===null){try{const r=await fetch('asse
      assets/en-vivo/en/anuncio.wav          → «Next on Santa's nice list is…»
      assets/nombres-en/<nombre>.wav         → p. ej. assets/nombres-en/sofia.wav
    Mientras no existan, se usa la voz en inglés del dispositivo. */
-const EN_REVEAL=2.4;
+const EN_REVEAL=3.6;
 const slug=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const headCache=new Map();
 function exists(url){if(!headCache.has(url))headCache.set(url,fetch(url,{method:'HEAD'}).then(r=>r.ok).catch(()=>false));return headCache.get(url);}
+async function firstExisting(base){for(const ext of ['mp3','wav'])if(await exists(`${base}.${ext}`))return `${base}.${ext}`;return null;}
 async function englishFiles(name){
-  const ann='assets/en-vivo/en/anuncio.wav',file=`assets/nombres-en/${slug(name)}.wav`;
-  return (await exists(ann))&&(await exists(file))?{ann,file}:null;
+  const ann=await firstExisting('assets/en-vivo/en/anuncio');if(!ann)return null;
+  const file=await firstExisting(`assets/nombres-en/${slug(name)}`);
+  return file?{ann,file}:null;
+}
+/* Voz del dispositivo: se elige la más natural disponible (voces neuronales/online primero).
+   Nunca se usa una voz que no sea en inglés: si el dispositivo no tiene ninguna, el nombre
+   aparece en el cielo sin voz. */
+let voiceCache=null;
+function rankVoice(v){
+  const n=v.name;let s=0;
+  if(/natural|neural/i.test(n))s+=60;                 // Edge: voces neuronales «Online (Natural)»
+  if(/premium|enhanced|siri/i.test(n))s+=50;          // Apple: voces mejoradas
+  if(/google/i.test(n))s+=40;                         // Chrome / Android
+  if(!v.localService)s+=10;
+  if(/^en[-_]us/i.test(v.lang))s+=8;else if(/^en[-_]gb/i.test(v.lang))s+=6;
+  if(/guy|andrew|brian|christopher|eric|davis|roger|steffan|ryan|thomas|arthur|daniel|aaron|male/i.test(n)&&!/female/i.test(n))s+=15; // voz masculina, como Santa
+  if(/desktop|espeak|robot/i.test(n))s-=30;           // voces antiguas y robóticas
+  return s;
 }
 function englishVoice(){
-  const voices=window.speechSynthesis?.getVoices?.()||[],en=voices.filter(v=>/^en(-|_|$)/i.test(v.lang));
-  return en.find(v=>/male|guy|david|daniel|george|ryan|christopher|eric/i.test(v.name)&&!/female/i.test(v.name))||en.find(v=>/en-us/i.test(v.lang))||en[0]||null;
+  if(voiceCache)return voiceCache;
+  const en=(window.speechSynthesis?.getVoices?.()||[]).filter(v=>/^en([-_]|$)/i.test(v.lang));
+  voiceCache=en.sort((a,b)=>rankVoice(b)-rankVoice(a))[0]||null;
+  return voiceCache;
 }
+window.speechSynthesis?.addEventListener?.('voiceschanged',()=>{voiceCache=null;});
 function speakEnglish(name,onName){
-  const synth=window.speechSynthesis;if(!synth)return;
+  const synth=window.speechSynthesis,voice=englishVoice();if(!synth||!voice)return false;
   synth.cancel();
-  const voice=englishVoice();
-  const mk=text=>{const u=new SpeechSynthesisUtterance(text);u.lang='en-US';if(voice)u.voice=voice;u.rate=.92;u.pitch=.75;return u;};
-  const intro=mk("Next on Santa's nice list is..."),who=mk(name+'!');
+  /* Entonación: frase cálida y pausada, una breve pausa y el nombre con énfasis. */
+  const mk=(text,rate,pitch)=>{const u=new SpeechSynthesisUtterance(text);u.voice=voice;u.lang=voice.lang;u.rate=rate;u.pitch=pitch;u.volume=1;return u;};
+  const intro=mk("And now... the next name on Santa's nice list is...",.88,.95);
+  const who=mk(`${name}!`,.82,1.05);
   who.onstart=()=>onName?.();
-  synth.speak(intro);synth.speak(who);
+  synth.speak(intro);
+  intro.onend=()=>setTimeout(()=>synth.speak(who),280);
+  return true;
 }
 
 function create({canvas,label='Lista de los buenos',onName}={}){
@@ -91,7 +114,7 @@ function create({canvas,label='Lista de los buenos',onName}={}){
           out.getChannelData(0).set(a.getChannelData(0),0);out.getChannelData(0).set(b.getChannelData(0),a.length+gap);
           return {name:it.name,recorded:true,en:true,revealAt:VOICE_AT+a.duration+.06,write:Math.max(WRITE,b.duration+.6),buffer:out};
         }
-        return {name:it.name,recorded:true,en:true,revealAt:VOICE_AT+EN_REVEAL,write:WRITE,tts:sound&&'speechSynthesis' in window};
+        return {name:it.name,recorded:true,en:true,revealAt:VOICE_AT+EN_REVEAL,write:WRITE,tts:sound&&!!englishVoice()};
       }
       if(it.rec){
         const gender=it.rec.gender==='girl'?'girl':'boy';
@@ -164,5 +187,11 @@ function create({canvas,label='Lista de los buenos',onName}={}){
     refresh:()=>loadList(true)
   };
 }
-window.ALDEA_LIVE_NAMES={create,loadList,namesToday,get count(){return list.length;},get source(){return source;}};
+/* Estado de la voz en inglés para mostrarlo en pantalla. */
+async function englishStatus(){
+  if(await firstExisting('assets/en-vivo/en/anuncio'))return {kind:'files',label:'Voz profesional en inglés (audios generados)'};
+  const v=englishVoice();
+  return v?{kind:'device',label:`Voz del dispositivo: ${v.name}`}:{kind:'none',label:'Este dispositivo no tiene una voz en inglés instalada: los nombres aparecen en el cielo sin voz.'};
+}
+window.ALDEA_LIVE_NAMES={create,loadList,namesToday,englishStatus,get count(){return list.length;},get source(){return source;}};
 })();
