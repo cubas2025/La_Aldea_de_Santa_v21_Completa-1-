@@ -5,15 +5,21 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const cfg=window.ALDEA_LIVE||{playlist:[]}, pay=window.ALDEA_PAY, music=window.SANTA_MUSIC||[];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const items=cfg.playlist.filter(i=>i.src&&i.duration>0).map(i=>({...i,repeat:Math.max(1,i.repeat||1),span:i.duration*Math.max(1,i.repeat||1)}));
-const total=items.reduce((s,i)=>s+i.span,0);
 const tiktokUrl=cfg.tiktokUser?`https://www.tiktok.com/@${encodeURIComponent(cfg.tiktokUser.replace(/^@/,''))}/live`:'';
+/* Retransmisión: los saludos grabados de «Niños buenos», consecutivos y con su propio audio. */
+const retrans=(window.NINOS_BUENOS?.items||[]).filter(it=>cfg.retransmision?.[it.id]>0).map(it=>({src:it.src,title:it.special?it.label:`Saludo de Santa para ${it.label.replace(/ · versión \d+$/,'')}`,duration:cfg.retransmision[it.id],repeat:1,span:cfg.retransmision[it.id]}));
+const CHANNELS={lista:items,retrans};
+const totalOf=list=>list.reduce((s,i)=>s+i.span,0);
 
 /* Posición del canal según la hora: todos los visitantes ven lo mismo al mismo tiempo. */
-function channelAt(ms=Date.now()){
-  let t=(ms/1000)%total;
-  for(let i=0;i<items.length;i++){if(t<items[i].span)return {index:i,item:items[i],offset:t%items[i].duration,left:items[i].span-t};t-=items[i].span;}
-  return {index:0,item:items[0],offset:0,left:items[0].span};
+function channelAt(list,ms=Date.now()){
+  let t=(ms/1000)%totalOf(list);
+  for(let i=0;i<list.length;i++){if(t<list[i].span)return {index:i,item:list[i],offset:t%list[i].duration,left:list[i].span-t};t-=list[i].span;}
+  return {index:0,item:list[0],offset:0,left:list[0].span};
 }
+const pref={get(k,d){try{return localStorage.getItem(k)||d;}catch{return d;}},set(k,v){try{localStorage.setItem(k,v);}catch{}}};
+let mode=pref.get('aldea-live-mode','lista');if(!CHANNELS[mode]?.length)mode='lista';
+let lang=pref.get('aldea-live-lang','es')==='en'?'en':'es';
 
 /* ---------- Canal público ---------- */
 const root=$('#en-vivo');
@@ -24,8 +30,9 @@ function playBg(){if(!soundOn||!music.length)return;bg.src=music[bgIndex].src;bg
 function buildChannel(){
   if(!root)return;
   root.innerHTML=`<div class="wrap"><div class="section-heading"><div><p class="eyebrow">DESDE EL POLO NORTE · AHORA MISMO</p><h2 id="live-heading">Santa <em>en vivo.</em></h2></div><p>Mira a Santa en su aldea a cualquier hora. Cuando Santa transmite en TikTok, aquí aparece el botón para entrar a su en vivo y saludarlo.</p></div>
-<div class="live-layout"><div class="live-player" id="live-player"><video id="live-video" muted playsinline autoplay loop preload="auto" aria-label="Canal en vivo de Santa"></video><canvas id="live-sky" class="live-sky" width="1080" height="1920" aria-hidden="true"></canvas><p class="sr-only" id="live-name-said" aria-live="polite"></p><span class="live-badge"><i></i>EN VIVO</span><span class="live-clock" id="live-clock"></span><div class="live-lower"><small>Ahora en la aldea</small><strong id="live-now"></strong></div></div>
-<div class="live-side panel"><div class="live-tiktok" id="live-tiktok" hidden><span class="live-badge static"><i></i>EN VIVO EN TIKTOK</span><p>Santa está transmitiendo ahora mismo. ¡Entra, salúdalo y escribe el nombre de tu niño o niña en el chat!</p><a class="button" id="live-tiktok-link" target="_blank" rel="noopener noreferrer">Ver a Santa en TikTok LIVE</a></div>
+<div class="live-modes" role="tablist" aria-label="Canal"><button type="button" role="tab" data-mode="lista">🔴 Lista de los buenos</button><button type="button" role="tab" data-mode="retrans">📺 Retransmisión: saludos de Santa</button></div>
+<div class="live-layout"><div class="live-player" id="live-player"><video id="live-video" muted playsinline autoplay loop preload="auto" aria-label="Canal en vivo de Santa"></video><canvas id="live-sky" class="live-sky" width="1080" height="1920" aria-hidden="true"></canvas><p class="sr-only" id="live-name-said" aria-live="polite"></p><span class="live-badge" id="live-badge"><i></i>EN VIVO</span><span class="live-clock" id="live-clock"></span><div class="live-lower"><small id="live-kicker">Ahora en la aldea</small><strong id="live-now"></strong></div></div>
+<div class="live-side panel"><div class="live-lang" id="live-lang" role="group" aria-label="Idioma de la lista"><span>Idioma de la lista:</span><button type="button" data-lang="es">🇪🇸 Español · voz de Santa</button><button type="button" data-lang="en">🇺🇸 English</button></div><p class="fine" id="live-lang-note"></p><div class="live-tiktok" id="live-tiktok" hidden><span class="live-badge static"><i></i>EN VIVO EN TIKTOK</span><p>Santa está transmitiendo ahora mismo. ¡Entra, salúdalo y escribe el nombre de tu niño o niña en el chat!</p><a class="button" id="live-tiktok-link" target="_blank" rel="noopener noreferrer">Ver a Santa en TikTok LIVE</a></div>
 <div class="live-buttons"><button type="button" class="button" id="live-sound">🔊 Activar sonido</button><button type="button" class="button outline" id="live-full">⛶ Pantalla completa</button></div>
 <div class="live-list"><strong id="live-list-count">✨ Santa ya leyó 0 nombres hoy</strong><span id="live-list-source"></span><button type="button" class="button green small" id="live-add-name">¿Quieres que Santa diga tu nombre? Escríbelo aquí</button></div>
 <h3>A continuación</h3><ol class="live-next" id="live-next"></ol>
@@ -33,21 +40,56 @@ function buildChannel(){
 ${cfg.youtubeLiveId?`<div class="live-youtube"><h3>Directo en YouTube</h3><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(cfg.youtubeLiveId)}" title="Directo de Santa en YouTube" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`:''}</div>`;
   root.querySelector('.wrap').append(pay.shareBar({heading:'Invita a tu familia a ver a Santa en vivo',text:'🎅🔴 Santa está en vivo desde el Polo Norte. ¡Míralo aquí!',hash:'#en-vivo'}));
   if(cfg.liveNow&&tiktokUrl){$('#live-tiktok').hidden=false;$('#live-tiktok-link').href=tiktokUrl;}
-  $('#live-sound').addEventListener('click',()=>{soundOn=!soundOn;$('#live-sound').textContent=soundOn?'🔇 Silenciar':'🔊 Activar sonido · Santa lee los nombres';$('#live-video').muted=!soundOn;namer?.setSound(soundOn);if(soundOn)playBg();else bg.pause();});
-  $('#live-sound').textContent='🔊 Activar sonido · Santa lee los nombres';
+  $('#live-sound').addEventListener('click',()=>{soundOn=!soundOn;applyAudio();});
   $('#live-add-name').addEventListener('click',()=>{const chip=$('#kid-chip');if(chip)chip.click();else location.hash='gratis';});
-  if(window.ALDEA_LIVE_NAMES)namer=window.ALDEA_LIVE_NAMES.create({canvas:$('#live-sky'),onName:(name)=>{$('#live-name-said').textContent=`Santa nombra a ${name}`;updateListInfo();}});
+  if(window.ALDEA_LIVE_NAMES){namer=window.ALDEA_LIVE_NAMES.create({canvas:$('#live-sky'),onName:(name)=>{$('#live-name-said').textContent=`Santa nombra a ${name}`;updateListInfo();}});namer.setLang(lang);}
+  for(const b of $$('[data-mode]'))b.addEventListener('click',()=>setMode(b.dataset.mode));
+  for(const b of $$('[data-lang]'))b.addEventListener('click',()=>setLang(b.dataset.lang));
+  if(!retrans.length)$('[data-mode="retrans"]').hidden=true;
+  renderMode();
   $('#live-full').addEventListener('click',()=>{const p=$('#live-player');(p.requestFullscreen||p.webkitRequestFullscreen)?.call(p);});
 }
+/* Audio: en la lista, SOLO la voz de la lista (el video de Santa va siempre sin sonido, para no
+   cruzarse con su audio en inglés). En la retransmisión, solo el audio propio de cada saludo grabado. */
+function applyAudio(){
+  const v=$('#live-video');if(!v)return;
+  const lista=mode==='lista';
+  v.muted=lista?true:!soundOn;
+  namer?.setSound(lista&&soundOn);
+  if(lista&&soundOn)playBg();else bg.pause();
+  $('#live-sound').textContent=soundOn?'🔇 Silenciar':lista?(lang==='en'?'🔊 Turn on sound · Santa reads the names':'🔊 Activar sonido · Santa lee los nombres'):'🔊 Activar sonido del saludo';
+}
+function renderMode(){
+  for(const b of $$('[data-mode]'))b.setAttribute('aria-selected',String(b.dataset.mode===mode));
+  for(const b of $$('[data-lang]'))b.setAttribute('aria-pressed',String(b.dataset.lang===lang));
+  const lista=mode==='lista';
+  $('#live-lang').hidden=!lista;$('.live-list').hidden=!lista;
+  $('#live-lang-note').hidden=!lista;
+  $('#live-lang-note').textContent=lang==='en'?'English version: separate from the Spanish voice. It uses your English AI audio files when available, or the device voice.':'Solo los 864 nombres grabados con la voz de Santa en español.';
+  $('#live-badge').innerHTML=lista?'<i></i>EN VIVO':'<i></i>RETRANSMISIÓN';
+  $('#live-badge').classList.toggle('replay',!lista);
+  $('#live-kicker').textContent=lista?'Ahora en la aldea':'Saludo grabado de Santa';
+  $('#live-video').loop=lista;
+}
+function setMode(next){
+  if(!CHANNELS[next]?.length||next===mode)return;
+  mode=next;pref.set('aldea-live-mode',mode);
+  if(mode==='lista')namer?.start();else namer?.stop();
+  current=-1;renderMode();applyAudio();syncChannel();
+}
+function setLang(next){
+  next=next==='en'?'en':'es';if(next===lang)return;
+  lang=next;pref.set('aldea-live-lang',lang);namer?.setLang(lang);renderMode();applyAudio();
+}
 function syncChannel(){
-  const v=$('#live-video');if(!v||!items.length)return;
-  const pos=channelAt();
-  if(pos.index!==current){current=pos.index;v.src=pos.item.src;v.addEventListener('loadedmetadata',()=>{v.currentTime=channelAt().offset;v.play().catch(()=>{});},{once:true});
+  const v=$('#live-video'),list=CHANNELS[mode];if(!v||!list.length)return;
+  const pos=channelAt(list),key=mode+':'+pos.index;
+  if(key!==current){current=key;v.src=pos.item.src;v.addEventListener('loadedmetadata',()=>{v.currentTime=channelAt(CHANNELS[mode]).offset;v.play().catch(()=>{});},{once:true});
     $('#live-now').textContent=pos.item.title;
-    const next=[];for(let k=1;k<=4;k++)next.push(items[(pos.index+k)%items.length].title);
+    const next=[];for(let k=1;k<=4;k++)next.push(list[(pos.index+k)%list.length].title);
     $('#live-next').innerHTML=next.map(t=>`<li>${esc(t)}</li>`).join('');
   }else if(v.readyState>=2&&Math.abs(v.currentTime-pos.offset)>1.5&&pos.offset>.5&&pos.offset<pos.item.duration-.5){v.currentTime=pos.offset;}
-  if(v.paused&&v.readyState>=2)v.play().catch(()=>{});
+  if(v.paused&&v.readyState>=2&&!v.ended)v.play().catch(()=>{});
   $('#live-clock').textContent=new Date().toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit'});
 }
 let namer=null;
@@ -58,7 +100,7 @@ function updateListInfo(){
   if(s)s.textContent=n.count?(n.source==='aprobados'?(n.count===1?'1 nombre en la lista de hoy':`${n.count.toLocaleString('es-PE')} niños y niñas en la lista de hoy`):`${n.count.toLocaleString('es-PE')} nombres en la lista de los buenos`):'';
 }
 window.addEventListener('aldea:live-names',updateListInfo);
-function startChannel(){if(channelTimer||!items.length)return;current=-1;syncChannel();channelTimer=setInterval(syncChannel,1000);bg.volume=.2;namer?.start();updateListInfo();}
+function startChannel(){if(channelTimer||!items.length)return;current=-1;syncChannel();channelTimer=setInterval(syncChannel,1000);bg.volume=.2;if(mode==='lista')namer?.start();applyAudio();updateListInfo();}
 function stopChannel(){clearInterval(channelTimer);channelTimer=0;const v=$('#live-video');if(v){v.pause();}bg.pause();namer?.stop();}
 
 /* Cartel global cuando Santa está en vivo en TikTok */
@@ -132,7 +174,8 @@ function openPresenter(){
   const advance=()=>{pIndex++;if(pIndex>=pOrder.length){pOrder=pool.slice();pIndex=0;}playItem();};
   function playItem(){
     clearTimeout(pTimer);const it=pOrder[pIndex];
-    v.loop=it.kind==='santa'&&!!it.span;v.muted=false;v.src=it.src;v.play().catch(()=>{v.muted=true;v.play().catch(()=>{});});
+    const silentSanta=it.kind==='santa'&&!!pNamer; // la voz de la lista no se cruza con el audio del video
+    v.loop=it.kind==='santa'&&!!it.span;v.muted=silentSanta;v.src=it.src;v.play().catch(()=>{v.muted=true;v.play().catch(()=>{});});
     if(it.kind==='santa'&&it.span)pTimer=setTimeout(advance,it.span*1000);
     $('#lp-kicker').textContent=it.kind==='client'?'Saludo especial de Santa para':'Ahora en la aldea';
     $('#lp-title').textContent=it.kind==='client'?it.name:it.title;
