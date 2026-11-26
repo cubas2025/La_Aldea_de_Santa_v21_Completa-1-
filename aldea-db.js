@@ -56,7 +56,15 @@ async function watchCounters(onChange){
     .subscribe();
 }
 
-window.ALDEA_DB={configured,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,staticCodes:cfg.codigosEstaticos!==false};
+/* Nombres aprobados por el creador para «Santa en vivo» (solo el nombre). */
+async function liveNames(){
+  const sb=await client();
+  const {data,error}=await sb.rpc('nombres_en_vivo');
+  if(error)throw error;
+  return (data||[]).map(r=>({nombre:String(r.nombre||''),grabado:!!r.grabado})).filter(r=>r.nombre);
+}
+
+window.ALDEA_DB={configured,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,liveNames,staticCodes:cfg.codigosEstaticos!==false};
 
 /* Cada video generado (lista de los buenos, escenas, tarjeta de Navidad, editor) suma 1. */
 const share=window.SANTA_VIDEO_SHARE;

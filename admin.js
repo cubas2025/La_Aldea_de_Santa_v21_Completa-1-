@@ -90,15 +90,33 @@ $('#ad-letters-refresh').addEventListener('click',()=>{loadLetters(true);refresh
 let searchTimer=0;$('#ad-letter-search').addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>loadLetters(true),350);});
 
 /* Nombres nuevos */
-let nameFilter='missing',lastNames=[];
+let nameFilter='pending',lastNames=[];
 chips('names',v=>{nameFilter=v;loadNames();});
 async function loadNames(){
-  let q=sb.from('nombres_registrados').select('*').order('ultima_vez',{ascending:false}).limit(500);if(nameFilter==='missing')q=q.eq('grabado',false);
+  let q=sb.from('nombres_registrados').select('*').order('ultima_vez',{ascending:false}).limit(500);
+  if(nameFilter==='missing')q=q.eq('grabado',false);
+  if(nameFilter==='pending')q=q.eq('aprobado_en_vivo',false);
+  if(nameFilter==='approved')q=q.eq('aprobado_en_vivo',true);
   const {data,error}=await q;const box=$('#ad-names');
-  if(error){box.innerHTML='<p class="fine">No se pudieron cargar los nombres.</p>';return;}
+  if(error){box.innerHTML=`<p class="fine">No se pudieron cargar los nombres.${/aprobado_en_vivo/.test(error.message||'')?' Ejecuta supabase/actualizacion-en-vivo.sql en Supabase.':''}</p>`;return;}
   lastNames=data;
-  box.innerHTML=data.length?`<table class="admin-table"><thead><tr><th>Nombre</th><th>¿Grabado?</th><th>Veces</th><th>Última vez</th></tr></thead><tbody>${data.map(n=>`<tr><td>${esc(n.nombre)}</td><td>${n.grabado?'✓ Sí':'✍️ No'}</td><td>${esc(n.veces)}</td><td>${esc(date(n.ultima_vez))}</td></tr>`).join('')}</tbody></table>`:'<p class="admin-empty">Todavía no hay nombres registrados.</p>';
+  $('#ad-names-approve-all').hidden=!data.some(n=>!n.aprobado_en_vivo);
+  box.innerHTML=data.length?`<table class="admin-table"><thead><tr><th>Nombre</th><th>¿Grabado?</th><th>Veces</th><th>Última vez</th><th>En vivo</th></tr></thead><tbody></tbody></table>`:'<p class="admin-empty">No hay nombres con ese filtro.</p>';
+  const body=box.querySelector('tbody');
+  for(const n of data){
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${esc(n.nombre)}</td><td>${n.grabado?'✓ Sí (Santa lo dice)':'✍️ No (solo escrito)'}</td><td>${esc(n.veces)}</td><td>${esc(date(n.ultima_vez))}</td><td class="admin-row-actions"><button type="button" data-live>${n.aprobado_en_vivo?'✓ Aprobado · Quitar':'Aprobar para el en vivo'}</button><button type="button" data-del>Borrar</button></td>`;
+    tr.querySelector('[data-live]').addEventListener('click',async()=>{const v=!n.aprobado_en_vivo;const {error:e}=await sb.from('nombres_registrados').update({aprobado_en_vivo:v}).eq('clave',n.clave);if(e)return toast('No se pudo actualizar.');n.aprobado_en_vivo=v;toast(v?`«${n.nombre}» saldrá en el en vivo.`:`«${n.nombre}» ya no saldrá en el en vivo.`);loadNames();});
+    tr.querySelector('[data-del]').addEventListener('click',async()=>{if(!confirm(`¿Borrar el nombre «${n.nombre}» de la lista? No se puede deshacer.`))return;const {error:e}=await sb.from('nombres_registrados').delete().eq('clave',n.clave);if(e)return toast('No se pudo borrar.');toast('Nombre borrado.');loadNames();});
+    body?.append(tr);
+  }
 }
+$('#ad-names-approve-all').addEventListener('click',async()=>{
+  const pending=lastNames.filter(n=>!n.aprobado_en_vivo);if(!pending.length)return;
+  if(!confirm(`¿Aprobar para el en vivo los ${pending.length} nombres de esta lista? Revisa antes que no haya groserías.`))return;
+  const {error}=await sb.from('nombres_registrados').update({aprobado_en_vivo:true}).in('clave',pending.map(n=>n.clave));
+  if(error)return toast('No se pudieron aprobar.');toast(`${pending.length} nombres aprobados.`);loadNames();
+});
 $('#ad-names-refresh').addEventListener('click',loadNames);
 $('#ad-names-copy').addEventListener('click',async()=>{const text=lastNames.map(n=>n.nombre).join('\n');try{await navigator.clipboard.writeText(text);toast(`${lastNames.length} nombres copiados.`);}catch{toast('No se pudo copiar.');}});
 
