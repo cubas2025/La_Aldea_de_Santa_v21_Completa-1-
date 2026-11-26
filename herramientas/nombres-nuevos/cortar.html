@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Cortar nombres nuevos</title>
+<style>body{font:14px system-ui;margin:20px}table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:4px 8px}.ok{color:green}.bad{color:#b00}</style>
+<script src="listas.js"></script><script src="archivos.js"></script></head>
+<body><h1>Cortar nombres nuevos</h1><p id="estado">Listo para analizar.</p><table id="tabla"></table>
+<script>
+/* Corta cada grabación en un WAV por nombre (PCM 16 bits, mono, 44.1 kHz), detectando las pausas.
+   Se prueba una cuadrícula de umbrales y se elige el corte cuya cantidad de nombres coincide con el texto. */
+const RATE=44100,FRAME=441;
+const names=b=>[...b.matchAll(/¡([^!¡]+)!/g)].map(m=>m[1].trim());
+const blocks=LISTAS_NUEVAS.bloques.map(names);
+function fileFor(a){return '/'+ARCHIVOS_NUEVOS[LISTAS_NUEVAS.audios.indexOf(a)];}
+function expected(i){
+  const a=LISTAS_NUEVAS.audios[i],list=blocks[a.bloque],start=list.indexOf(a.inicio);
+  const next=LISTAS_NUEVAS.audios.slice(i+1).find(x=>x.bloque===a.bloque);
+  const end=next?list.indexOf(next.inicio):list.length;
+  return {names:list.slice(start,end),exact:!!next,start};
+}
+async function decode(url){
+  const buf=await (await fetch(encodeURI(url))).arrayBuffer();
+  const ac=new OfflineAudioContext(1,RATE,RATE);
+  const a=await ac.decodeAudioData(buf);
+  if(a.sampleRate===RATE&&a.numberOfChannels===1)return a.getChannelData(0);
+  const off=new OfflineAudioContext(1,Math.ceil(a.duration*RATE),RATE);const s=off.createBufferSource();s.buffer=a;s.connect(off.destination);s.start();return (await off.startRendering()).getChannelData(0);
+}
+function frames(x){const n=Math.floor(x.length/FRAME),r=new Float32Array(n);for(let i=0;i<n;i++){let s=0;for(let j=i*FRAME;j<(i+1)*FRAME;j++)s+=x[j]*x[j];r[i]=Math.sqrt(s/FRAME);}return r;}
+function pct(arr,p){const s=[...arr].sort((a,b)=>a-b);return s[Math.floor((s.length-1)*p)];}
+function segment(r,k,gap){
+  const floor=pct(r,.1),speech=pct(r,.9),thr=floor+(speech-floor)*k,segs=[];let st=-1,last=-1;
+  for(let i=0;i<r.length;i++){if(r[i]>thr){if(st<0)st=i;else if(i-last>gap){segs.push([st,last]);st=i;}last=i;}}
+  if(st>=0)segs.push([st,last]);
+  return segs.filter(([a,b])=>b-a>=12);
+}
+function wav(samples){
+  const out=new Uint8Array(44+samples.length*2),v=new DataView(out.buffer),t=(o,s)=>{for(let i=0;i<s.length;i++)out[o+i]=s.charCodeAt(i);};
+  t(0,'RIFF');v.setUint32(4,out.length-8,true);t(8,'WAVE');t(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,RATE,true);v.setUint32(28,RATE*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);t(36,'data');v.setUint32(40,samples.length*2,true);
+  for(let i=0;i<samples.length;i++)v.setInt16(44+i*2,Math.round(Math.max(-1,Math.min(1,samples[i]))*32767),true);
+  return out;
+}
+const results=[];
+async function analyze(){
+  const rows=[];
+  for(let i=0;i<LISTAS_NUEVAS.audios.length;i++){
+    const a=LISTAS_NUEVAS.audios[i],file=fileFor(a),exp=expected(i);
+    document.getElementById('estado').textContent=`Analizando ${i+1}/14…`;
+    const x=await decode(file),r=frames(x);const tries=[];
+    for(const k of [.04,.06,.08,.1,.13,.16,.2,.25])for(const gap of [12,16,20,25,30,35,45])tries.push({k,gap,segs:segment(r,k,gap)});
+    let pick;
+    if(exp.exact){const m=tries.filter(t=>t.segs.length===exp.names.length);pick=m[Math.floor(m.length/2)];}
+    else{const counts={};for(const t of tries)if(t.segs.length<=exp.names.length)counts[t.segs.length]=(counts[t.segs.length]||0)+1;const best=Object.entries(counts).sort((p,q)=>q[1]-p[1])[0];if(best){const m=tries.filter(t=>t.segs.length===+best[0]);pick=m[Math.floor(m.length/2)];}}
+    const counts=[...new Set(tries.map(t=>t.segs.length))].sort((p,q)=>p-q).join(',');
+    results.push({audio:i+1,file,expected:exp.names.length,exact:exp.exact,found:pick?pick.segs.length:0,k:pick?.k,gap:pick?.gap,segs:pick?.segs||[],names:exp.names,samples:x});
+    rows.push(`<tr><td>${i+1}</td><td>${a.inicio}</td><td>${exp.names.length}${exp.exact?'':' (máx.)'}</td><td class="${pick&&(!exp.exact||pick.segs.length===exp.names.length)?'ok':'bad'}">${pick?pick.segs.length:'no coincide'}</td><td>${counts}</td></tr>`);
+    document.getElementById('tabla').innerHTML='<tr><th>#</th><th>Inicio</th><th>Esperados</th><th>Cortados</th><th>Posibles</th></tr>'+rows.join('');
+  }
+  document.getElementById('estado').textContent='Análisis terminado.';
+  return results.map(r=>({audio:r.audio,expected:r.expected,exact:r.exact,found:r.found,k:r.k,gap:r.gap}));
+}
+async function save(){
+  const manifest=[];let n=0;
+  for(const r of results){
+    if(!r.found||(r.exact&&r.found!==r.expected))continue;
+    for(let j=0;j<r.segs.length;j++){
+      const [a,b]=r.segs[j],prevEnd=j?r.segs[j-1][1]:0,nextStart=j<r.segs.length-1?r.segs[j+1][0]:Math.floor(r.samples.length/FRAME);
+      const s=Math.max(prevEnd+1,a-3)*FRAME,e=Math.min(nextStart-1,b+12)*FRAME;
+      const clip=r.samples.slice(s,e),file=`b4-${String(r.audio).padStart(2,'0')}-${String(j+1).padStart(3,'0')}.wav`;
+      const res=await fetch(`http://127.0.0.1:8090/?archivo=${file}`,{method:'POST',body:wav(clip)});if(!res.ok)throw new Error('No se pudo guardar '+file);
+      manifest.push({name:r.names[j],src:`assets/nombres/${file}`,duration:+(clip.length/RATE).toFixed(5),lead:0.025,audio:r.audio,start:+(s/RATE).toFixed(3),end:+(e/RATE).toFixed(3)});n++;
+      document.getElementById('estado').textContent=`Guardados ${n}…`;
+    }
+  }
+  await fetch('http://127.0.0.1:8090/?archivo=resultado.json',{method:'POST',body:JSON.stringify(manifest,null,1)});
+  document.getElementById('estado').textContent=`Listo: ${n} nombres guardados.`;
+  return n;
+}
+</script></body></html>

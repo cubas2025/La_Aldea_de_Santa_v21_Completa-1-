@@ -74,3 +74,31 @@
 .live-lang span{font-weight:700;font-size:.9rem}
 .live-lang button{min-height:40px;padding:6px 12px;border:1px solid #e3cfc2;border-radius:999px;background:#fff;font:inherit;font-size:.88rem;font-weight:600;cursor:pointer}
 .live-lang button[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
+/* Panel en vivo sobre el video (cuenta regresiva, fecha, hora, nombres) y cintillo */
+.live-overlay{position:absolute;inset:0;z-index:2;pointer-events:none;font-family:'DM Sans',sans-serif}
+.live-player .live-lower{bottom:38px;right:48%;padding:28px 12px 10px}
+.live-player .live-lower strong{font-size:.95rem;line-height:1.25;display:block}
+.lo-hud{position:absolute;right:8px;bottom:44px;width:46%;display:grid;gap:1px;padding:8px 10px;border-radius:12px;background:linear-gradient(135deg,#7a0d1dee,#b9142bdd);color:#fff;text-align:right;box-shadow:0 6px 18px #0007;border:1px solid #ffe7b066}
+.lo-faltan{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#ffe7b0}
+.lo-days{font-size:1.25rem;line-height:1.1;font-family:'Cormorant Garamond',serif}
+.lo-time{font-size:1rem;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.lo-date{font-size:.62rem;opacity:.95}
+.lo-names{font-size:.66rem;font-weight:700;color:#ffe7b0;font-variant-numeric:tabular-nums}
+.live-ticker{position:absolute;left:0;right:0;bottom:0;height:34px;display:flex;align-items:center;background:#0b0f1fe6;border-top:2px solid #e5153a;overflow:hidden}
+.lt-tag{flex:none;align-self:stretch;display:grid;place-items:center;padding:0 10px;background:#e5153a;color:#fff;font-size:.72rem;font-weight:900;letter-spacing:.08em;z-index:1}
+.lt-track{flex:1;overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.lt-move{display:inline-flex;animation:lt-scroll 40s linear infinite;will-change:transform}
+.lt-move span{padding-right:3.5em;color:#fff;font-size:.86rem;font-weight:600;text-shadow:0 1px 2px #000}
+@keyframes lt-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.lt-move{animation-duration:120s!important}}
+.live-clock{font-variant-numeric:tabular-nums}
+/* Modo presentador: mismo panel, más grande */
+.live-presenter .live-overlay{z-index:2}
+.live-presenter .lo-hud{right:3%;bottom:76px;width:auto;min-width:240px;padding:14px 18px;border-radius:16px}
+.live-presenter .lo-faltan{font-size:.85rem}.live-presenter .lo-days{font-size:2rem}.live-presenter .lo-time{font-size:1.6rem}
+.live-presenter .lo-date{font-size:.9rem}.live-presenter .lo-names{font-size:.95rem}
+.live-presenter .live-ticker{height:54px}.live-presenter .lt-tag{font-size:1rem;padding:0 18px}.live-presenter .lt-move span{font-size:1.25rem}
+.live-presenter .lp-lower{bottom:76px;right:auto;max-width:55%}
+.lp-clock{position:absolute;top:62px;right:22px;z-index:2;padding:6px 12px;border-radius:8px;background:#0008;color:#fff;font-weight:800;font-size:1.1rem;font-variant-numeric:tabular-nums}
+.live-lang button{white-space:nowrap}
+@media (max-width:520px){.lo-hud{width:50%;padding:6px 8px}.lo-days{font-size:1.05rem}.lo-time{font-size:.88rem}.live-player .live-lower{right:52%}.live-player .live-lower strong{font-size:.82rem}.lt-move span{font-size:.78rem}}

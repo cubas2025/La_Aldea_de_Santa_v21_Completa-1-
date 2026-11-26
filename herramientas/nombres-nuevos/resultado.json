@@ -1,0 +1,4160 @@
+[
+ {
+  "name": "Abner",
+  "src": "assets/nombres/b4-01-001.wav",
+  "duration": 0.86,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 0.11,
+  "end": 0.97
+ },
+ {
+  "name": "Adamarí",
+  "src": "assets/nombres/b4-01-002.wav",
+  "duration": 1.19,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 1.34,
+  "end": 2.53
+ },
+ {
+  "name": "Abdías",
+  "src": "assets/nombres/b4-01-003.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 2.8,
+  "end": 3.85
+ },
+ {
+  "name": "Abiel",
+  "src": "assets/nombres/b4-01-004.wav",
+  "duration": 1.01,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 4.28,
+  "end": 5.29
+ },
+ {
+  "name": "Adilene",
+  "src": "assets/nombres/b4-01-005.wav",
+  "duration": 1.19,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 5.51,
+  "end": 6.7
+ },
+ {
+  "name": "Adair",
+  "src": "assets/nombres/b4-01-006.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 6.94,
+  "end": 8.03
+ },
+ {
+  "name": "Adira",
+  "src": "assets/nombres/b4-01-007.wav",
+  "duration": 1,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 8.21,
+  "end": 9.21
+ },
+ {
+  "name": "Aidé",
+  "src": "assets/nombres/b4-01-008.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 9.44,
+  "end": 10.5
+ },
+ {
+  "name": "Airam",
+  "src": "assets/nombres/b4-01-009.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 10.7,
+  "end": 11.79
+ },
+ {
+  "name": "Ailani",
+  "src": "assets/nombres/b4-01-010.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 12.04,
+  "end": 13.2
+ },
+ {
+  "name": "Anderson",
+  "src": "assets/nombres/b4-01-011.wav",
+  "duration": 1.22,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 13.49,
+  "end": 14.71
+ },
+ {
+  "name": "Aimé",
+  "src": "assets/nombres/b4-01-012.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 14.95,
+  "end": 16.01
+ },
+ {
+  "name": "Andrey",
+  "src": "assets/nombres/b4-01-013.wav",
+  "duration": 1.12,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 16.29,
+  "end": 17.41
+ },
+ {
+  "name": "Aira",
+  "src": "assets/nombres/b4-01-014.wav",
+  "duration": 0.87,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 17.71,
+  "end": 18.58
+ },
+ {
+  "name": "Antón",
+  "src": "assets/nombres/b4-01-015.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 18.95,
+  "end": 20.03
+ },
+ {
+  "name": "Arián",
+  "src": "assets/nombres/b4-01-016.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 20.29,
+  "end": 21.34
+ },
+ {
+  "name": "Arley",
+  "src": "assets/nombres/b4-01-017.wav",
+  "duration": 0.98,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 21.62,
+  "end": 22.6
+ },
+ {
+  "name": "Arnoldo",
+  "src": "assets/nombres/b4-01-018.wav",
+  "duration": 1.25,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 22.88,
+  "end": 24.13
+ },
+ {
+  "name": "Alanis",
+  "src": "assets/nombres/b4-01-019.wav",
+  "duration": 0.97,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 24.39,
+  "end": 25.36
+ },
+ {
+  "name": "Artemio",
+  "src": "assets/nombres/b4-01-020.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 25.79,
+  "end": 26.99
+ },
+ {
+  "name": "Aleida",
+  "src": "assets/nombres/b4-01-021.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 27.29,
+  "end": 28.38
+ },
+ {
+  "name": "Aziel",
+  "src": "assets/nombres/b4-01-022.wav",
+  "duration": 1.03,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 28.7,
+  "end": 29.73
+ },
+ {
+  "name": "Alessandra",
+  "src": "assets/nombres/b4-01-023.wav",
+  "duration": 1.39,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 30.04,
+  "end": 31.43
+ },
+ {
+  "name": "Bayron",
+  "src": "assets/nombres/b4-01-024.wav",
+  "duration": 1.01,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 31.81,
+  "end": 32.82
+ },
+ {
+  "name": "Aliana",
+  "src": "assets/nombres/b4-01-025.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 33.12,
+  "end": 34.2
+ },
+ {
+  "name": "Alisa",
+  "src": "assets/nombres/b4-01-026.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 34.46,
+  "end": 35.54
+ },
+ {
+  "name": "Dáel",
+  "src": "assets/nombres/b4-01-027.wav",
+  "duration": 0.96,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 35.82,
+  "end": 36.78
+ },
+ {
+  "name": "Alitza",
+  "src": "assets/nombres/b4-01-028.wav",
+  "duration": 1.11,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 37.12,
+  "end": 38.23
+ },
+ {
+  "name": "Darel",
+  "src": "assets/nombres/b4-01-029.wav",
+  "duration": 0.92,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 38.48,
+  "end": 39.4
+ },
+ {
+  "name": "Aliz",
+  "src": "assets/nombres/b4-01-030.wav",
+  "duration": 0.75,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 39.75,
+  "end": 40.5
+ },
+ {
+  "name": "Darián",
+  "src": "assets/nombres/b4-01-031.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 40.91,
+  "end": 41.99
+ },
+ {
+  "name": "Darwin",
+  "src": "assets/nombres/b4-01-032.wav",
+  "duration": 1.13,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 42.22,
+  "end": 43.35
+ },
+ {
+  "name": "Dayron",
+  "src": "assets/nombres/b4-01-033.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 43.6,
+  "end": 44.66
+ },
+ {
+  "name": "Derian",
+  "src": "assets/nombres/b4-01-034.wav",
+  "duration": 1.13,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 44.85,
+  "end": 45.98
+ },
+ {
+  "name": "Amaris",
+  "src": "assets/nombres/b4-01-035.wav",
+  "duration": 0.91,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 46.25,
+  "end": 47.16
+ },
+ {
+  "name": "Diago",
+  "src": "assets/nombres/b4-01-036.wav",
+  "duration": 1.01,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 47.54,
+  "end": 48.55
+ },
+ {
+  "name": "Amelí",
+  "src": "assets/nombres/b4-01-037.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 48.83,
+  "end": 49.89
+ },
+ {
+  "name": "Dilán",
+  "src": "assets/nombres/b4-01-038.wav",
+  "duration": 1.04,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 50.14,
+  "end": 51.18
+ },
+ {
+  "name": "Dorian",
+  "src": "assets/nombres/b4-01-039.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 1,
+  "start": 51.41,
+  "end": 52.51
+ },
+ {
+  "name": "Amira",
+  "src": "assets/nombres/b4-02-001.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 0.1,
+  "end": 1.2
+ },
+ {
+  "name": "Ediel",
+  "src": "assets/nombres/b4-02-002.wav",
+  "duration": 1.15,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 1.59,
+  "end": 2.74
+ },
+ {
+  "name": "Elam",
+  "src": "assets/nombres/b4-02-003.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 3.09,
+  "end": 4.14
+ },
+ {
+  "name": "Anabia",
+  "src": "assets/nombres/b4-02-004.wav",
+  "duration": 1.17,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 4.41,
+  "end": 5.58
+ },
+ {
+  "name": "Eliud",
+  "src": "assets/nombres/b4-02-005.wav",
+  "duration": 0.87,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 6,
+  "end": 6.87
+ },
+ {
+  "name": "Anaira",
+  "src": "assets/nombres/b4-02-006.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 7.42,
+  "end": 8.58
+ },
+ {
+  "name": "Emil",
+  "src": "assets/nombres/b4-02-007.wav",
+  "duration": 0.96,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 9.03,
+  "end": 9.99
+ },
+ {
+  "name": "Anarí",
+  "src": "assets/nombres/b4-02-008.wav",
+  "duration": 1.14,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 10.49,
+  "end": 11.63
+ },
+ {
+  "name": "Erwin",
+  "src": "assets/nombres/b4-02-009.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 12.01,
+  "end": 13.11
+ },
+ {
+  "name": "Anayra",
+  "src": "assets/nombres/b4-02-010.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 13.5,
+  "end": 14.7
+ },
+ {
+  "name": "Fabio",
+  "src": "assets/nombres/b4-02-011.wav",
+  "duration": 0.98,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 15.14,
+  "end": 16.12
+ },
+ {
+  "name": "Fabricio",
+  "src": "assets/nombres/b4-02-012.wav",
+  "duration": 1.28,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 16.48,
+  "end": 17.76
+ },
+ {
+  "name": "Angeli",
+  "src": "assets/nombres/b4-02-013.wav",
+  "duration": 1.14,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 18.11,
+  "end": 19.25
+ },
+ {
+  "name": "Favian",
+  "src": "assets/nombres/b4-02-014.wav",
+  "duration": 1.21,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 19.65,
+  "end": 20.86
+ },
+ {
+  "name": "Anika",
+  "src": "assets/nombres/b4-02-015.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 21.19,
+  "end": 22.27
+ },
+ {
+  "name": "Fredy",
+  "src": "assets/nombres/b4-02-016.wav",
+  "duration": 0.88,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 22.7,
+  "end": 23.58
+ },
+ {
+  "name": "Gadiel",
+  "src": "assets/nombres/b4-02-017.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 23.96,
+  "end": 25.16
+ },
+ {
+  "name": "Giancarlo",
+  "src": "assets/nombres/b4-02-018.wav",
+  "duration": 1.46,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 25.52,
+  "end": 26.98
+ },
+ {
+  "name": "Gibrán",
+  "src": "assets/nombres/b4-02-019.wav",
+  "duration": 1.18,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 27.21,
+  "end": 28.39
+ },
+ {
+  "name": "Ariadne",
+  "src": "assets/nombres/b4-02-020.wav",
+  "duration": 1.26,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 28.75,
+  "end": 30.01
+ },
+ {
+  "name": "Ariely",
+  "src": "assets/nombres/b4-02-021.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 30.35,
+  "end": 31.55
+ },
+ {
+  "name": "Giuliano",
+  "src": "assets/nombres/b4-02-022.wav",
+  "duration": 1.5,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 31.86,
+  "end": 33.36
+ },
+ {
+  "name": "Haziel",
+  "src": "assets/nombres/b4-02-023.wav",
+  "duration": 1.23,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 33.62,
+  "end": 34.85
+ },
+ {
+  "name": "Arlen",
+  "src": "assets/nombres/b4-02-024.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 35.4,
+  "end": 36.46
+ },
+ {
+  "name": "Heber",
+  "src": "assets/nombres/b4-02-025.wav",
+  "duration": 0.92,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 36.74,
+  "end": 37.66
+ },
+ {
+  "name": "Hiram",
+  "src": "assets/nombres/b4-02-026.wav",
+  "duration": 0.95,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 38.04,
+  "end": 38.99
+ },
+ {
+  "name": "Astrid",
+  "src": "assets/nombres/b4-02-027.wav",
+  "duration": 0.96,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 39.38,
+  "end": 40.34
+ },
+ {
+  "name": "Atziri",
+  "src": "assets/nombres/b4-02-028.wav",
+  "duration": 1.25,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 40.83,
+  "end": 42.08
+ },
+ {
+  "name": "Ilian",
+  "src": "assets/nombres/b4-02-029.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 42.44,
+  "end": 43.53
+ },
+ {
+  "name": "Avril",
+  "src": "assets/nombres/b4-02-030.wav",
+  "duration": 1.02,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 43.89,
+  "end": 44.91
+ },
+ {
+  "name": "Ayelén",
+  "src": "assets/nombres/b4-02-031.wav",
+  "duration": 1.3,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 45.3,
+  "end": 46.6
+ },
+ {
+  "name": "Irving",
+  "src": "assets/nombres/b4-02-032.wav",
+  "duration": 1.13,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 46.97,
+  "end": 48.1
+ },
+ {
+  "name": "Ithiel",
+  "src": "assets/nombres/b4-02-033.wav",
+  "duration": 1.21,
+  "lead": 0.025,
+  "audio": 2,
+  "start": 48.44,
+  "end": 49.65
+ },
+ {
+  "name": "Ayra",
+  "src": "assets/nombres/b4-03-001.wav",
+  "duration": 0.95,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 0.14,
+  "end": 1.09
+ },
+ {
+  "name": "Jaciel",
+  "src": "assets/nombres/b4-03-002.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 1.6,
+  "end": 2.68
+ },
+ {
+  "name": "Belky",
+  "src": "assets/nombres/b4-03-003.wav",
+  "duration": 0.94,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 3.1,
+  "end": 4.04
+ },
+ {
+  "name": "Jadiel",
+  "src": "assets/nombres/b4-03-004.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 4.53,
+  "end": 5.63
+ },
+ {
+  "name": "Bianka",
+  "src": "assets/nombres/b4-03-005.wav",
+  "duration": 1.14,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 5.94,
+  "end": 7.08
+ },
+ {
+  "name": "Jamir",
+  "src": "assets/nombres/b4-03-006.wav",
+  "duration": 1.01,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 7.53,
+  "end": 8.54
+ },
+ {
+  "name": "Jassiel",
+  "src": "assets/nombres/b4-03-007.wav",
+  "duration": 1.12,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 8.91,
+  "end": 10.03
+ },
+ {
+  "name": "Jerson",
+  "src": "assets/nombres/b4-03-008.wav",
+  "duration": 1.17,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 10.46,
+  "end": 11.63
+ },
+ {
+  "name": "Caterina",
+  "src": "assets/nombres/b4-03-009.wav",
+  "duration": 1.18,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 12.08,
+  "end": 13.26
+ },
+ {
+  "name": "Jireh",
+  "src": "assets/nombres/b4-03-010.wav",
+  "duration": 1,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 13.76,
+  "end": 14.76
+ },
+ {
+  "name": "Joab",
+  "src": "assets/nombres/b4-03-011.wav",
+  "duration": 0.76,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 15.28,
+  "end": 16.04
+ },
+ {
+  "name": "Ciana",
+  "src": "assets/nombres/b4-03-012.wav",
+  "duration": 0.84,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 16.73,
+  "end": 17.57
+ },
+ {
+  "name": "Jomar",
+  "src": "assets/nombres/b4-03-013.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 18.14,
+  "end": 19.04
+ },
+ {
+  "name": "Jostin",
+  "src": "assets/nombres/b4-03-014.wav",
+  "duration": 0.98,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 19.61,
+  "end": 20.59
+ },
+ {
+  "name": "Jován",
+  "src": "assets/nombres/b4-03-015.wav",
+  "duration": 1.04,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 20.97,
+  "end": 22.01
+ },
+ {
+  "name": "Cristel",
+  "src": "assets/nombres/b4-03-016.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 22.49,
+  "end": 23.54
+ },
+ {
+  "name": "Juvenal",
+  "src": "assets/nombres/b4-03-017.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 24.03,
+  "end": 25.08
+ },
+ {
+  "name": "Kael",
+  "src": "assets/nombres/b4-03-018.wav",
+  "duration": 0.94,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 25.6,
+  "end": 26.54
+ },
+ {
+  "name": "Daleyza",
+  "src": "assets/nombres/b4-03-019.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 27,
+  "end": 28.2
+ },
+ {
+  "name": "Keylor",
+  "src": "assets/nombres/b4-03-020.wav",
+  "duration": 0.84,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 28.74,
+  "end": 29.58
+ },
+ {
+  "name": "Danely",
+  "src": "assets/nombres/b4-03-021.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 30.07,
+  "end": 31.13
+ },
+ {
+  "name": "Dariela",
+  "src": "assets/nombres/b4-03-022.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 31.59,
+  "end": 32.75
+ },
+ {
+  "name": "Lemuel",
+  "src": "assets/nombres/b4-03-023.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 33.18,
+  "end": 34.28
+ },
+ {
+  "name": "Daya",
+  "src": "assets/nombres/b4-03-024.wav",
+  "duration": 0.93,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 34.48,
+  "end": 35.41
+ },
+ {
+  "name": "Dayla",
+  "src": "assets/nombres/b4-03-025.wav",
+  "duration": 0.97,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 35.85,
+  "end": 36.82
+ },
+ {
+  "name": "Daylin",
+  "src": "assets/nombres/b4-03-026.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 37.29,
+  "end": 38.38
+ },
+ {
+  "name": "Maikel",
+  "src": "assets/nombres/b4-03-027.wav",
+  "duration": 1.11,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 38.82,
+  "end": 39.93
+ },
+ {
+  "name": "Deisy",
+  "src": "assets/nombres/b4-03-028.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 40.31,
+  "end": 41.41
+ },
+ {
+  "name": "Delara",
+  "src": "assets/nombres/b4-03-029.wav",
+  "duration": 1.13,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 41.81,
+  "end": 42.94
+ },
+ {
+  "name": "Marvin",
+  "src": "assets/nombres/b4-03-030.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 43.37,
+  "end": 44.47
+ },
+ {
+  "name": "Doménica",
+  "src": "assets/nombres/b4-03-031.wav",
+  "duration": 1.3,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 44.88,
+  "end": 46.18
+ },
+ {
+  "name": "Doris",
+  "src": "assets/nombres/b4-03-032.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 46.6,
+  "end": 47.5
+ },
+ {
+  "name": "Eleana",
+  "src": "assets/nombres/b4-03-033.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 3,
+  "start": 48.03,
+  "end": 49.13
+ },
+ {
+  "name": "Obed",
+  "src": "assets/nombres/b4-04-001.wav",
+  "duration": 0.87,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 0.1,
+  "end": 0.97
+ },
+ {
+  "name": "Eleonora",
+  "src": "assets/nombres/b4-04-002.wav",
+  "duration": 1.32,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 1.34,
+  "end": 2.66
+ },
+ {
+  "name": "Odín",
+  "src": "assets/nombres/b4-04-003.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 3.06,
+  "end": 4.14
+ },
+ {
+  "name": "Elia",
+  "src": "assets/nombres/b4-04-004.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 4.49,
+  "end": 5.39
+ },
+ {
+  "name": "Oriel",
+  "src": "assets/nombres/b4-04-005.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 5.8,
+  "end": 6.86
+ },
+ {
+  "name": "Elianny",
+  "src": "assets/nombres/b4-04-006.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 7.22,
+  "end": 8.38
+ },
+ {
+  "name": "Elina",
+  "src": "assets/nombres/b4-04-007.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 8.73,
+  "end": 9.78
+ },
+ {
+  "name": "Osiris",
+  "src": "assets/nombres/b4-04-008.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 10.25,
+  "end": 11.31
+ },
+ {
+  "name": "Oziel",
+  "src": "assets/nombres/b4-04-009.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 11.76,
+  "end": 12.82
+ },
+ {
+  "name": "Piero",
+  "src": "assets/nombres/b4-04-010.wav",
+  "duration": 0.87,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 13.26,
+  "end": 14.13
+ },
+ {
+  "name": "Remiel",
+  "src": "assets/nombres/b4-04-011.wav",
+  "duration": 1.11,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 14.49,
+  "end": 15.6
+ },
+ {
+  "name": "Elma",
+  "src": "assets/nombres/b4-04-012.wav",
+  "duration": 0.89,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 15.99,
+  "end": 16.88
+ },
+ {
+  "name": "Elora",
+  "src": "assets/nombres/b4-04-013.wav",
+  "duration": 1.02,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 17.29,
+  "end": 18.31
+ },
+ {
+  "name": "Elva",
+  "src": "assets/nombres/b4-04-014.wav",
+  "duration": 0.97,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 18.71,
+  "end": 19.68
+ },
+ {
+  "name": "Elvia",
+  "src": "assets/nombres/b4-04-015.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 19.99,
+  "end": 21.04
+ },
+ {
+  "name": "Romel",
+  "src": "assets/nombres/b4-04-016.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 21.4,
+  "end": 22.46
+ },
+ {
+  "name": "Emili",
+  "src": "assets/nombres/b4-04-017.wav",
+  "duration": 0.97,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 22.83,
+  "end": 23.8
+ },
+ {
+  "name": "Emira",
+  "src": "assets/nombres/b4-04-018.wav",
+  "duration": 1.02,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 24.09,
+  "end": 25.11
+ },
+ {
+  "name": "Enid",
+  "src": "assets/nombres/b4-04-019.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 25.52,
+  "end": 26.42
+ },
+ {
+  "name": "Said",
+  "src": "assets/nombres/b4-04-020.wav",
+  "duration": 0.96,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 26.85,
+  "end": 27.81
+ },
+ {
+  "name": "Eriana",
+  "src": "assets/nombres/b4-04-021.wav",
+  "duration": 1.11,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 28.18,
+  "end": 29.29
+ },
+ {
+  "name": "Samir",
+  "src": "assets/nombres/b4-04-022.wav",
+  "duration": 1.04,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 29.65,
+  "end": 30.69
+ },
+ {
+  "name": "Erina",
+  "src": "assets/nombres/b4-04-023.wav",
+  "duration": 1.03,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 31.01,
+  "end": 32.04
+ },
+ {
+  "name": "Esme",
+  "src": "assets/nombres/b4-04-024.wav",
+  "duration": 0.93,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 32.37,
+  "end": 33.3
+ },
+ {
+  "name": "Estefani",
+  "src": "assets/nombres/b4-04-025.wav",
+  "duration": 1.32,
+  "lead": 0.025,
+  "audio": 4,
+  "start": 33.62,
+  "end": 34.94
+ },
+ {
+  "name": "Aleska",
+  "src": "assets/nombres/b4-05-001.wav",
+  "duration": 1.21,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 0.1,
+  "end": 1.31
+ },
+ {
+  "name": "Elior",
+  "src": "assets/nombres/b4-05-002.wav",
+  "duration": 1.15,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 1.58,
+  "end": 2.73
+ },
+ {
+  "name": "Amayrani",
+  "src": "assets/nombres/b4-05-003.wav",
+  "duration": 1.44,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 2.84,
+  "end": 4.28
+ },
+ {
+  "name": "Eriel",
+  "src": "assets/nombres/b4-05-004.wav",
+  "duration": 1.04,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 4.46,
+  "end": 5.5
+ },
+ {
+  "name": "Anely",
+  "src": "assets/nombres/b4-05-005.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 5.64,
+  "end": 6.72
+ },
+ {
+  "name": "Farid",
+  "src": "assets/nombres/b4-05-006.wav",
+  "duration": 1,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 6.92,
+  "end": 7.92
+ },
+ {
+  "name": "Ángely",
+  "src": "assets/nombres/b4-05-007.wav",
+  "duration": 1.15,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 8.15,
+  "end": 9.3
+ },
+ {
+  "name": "Gino",
+  "src": "assets/nombres/b4-05-008.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 9.47,
+  "end": 10.37
+ },
+ {
+  "name": "Anya",
+  "src": "assets/nombres/b4-05-009.wav",
+  "duration": 0.89,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 10.62,
+  "end": 11.51
+ },
+ {
+  "name": "Jeyson",
+  "src": "assets/nombres/b4-05-010.wav",
+  "duration": 1.14,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 11.71,
+  "end": 12.85
+ },
+ {
+  "name": "Aylani",
+  "src": "assets/nombres/b4-05-011.wav",
+  "duration": 1.13,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 13.05,
+  "end": 14.18
+ },
+ {
+  "name": "Kadir",
+  "src": "assets/nombres/b4-05-012.wav",
+  "duration": 0.98,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 14.36,
+  "end": 15.34
+ },
+ {
+  "name": "Citlali",
+  "src": "assets/nombres/b4-05-013.wav",
+  "duration": 1.23,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 15.44,
+  "end": 16.67
+ },
+ {
+  "name": "Lander",
+  "src": "assets/nombres/b4-05-014.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 16.86,
+  "end": 17.95
+ },
+ {
+  "name": "Daleth",
+  "src": "assets/nombres/b4-05-015.wav",
+  "duration": 0.85,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 18.11,
+  "end": 18.96
+ },
+ {
+  "name": "Liel",
+  "src": "assets/nombres/b4-05-016.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 19.25,
+  "end": 20.33
+ },
+ {
+  "name": "Darlyn",
+  "src": "assets/nombres/b4-05-017.wav",
+  "duration": 1.12,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 20.53,
+  "end": 21.65
+ },
+ {
+  "name": "Luan",
+  "src": "assets/nombres/b4-05-018.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 21.78,
+  "end": 22.88
+ },
+ {
+  "name": "Elana",
+  "src": "assets/nombres/b4-05-019.wav",
+  "duration": 1.13,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 23.02,
+  "end": 24.15
+ },
+ {
+  "name": "Nahim",
+  "src": "assets/nombres/b4-05-020.wav",
+  "duration": 1.13,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 24.3,
+  "end": 25.43
+ },
+ {
+  "name": "Eliane",
+  "src": "assets/nombres/b4-05-021.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 25.61,
+  "end": 26.77
+ },
+ {
+  "name": "Nayan",
+  "src": "assets/nombres/b4-05-022.wav",
+  "duration": 1.17,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 26.93,
+  "end": 28.1
+ },
+ {
+  "name": "Elieth",
+  "src": "assets/nombres/b4-05-023.wav",
+  "duration": 0.83,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 28.3,
+  "end": 29.13
+ },
+ {
+  "name": "Neylan",
+  "src": "assets/nombres/b4-05-024.wav",
+  "duration": 1.23,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 29.42,
+  "end": 30.65
+ },
+ {
+  "name": "Elissa",
+  "src": "assets/nombres/b4-05-025.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 31.06,
+  "end": 32.12
+ },
+ {
+  "name": "Remi",
+  "src": "assets/nombres/b4-05-026.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 32.24,
+  "end": 33.29
+ },
+ {
+  "name": "Eylin",
+  "src": "assets/nombres/b4-05-027.wav",
+  "duration": 0.98,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 33.44,
+  "end": 34.42
+ },
+ {
+  "name": "Roan",
+  "src": "assets/nombres/b4-05-028.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 34.54,
+  "end": 35.6
+ },
+ {
+  "name": "Salim",
+  "src": "assets/nombres/b4-05-029.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 35.75,
+  "end": 36.84
+ },
+ {
+  "name": "Vander",
+  "src": "assets/nombres/b4-05-030.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 36.95,
+  "end": 38.01
+ },
+ {
+  "name": "Yahel",
+  "src": "assets/nombres/b4-05-031.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 38.16,
+  "end": 39.24
+ },
+ {
+  "name": "Yaser",
+  "src": "assets/nombres/b4-05-032.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 39.37,
+  "end": 40.45
+ },
+ {
+  "name": "Yeriel",
+  "src": "assets/nombres/b4-05-033.wav",
+  "duration": 1.14,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 40.61,
+  "end": 41.75
+ },
+ {
+  "name": "Zian",
+  "src": "assets/nombres/b4-05-034.wav",
+  "duration": 1.04,
+  "lead": 0.025,
+  "audio": 5,
+  "start": 41.86,
+  "end": 42.9
+ },
+ {
+  "name": "Zaylin",
+  "src": "assets/nombres/b4-06-001.wav",
+  "duration": 0.89,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 0.2,
+  "end": 1.09
+ },
+ {
+  "name": "Arantxa",
+  "src": "assets/nombres/b4-06-002.wav",
+  "duration": 1.07,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 1.37,
+  "end": 2.44
+ },
+ {
+  "name": "Zarek",
+  "src": "assets/nombres/b4-06-003.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 2.82,
+  "end": 3.72
+ },
+ {
+  "name": "Ayari",
+  "src": "assets/nombres/b4-06-004.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 3.96,
+  "end": 5.05
+ },
+ {
+  "name": "Zamir",
+  "src": "assets/nombres/b4-06-005.wav",
+  "duration": 0.98,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 5.3,
+  "end": 6.28
+ },
+ {
+  "name": "Yalitza",
+  "src": "assets/nombres/b4-06-006.wav",
+  "duration": 1.17,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 6.49,
+  "end": 7.66
+ },
+ {
+  "name": "Zahir",
+  "src": "assets/nombres/b4-06-007.wav",
+  "duration": 1,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 7.93,
+  "end": 8.93
+ },
+ {
+  "name": "Yulieth",
+  "src": "assets/nombres/b4-06-008.wav",
+  "duration": 0.92,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 9.13,
+  "end": 10.05
+ },
+ {
+  "name": "Zayán",
+  "src": "assets/nombres/b4-06-009.wav",
+  "duration": 1.07,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 10.45,
+  "end": 11.52
+ },
+ {
+  "name": "Yajaira",
+  "src": "assets/nombres/b4-06-010.wav",
+  "duration": 1.26,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 11.72,
+  "end": 12.98
+ },
+ {
+  "name": "Jhonatan",
+  "src": "assets/nombres/b4-06-011.wav",
+  "duration": 1.37,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 13.17,
+  "end": 14.54
+ },
+ {
+  "name": "Yareni",
+  "src": "assets/nombres/b4-06-012.wav",
+  "duration": 1.23,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 14.71,
+  "end": 15.94
+ },
+ {
+  "name": "Jibril",
+  "src": "assets/nombres/b4-06-013.wav",
+  "duration": 1.22,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 16.17,
+  "end": 17.39
+ },
+ {
+  "name": "Yatzil",
+  "src": "assets/nombres/b4-06-014.wav",
+  "duration": 1.25,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 17.6,
+  "end": 18.85
+ },
+ {
+  "name": "Yunis",
+  "src": "assets/nombres/b4-06-015.wav",
+  "duration": 1.14,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 19.13,
+  "end": 20.27
+ },
+ {
+  "name": "Yanelis",
+  "src": "assets/nombres/b4-06-016.wav",
+  "duration": 1.33,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 20.61,
+  "end": 21.94
+ },
+ {
+  "name": "Wilbert",
+  "src": "assets/nombres/b4-06-017.wav",
+  "duration": 1.15,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 22.25,
+  "end": 23.4
+ },
+ {
+  "name": "Mailén",
+  "src": "assets/nombres/b4-06-018.wav",
+  "duration": 1.29,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 23.7,
+  "end": 24.99
+ },
+ {
+  "name": "William",
+  "src": "assets/nombres/b4-06-019.wav",
+  "duration": 1.23,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 25.24,
+  "end": 26.47
+ },
+ {
+  "name": "Maleny",
+  "src": "assets/nombres/b4-06-020.wav",
+  "duration": 1.38,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 26.68,
+  "end": 28.06
+ },
+ {
+  "name": "Vito",
+  "src": "assets/nombres/b4-06-021.wav",
+  "duration": 1.18,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 28.25,
+  "end": 29.43
+ },
+ {
+  "name": "Mariely",
+  "src": "assets/nombres/b4-06-022.wav",
+  "duration": 1.39,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 29.6,
+  "end": 30.99
+ },
+ {
+  "name": "Urias",
+  "src": "assets/nombres/b4-06-023.wav",
+  "duration": 1.12,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 31.23,
+  "end": 32.35
+ },
+ {
+  "name": "Milagro",
+  "src": "assets/nombres/b4-06-024.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 32.77,
+  "end": 33.87
+ },
+ {
+  "name": "Uzair",
+  "src": "assets/nombres/b4-06-025.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 34.16,
+  "end": 35.21
+ },
+ {
+  "name": "Nahomy",
+  "src": "assets/nombres/b4-06-026.wav",
+  "duration": 1.19,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 35.56,
+  "end": 36.75
+ },
+ {
+  "name": "Tamir",
+  "src": "assets/nombres/b4-06-027.wav",
+  "duration": 0.95,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 37.06,
+  "end": 38.01
+ },
+ {
+  "name": "Naylani",
+  "src": "assets/nombres/b4-06-028.wav",
+  "duration": 1.23,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 38.32,
+  "end": 39.55
+ },
+ {
+  "name": "Shamir",
+  "src": "assets/nombres/b4-06-029.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 39.84,
+  "end": 40.89
+ },
+ {
+  "name": "Nallely",
+  "src": "assets/nombres/b4-06-030.wav",
+  "duration": 1.25,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 41.17,
+  "end": 42.42
+ },
+ {
+  "name": "Silvio",
+  "src": "assets/nombres/b4-06-031.wav",
+  "duration": 1.11,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 42.68,
+  "end": 43.79
+ },
+ {
+  "name": "Naydelin",
+  "src": "assets/nombres/b4-06-032.wav",
+  "duration": 1.48,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 44.08,
+  "end": 45.56
+ },
+ {
+  "name": "Ander",
+  "src": "assets/nombres/b4-06-033.wav",
+  "duration": 0.96,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 45.83,
+  "end": 46.79
+ },
+ {
+  "name": "Nisa",
+  "src": "assets/nombres/b4-06-034.wav",
+  "duration": 1.15,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 47.12,
+  "end": 48.27
+ },
+ {
+  "name": "Eben",
+  "src": "assets/nombres/b4-06-035.wav",
+  "duration": 0.92,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 48.61,
+  "end": 49.53
+ },
+ {
+  "name": "Sahily",
+  "src": "assets/nombres/b4-06-036.wav",
+  "duration": 1.27,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 49.82,
+  "end": 51.09
+ },
+ {
+  "name": "Emeric",
+  "src": "assets/nombres/b4-06-037.wav",
+  "duration": 1.01,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 51.48,
+  "end": 52.49
+ },
+ {
+  "name": "Samadhi",
+  "src": "assets/nombres/b4-06-038.wav",
+  "duration": 1.26,
+  "lead": 0.025,
+  "audio": 6,
+  "start": 52.85,
+  "end": 54.11
+ },
+ {
+  "name": "Eren",
+  "src": "assets/nombres/b4-07-001.wav",
+  "duration": 0.95,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 0.1,
+  "end": 1.05
+ },
+ {
+  "name": "Saray",
+  "src": "assets/nombres/b4-07-002.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 1.28,
+  "end": 2.37
+ },
+ {
+  "name": "Fares",
+  "src": "assets/nombres/b4-07-003.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 2.65,
+  "end": 3.55
+ },
+ {
+  "name": "Thalía",
+  "src": "assets/nombres/b4-07-004.wav",
+  "duration": 1.04,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 3.88,
+  "end": 4.92
+ },
+ {
+  "name": "Francesco",
+  "src": "assets/nombres/b4-07-005.wav",
+  "duration": 1.25,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 5.15,
+  "end": 6.4
+ },
+ {
+  "name": "Yasna",
+  "src": "assets/nombres/b4-07-006.wav",
+  "duration": 0.98,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 6.64,
+  "end": 7.62
+ },
+ {
+  "name": "Frank",
+  "src": "assets/nombres/b4-07-007.wav",
+  "duration": 0.93,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 7.91,
+  "end": 8.84
+ },
+ {
+  "name": "Yeimi",
+  "src": "assets/nombres/b4-07-008.wav",
+  "duration": 1.07,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 9.12,
+  "end": 10.19
+ },
+ {
+  "name": "Kamil",
+  "src": "assets/nombres/b4-07-009.wav",
+  "duration": 1.07,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 10.46,
+  "end": 11.53
+ },
+ {
+  "name": "Yesly",
+  "src": "assets/nombres/b4-07-010.wav",
+  "duration": 1.15,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 11.76,
+  "end": 12.91
+ },
+ {
+  "name": "Malcom",
+  "src": "assets/nombres/b4-07-011.wav",
+  "duration": 1.14,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 13.12,
+  "end": 14.26
+ },
+ {
+  "name": "Yetzali",
+  "src": "assets/nombres/b4-07-012.wav",
+  "duration": 1.34,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 14.48,
+  "end": 15.82
+ },
+ {
+  "name": "Maxen",
+  "src": "assets/nombres/b4-07-013.wav",
+  "duration": 1.17,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 16.07,
+  "end": 17.24
+ },
+ {
+  "name": "Yuna",
+  "src": "assets/nombres/b4-07-014.wav",
+  "duration": 1.07,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 17.5,
+  "end": 18.57
+ },
+ {
+  "name": "Meir",
+  "src": "assets/nombres/b4-07-015.wav",
+  "duration": 1.11,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 18.85,
+  "end": 19.96
+ },
+ {
+  "name": "Yurany",
+  "src": "assets/nombres/b4-07-016.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 20.17,
+  "end": 21.33
+ },
+ {
+  "name": "Nicolai",
+  "src": "assets/nombres/b4-07-017.wav",
+  "duration": 1.35,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 21.57,
+  "end": 22.92
+ },
+ {
+  "name": "Zuleyka",
+  "src": "assets/nombres/b4-07-018.wav",
+  "duration": 1.26,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 23.12,
+  "end": 24.38
+ },
+ {
+  "name": "Orson",
+  "src": "assets/nombres/b4-07-019.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 24.71,
+  "end": 25.77
+ },
+ {
+  "name": "Zuria",
+  "src": "assets/nombres/b4-07-020.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 25.97,
+  "end": 27.07
+ },
+ {
+  "name": "Rainier",
+  "src": "assets/nombres/b4-07-021.wav",
+  "duration": 1.17,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 27.31,
+  "end": 28.48
+ },
+ {
+  "name": "Zuriel",
+  "src": "assets/nombres/b4-07-022.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 28.71,
+  "end": 29.91
+ },
+ {
+  "name": "Sacha",
+  "src": "assets/nombres/b4-07-023.wav",
+  "duration": 1.03,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 30.19,
+  "end": 31.22
+ },
+ {
+  "name": "Shaddai",
+  "src": "assets/nombres/b4-07-024.wav",
+  "duration": 1.31,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 31.49,
+  "end": 32.8
+ },
+ {
+  "name": "Sander",
+  "src": "assets/nombres/b4-07-025.wav",
+  "duration": 0.94,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 33.29,
+  "end": 34.23
+ },
+ {
+  "name": "Adelie",
+  "src": "assets/nombres/b4-07-026.wav",
+  "duration": 1.15,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 34.54,
+  "end": 35.69
+ },
+ {
+  "name": "Santiel",
+  "src": "assets/nombres/b4-07-027.wav",
+  "duration": 1.23,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 35.91,
+  "end": 37.14
+ },
+ {
+  "name": "Alaiza",
+  "src": "assets/nombres/b4-07-028.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 37.45,
+  "end": 38.65
+ },
+ {
+  "name": "Zahid",
+  "src": "assets/nombres/b4-07-029.wav",
+  "duration": 1.03,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 38.96,
+  "end": 39.99
+ },
+ {
+  "name": "Atlas",
+  "src": "assets/nombres/b4-07-030.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 40.49,
+  "end": 41.39
+ },
+ {
+  "name": "Zidan",
+  "src": "assets/nombres/b4-07-031.wav",
+  "duration": 1.22,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 41.78,
+  "end": 43
+ },
+ {
+  "name": "Amal",
+  "src": "assets/nombres/b4-07-032.wav",
+  "duration": 1.17,
+  "lead": 0.025,
+  "audio": 7,
+  "start": 43.32,
+  "end": 44.49
+ },
+ {
+  "name": "Steven",
+  "src": "assets/nombres/b4-08-001.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 0.08,
+  "end": 1.18
+ },
+ {
+  "name": "Ameri",
+  "src": "assets/nombres/b4-08-002.wav",
+  "duration": 0.95,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 1.32,
+  "end": 2.27
+ },
+ {
+  "name": "Vittorio",
+  "src": "assets/nombres/b4-08-003.wav",
+  "duration": 1.14,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 2.37,
+  "end": 3.51
+ },
+ {
+  "name": "Ari",
+  "src": "assets/nombres/b4-08-004.wav",
+  "duration": 0.79,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 3.74,
+  "end": 4.53
+ },
+ {
+  "name": "Arika",
+  "src": "assets/nombres/b4-08-005.wav",
+  "duration": 0.92,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 4.8,
+  "end": 5.72
+ },
+ {
+  "name": "Arina",
+  "src": "assets/nombres/b4-08-006.wav",
+  "duration": 0.95,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 5.95,
+  "end": 6.9
+ },
+ {
+  "name": "Arisa",
+  "src": "assets/nombres/b4-08-007.wav",
+  "duration": 0.99,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 7.16,
+  "end": 8.15
+ },
+ {
+  "name": "Iman",
+  "src": "assets/nombres/b4-08-008.wav",
+  "duration": 0.95,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 8.45,
+  "end": 9.4
+ },
+ {
+  "name": "Carly",
+  "src": "assets/nombres/b4-08-009.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 9.69,
+  "end": 10.59
+ },
+ {
+  "name": "Chantal",
+  "src": "assets/nombres/b4-08-010.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 10.82,
+  "end": 11.92
+ },
+ {
+  "name": "Ciara",
+  "src": "assets/nombres/b4-08-011.wav",
+  "duration": 0.89,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 12.2,
+  "end": 13.09
+ },
+ {
+  "name": "Coralie",
+  "src": "assets/nombres/b4-08-012.wav",
+  "duration": 1,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 13.43,
+  "end": 14.43
+ },
+ {
+  "name": "Cori",
+  "src": "assets/nombres/b4-08-013.wav",
+  "duration": 0.8,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 14.81,
+  "end": 15.61
+ },
+ {
+  "name": "Kiran",
+  "src": "assets/nombres/b4-08-014.wav",
+  "duration": 0.89,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 15.95,
+  "end": 16.84
+ },
+ {
+  "name": "Levy",
+  "src": "assets/nombres/b4-08-015.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 17.17,
+  "end": 18.07
+ },
+ {
+  "name": "Dasia",
+  "src": "assets/nombres/b4-08-016.wav",
+  "duration": 1.04,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 18.37,
+  "end": 19.41
+ },
+ {
+  "name": "Lior",
+  "src": "assets/nombres/b4-08-017.wav",
+  "duration": 0.96,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 19.67,
+  "end": 20.63
+ },
+ {
+  "name": "Michel",
+  "src": "assets/nombres/b4-08-018.wav",
+  "duration": 0.94,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 20.95,
+  "end": 21.89
+ },
+ {
+  "name": "Elayne",
+  "src": "assets/nombres/b4-08-019.wav",
+  "duration": 1.07,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 22.29,
+  "end": 23.36
+ },
+ {
+  "name": "Eleina",
+  "src": "assets/nombres/b4-08-020.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 23.62,
+  "end": 24.68
+ },
+ {
+  "name": "Elinor",
+  "src": "assets/nombres/b4-08-021.wav",
+  "duration": 0.91,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 25,
+  "end": 25.91
+ },
+ {
+  "name": "Elka",
+  "src": "assets/nombres/b4-08-022.wav",
+  "duration": 0.88,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 26.3,
+  "end": 27.18
+ },
+ {
+  "name": "Ella",
+  "src": "assets/nombres/b4-08-023.wav",
+  "duration": 0.84,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 27.53,
+  "end": 28.37
+ },
+ {
+  "name": "Ray",
+  "src": "assets/nombres/b4-08-024.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 28.64,
+  "end": 29.54
+ },
+ {
+  "name": "Ely",
+  "src": "assets/nombres/b4-08-025.wav",
+  "duration": 0.8,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 29.86,
+  "end": 30.66
+ },
+ {
+  "name": "Eris",
+  "src": "assets/nombres/b4-08-026.wav",
+  "duration": 0.79,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 31.11,
+  "end": 31.9
+ },
+ {
+  "name": "Evani",
+  "src": "assets/nombres/b4-08-027.wav",
+  "duration": 1,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 32.28,
+  "end": 33.28
+ },
+ {
+  "name": "Evy",
+  "src": "assets/nombres/b4-08-028.wav",
+  "duration": 0.82,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 33.59,
+  "end": 34.41
+ },
+ {
+  "name": "Analis",
+  "src": "assets/nombres/b4-08-029.wav",
+  "duration": 0.91,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 34.74,
+  "end": 35.65
+ },
+ {
+  "name": "Yusra",
+  "src": "assets/nombres/b4-08-030.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 8,
+  "start": 36.09,
+  "end": 37.14
+ },
+ {
+  "name": "Nancy",
+  "src": "assets/nombres/b4-09-001.wav",
+  "duration": 1.03,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 0.11,
+  "end": 1.14
+ },
+ {
+  "name": "Richard",
+  "src": "assets/nombres/b4-09-002.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 1.39,
+  "end": 2.55
+ },
+ {
+  "name": "Franklin",
+  "src": "assets/nombres/b4-09-003.wav",
+  "duration": 1.22,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 2.92,
+  "end": 4.14
+ },
+ {
+  "name": "Mary",
+  "src": "assets/nombres/b4-09-004.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 4.42,
+  "end": 5.5
+ },
+ {
+  "name": "Yelitza",
+  "src": "assets/nombres/b4-09-005.wav",
+  "duration": 1.33,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 5.75,
+  "end": 7.08
+ },
+ {
+  "name": "Nelly",
+  "src": "assets/nombres/b4-09-006.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 7.31,
+  "end": 8.4
+ },
+ {
+  "name": "Omaira",
+  "src": "assets/nombres/b4-09-007.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 8.6,
+  "end": 9.76
+ },
+ {
+  "name": "Douglas",
+  "src": "assets/nombres/b4-09-008.wav",
+  "duration": 1.11,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 9.97,
+  "end": 11.08
+ },
+ {
+  "name": "Yenny",
+  "src": "assets/nombres/b4-09-009.wav",
+  "duration": 1.07,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 11.37,
+  "end": 12.44
+ },
+ {
+  "name": "Andreina",
+  "src": "assets/nombres/b4-09-010.wav",
+  "duration": 1.33,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 12.69,
+  "end": 14.02
+ },
+ {
+  "name": "Danny",
+  "src": "assets/nombres/b4-09-011.wav",
+  "duration": 0.99,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 14.32,
+  "end": 15.31
+ },
+ {
+  "name": "Alí",
+  "src": "assets/nombres/b4-09-012.wav",
+  "duration": 0.97,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 15.57,
+  "end": 16.54
+ },
+ {
+  "name": "Elvis",
+  "src": "assets/nombres/b4-09-013.wav",
+  "duration": 1.02,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 16.8,
+  "end": 17.82
+ },
+ {
+  "name": "Elio",
+  "src": "assets/nombres/b4-09-014.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 18.22,
+  "end": 19.28
+ },
+ {
+  "name": "Esther",
+  "src": "assets/nombres/b4-09-015.wav",
+  "duration": 1.07,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 19.53,
+  "end": 20.6
+ },
+ {
+  "name": "Magaly",
+  "src": "assets/nombres/b4-09-016.wav",
+  "duration": 1.25,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 20.84,
+  "end": 22.09
+ },
+ {
+  "name": "Alirio",
+  "src": "assets/nombres/b4-09-017.wav",
+  "duration": 1.25,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 22.37,
+  "end": 23.62
+ },
+ {
+  "name": "Edwin",
+  "src": "assets/nombres/b4-09-018.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 23.86,
+  "end": 25.02
+ },
+ {
+  "name": "Dilia",
+  "src": "assets/nombres/b4-09-019.wav",
+  "duration": 1.13,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 25.25,
+  "end": 26.38
+ },
+ {
+  "name": "Roger",
+  "src": "assets/nombres/b4-09-020.wav",
+  "duration": 1.14,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 26.65,
+  "end": 27.79
+ },
+ {
+  "name": "Yolimar",
+  "src": "assets/nombres/b4-09-021.wav",
+  "duration": 1.3,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 28,
+  "end": 29.3
+ },
+ {
+  "name": "Alida",
+  "src": "assets/nombres/b4-09-022.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 29.54,
+  "end": 30.7
+ },
+ {
+  "name": "Noris",
+  "src": "assets/nombres/b4-09-023.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 30.93,
+  "end": 32.01
+ },
+ {
+  "name": "Raiza",
+  "src": "assets/nombres/b4-09-024.wav",
+  "duration": 1.43,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 32.32,
+  "end": 33.75
+ },
+ {
+  "name": "Migdalia",
+  "src": "assets/nombres/b4-09-025.wav",
+  "duration": 1.35,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 34.2,
+  "end": 35.55
+ },
+ {
+  "name": "Wendy",
+  "src": "assets/nombres/b4-09-026.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 35.81,
+  "end": 36.97
+ },
+ {
+  "name": "Katiuska",
+  "src": "assets/nombres/b4-09-027.wav",
+  "duration": 1.31,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 37.28,
+  "end": 38.59
+ },
+ {
+  "name": "Leida",
+  "src": "assets/nombres/b4-09-028.wav",
+  "duration": 1.11,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 38.85,
+  "end": 39.96
+ },
+ {
+  "name": "Yaneth",
+  "src": "assets/nombres/b4-09-029.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 9,
+  "start": 40.19,
+  "end": 41.27
+ },
+ {
+  "name": "Eddy",
+  "src": "assets/nombres/b4-10-001.wav",
+  "duration": 0.95,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 0.11,
+  "end": 1.06
+ },
+ {
+  "name": "Keila",
+  "src": "assets/nombres/b4-10-002.wav",
+  "duration": 0.93,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 1.15,
+  "end": 2.08
+ },
+ {
+  "name": "Anthony",
+  "src": "assets/nombres/b4-10-003.wav",
+  "duration": 1.14,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 2.28,
+  "end": 3.42
+ },
+ {
+  "name": "Lilibeth",
+  "src": "assets/nombres/b4-10-004.wav",
+  "duration": 1.17,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 3.54,
+  "end": 4.71
+ },
+ {
+  "name": "Santa",
+  "src": "assets/nombres/b4-10-005.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 4.9,
+  "end": 5.98
+ },
+ {
+  "name": "Luisana",
+  "src": "assets/nombres/b4-10-006.wav",
+  "duration": 1.23,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 6.06,
+  "end": 7.29
+ },
+ {
+  "name": "Nerio",
+  "src": "assets/nombres/b4-10-007.wav",
+  "duration": 1.13,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 7.38,
+  "end": 8.51
+ },
+ {
+  "name": "Neida",
+  "src": "assets/nombres/b4-10-008.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 8.61,
+  "end": 9.7
+ },
+ {
+  "name": "Tibisay",
+  "src": "assets/nombres/b4-10-009.wav",
+  "duration": 1.19,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 9.92,
+  "end": 11.11
+ },
+ {
+  "name": "Yuraima",
+  "src": "assets/nombres/b4-10-010.wav",
+  "duration": 1.26,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 11.21,
+  "end": 12.47
+ },
+ {
+  "name": "Mirna",
+  "src": "assets/nombres/b4-10-011.wav",
+  "duration": 1.18,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 12.6,
+  "end": 13.78
+ },
+ {
+  "name": "Edward",
+  "src": "assets/nombres/b4-10-012.wav",
+  "duration": 1.02,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 13.97,
+  "end": 14.99
+ },
+ {
+  "name": "Yoleida",
+  "src": "assets/nombres/b4-10-013.wav",
+  "duration": 1.33,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 15.21,
+  "end": 16.54
+ },
+ {
+  "name": "Edixon",
+  "src": "assets/nombres/b4-10-014.wav",
+  "duration": 1.21,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 16.74,
+  "end": 17.95
+ },
+ {
+  "name": "Mery",
+  "src": "assets/nombres/b4-10-015.wav",
+  "duration": 1.03,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 18.08,
+  "end": 19.11
+ },
+ {
+  "name": "Yorman",
+  "src": "assets/nombres/b4-10-016.wav",
+  "duration": 1.22,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 19.3,
+  "end": 20.52
+ },
+ {
+  "name": "Dora",
+  "src": "assets/nombres/b4-10-017.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 20.65,
+  "end": 21.7
+ },
+ {
+  "name": "Rómulo",
+  "src": "assets/nombres/b4-10-018.wav",
+  "duration": 1.28,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 21.89,
+  "end": 23.17
+ },
+ {
+  "name": "John",
+  "src": "assets/nombres/b4-10-019.wav",
+  "duration": 0.99,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 23.33,
+  "end": 24.32
+ },
+ {
+  "name": "Daisy",
+  "src": "assets/nombres/b4-10-020.wav",
+  "duration": 1.23,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 24.49,
+  "end": 25.72
+ },
+ {
+  "name": "Gladis",
+  "src": "assets/nombres/b4-10-021.wav",
+  "duration": 1.27,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 25.87,
+  "end": 27.14
+ },
+ {
+  "name": "Lesbia",
+  "src": "assets/nombres/b4-10-022.wav",
+  "duration": 1.3,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 27.37,
+  "end": 28.67
+ },
+ {
+  "name": "Marbelis",
+  "src": "assets/nombres/b4-10-023.wav",
+  "duration": 1.42,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 28.86,
+  "end": 30.28
+ },
+ {
+  "name": "Hermes",
+  "src": "assets/nombres/b4-10-024.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 30.76,
+  "end": 31.81
+ },
+ {
+  "name": "Trina",
+  "src": "assets/nombres/b4-10-025.wav",
+  "duration": 0.97,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 32.08,
+  "end": 33.05
+ },
+ {
+  "name": "Jackson",
+  "src": "assets/nombres/b4-10-026.wav",
+  "duration": 1.38,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 33.22,
+  "end": 34.6
+ },
+ {
+  "name": "Thaís",
+  "src": "assets/nombres/b4-10-027.wav",
+  "duration": 1.04,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 34.76,
+  "end": 35.8
+ },
+ {
+  "name": "Elis",
+  "src": "assets/nombres/b4-10-028.wav",
+  "duration": 1.03,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 36.11,
+  "end": 37.14
+ },
+ {
+  "name": "Dilcia",
+  "src": "assets/nombres/b4-10-029.wav",
+  "duration": 1.28,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 37.37,
+  "end": 38.65
+ },
+ {
+  "name": "Mirla",
+  "src": "assets/nombres/b4-10-030.wav",
+  "duration": 1.22,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 38.87,
+  "end": 40.09
+ },
+ {
+  "name": "Denny",
+  "src": "assets/nombres/b4-10-031.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 40.3,
+  "end": 41.5
+ },
+ {
+  "name": "Elsy",
+  "src": "assets/nombres/b4-10-032.wav",
+  "duration": 1.12,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 41.74,
+  "end": 42.86
+ },
+ {
+  "name": "Mildred",
+  "src": "assets/nombres/b4-10-033.wav",
+  "duration": 1.23,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 43.07,
+  "end": 44.3
+ },
+ {
+  "name": "Moraima",
+  "src": "assets/nombres/b4-10-034.wav",
+  "duration": 1.39,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 44.54,
+  "end": 45.93
+ },
+ {
+  "name": "Lilian",
+  "src": "assets/nombres/b4-10-035.wav",
+  "duration": 1.3,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 46.16,
+  "end": 47.46
+ },
+ {
+  "name": "Eneida",
+  "src": "assets/nombres/b4-10-036.wav",
+  "duration": 1.32,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 47.71,
+  "end": 49.03
+ },
+ {
+  "name": "Kelly",
+  "src": "assets/nombres/b4-10-037.wav",
+  "duration": 1.01,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 49.37,
+  "end": 50.38
+ },
+ {
+  "name": "Marianny",
+  "src": "assets/nombres/b4-10-038.wav",
+  "duration": 1.5,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 50.59,
+  "end": 52.09
+ },
+ {
+  "name": "Euclides",
+  "src": "assets/nombres/b4-10-039.wav",
+  "duration": 1.6,
+  "lead": 0.025,
+  "audio": 10,
+  "start": 52.29,
+  "end": 53.89
+ },
+ {
+  "name": "Jaziel",
+  "src": "assets/nombres/b4-11-001.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 0.13,
+  "end": 1.22
+ },
+ {
+  "name": "Giselle",
+  "src": "assets/nombres/b4-11-002.wav",
+  "duration": 1.05,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 1.57,
+  "end": 2.62
+ },
+ {
+  "name": "Lizbeth",
+  "src": "assets/nombres/b4-11-003.wav",
+  "duration": 0.92,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 2.94,
+  "end": 3.86
+ },
+ {
+  "name": "Leilani",
+  "src": "assets/nombres/b4-11-004.wav",
+  "duration": 1.29,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 4.22,
+  "end": 5.51
+ },
+ {
+  "name": "Paulette",
+  "src": "assets/nombres/b4-11-005.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 5.84,
+  "end": 6.74
+ },
+ {
+  "name": "Meredith",
+  "src": "assets/nombres/b4-11-006.wav",
+  "duration": 1.01,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 7.2,
+  "end": 8.21
+ },
+ {
+  "name": "Lesly",
+  "src": "assets/nombres/b4-11-007.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 8.69,
+  "end": 9.79
+ },
+ {
+  "name": "Itzae",
+  "src": "assets/nombres/b4-11-008.wav",
+  "duration": 1.18,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 10.08,
+  "end": 11.26
+ },
+ {
+  "name": "Evangeline",
+  "src": "assets/nombres/b4-11-009.wav",
+  "duration": 1.4,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 11.57,
+  "end": 12.97
+ },
+ {
+  "name": "Dayami",
+  "src": "assets/nombres/b4-11-010.wav",
+  "duration": 1.26,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 13.27,
+  "end": 14.53
+ },
+ {
+  "name": "Mariam",
+  "src": "assets/nombres/b4-11-011.wav",
+  "duration": 1.17,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 14.75,
+  "end": 15.92
+ },
+ {
+  "name": "Nathan",
+  "src": "assets/nombres/b4-11-012.wav",
+  "duration": 1.18,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 16.22,
+  "end": 17.4
+ },
+ {
+  "name": "Alessandro",
+  "src": "assets/nombres/b4-11-013.wav",
+  "duration": 1.42,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 17.67,
+  "end": 19.09
+ },
+ {
+  "name": "Grettel",
+  "src": "assets/nombres/b4-11-014.wav",
+  "duration": 1.12,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 19.41,
+  "end": 20.53
+ },
+ {
+  "name": "Amairany",
+  "src": "assets/nombres/b4-11-015.wav",
+  "duration": 1.35,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 20.78,
+  "end": 22.13
+ },
+ {
+  "name": "Paulo",
+  "src": "assets/nombres/b4-11-016.wav",
+  "duration": 1,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 22.47,
+  "end": 23.47
+ },
+ {
+  "name": "Melody",
+  "src": "assets/nombres/b4-11-017.wav",
+  "duration": 1.22,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 23.73,
+  "end": 24.95
+ },
+ {
+  "name": "Dominic",
+  "src": "assets/nombres/b4-11-018.wav",
+  "duration": 1.17,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 25.18,
+  "end": 26.35
+ },
+ {
+  "name": "Debanhi",
+  "src": "assets/nombres/b4-11-019.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 26.63,
+  "end": 27.83
+ },
+ {
+  "name": "Hannia",
+  "src": "assets/nombres/b4-11-020.wav",
+  "duration": 1.11,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 28.11,
+  "end": 29.22
+ },
+ {
+  "name": "Jayden",
+  "src": "assets/nombres/b4-11-021.wav",
+  "duration": 1.26,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 29.46,
+  "end": 30.72
+ },
+ {
+  "name": "Jocelyn",
+  "src": "assets/nombres/b4-11-022.wav",
+  "duration": 1.44,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 30.93,
+  "end": 32.37
+ },
+ {
+  "name": "Mila",
+  "src": "assets/nombres/b4-11-023.wav",
+  "duration": 0.96,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 32.73,
+  "end": 33.69
+ },
+ {
+  "name": "Eliette",
+  "src": "assets/nombres/b4-11-024.wav",
+  "duration": 0.86,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 34,
+  "end": 34.86
+ },
+ {
+  "name": "Jeremy",
+  "src": "assets/nombres/b4-11-025.wav",
+  "duration": 1.14,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 35.32,
+  "end": 36.46
+ },
+ {
+  "name": "Rebecca",
+  "src": "assets/nombres/b4-11-026.wav",
+  "duration": 1.17,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 36.72,
+  "end": 37.89
+ },
+ {
+  "name": "Helen",
+  "src": "assets/nombres/b4-11-027.wav",
+  "duration": 1.02,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 38.21,
+  "end": 39.23
+ },
+ {
+  "name": "Juliette",
+  "src": "assets/nombres/b4-11-028.wav",
+  "duration": 1.15,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 39.44,
+  "end": 40.59
+ },
+ {
+  "name": "Osmar",
+  "src": "assets/nombres/b4-11-029.wav",
+  "duration": 1.01,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 41.01,
+  "end": 42.02
+ },
+ {
+  "name": "Layla",
+  "src": "assets/nombres/b4-11-030.wav",
+  "duration": 1.07,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 42.31,
+  "end": 43.38
+ },
+ {
+  "name": "Irina",
+  "src": "assets/nombres/b4-11-031.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 43.65,
+  "end": 44.74
+ },
+ {
+  "name": "Sherlyn",
+  "src": "assets/nombres/b4-11-032.wav",
+  "duration": 1.19,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 44.97,
+  "end": 46.16
+ },
+ {
+  "name": "Ashly",
+  "src": "assets/nombres/b4-11-033.wav",
+  "duration": 1.02,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 46.47,
+  "end": 47.49
+ },
+ {
+  "name": "Karely",
+  "src": "assets/nombres/b4-11-034.wav",
+  "duration": 1.02,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 47.84,
+  "end": 48.86
+ },
+ {
+  "name": "Saori",
+  "src": "assets/nombres/b4-11-035.wav",
+  "duration": 1.26,
+  "lead": 0.025,
+  "audio": 11,
+  "start": 49.07,
+  "end": 50.33
+ },
+ {
+  "name": "Yosuani",
+  "src": "assets/nombres/b4-12-001.wav",
+  "duration": 1.45,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 0.12,
+  "end": 1.57
+ },
+ {
+  "name": "Loretta",
+  "src": "assets/nombres/b4-12-002.wav",
+  "duration": 1.19,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 1.73,
+  "end": 2.92
+ },
+ {
+  "name": "Marely",
+  "src": "assets/nombres/b4-12-003.wav",
+  "duration": 1.14,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 3.16,
+  "end": 4.3
+ },
+ {
+  "name": "Isis",
+  "src": "assets/nombres/b4-12-004.wav",
+  "duration": 0.94,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 4.66,
+  "end": 5.6
+ },
+ {
+  "name": "Amelie",
+  "src": "assets/nombres/b4-12-005.wav",
+  "duration": 1.12,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 6,
+  "end": 7.12
+ },
+ {
+  "name": "Brittany",
+  "src": "assets/nombres/b4-12-006.wav",
+  "duration": 1.22,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 7.37,
+  "end": 8.59
+ },
+ {
+  "name": "Irlanda",
+  "src": "assets/nombres/b4-12-007.wav",
+  "duration": 1.36,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 8.88,
+  "end": 10.24
+ },
+ {
+  "name": "Mahelet",
+  "src": "assets/nombres/b4-12-008.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 10.57,
+  "end": 11.67
+ },
+ {
+  "name": "Kylian",
+  "src": "assets/nombres/b4-12-009.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 12.23,
+  "end": 13.32
+ },
+ {
+  "name": "Megan",
+  "src": "assets/nombres/b4-12-010.wav",
+  "duration": 1.21,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 13.69,
+  "end": 14.9
+ },
+ {
+  "name": "Dalary",
+  "src": "assets/nombres/b4-12-011.wav",
+  "duration": 1.29,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 15.24,
+  "end": 16.53
+ },
+ {
+  "name": "Vladimir",
+  "src": "assets/nombres/b4-12-012.wav",
+  "duration": 1.34,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 16.86,
+  "end": 18.2
+ },
+ {
+  "name": "Andrew",
+  "src": "assets/nombres/b4-12-013.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 18.75,
+  "end": 19.95
+ },
+ {
+  "name": "Maylen",
+  "src": "assets/nombres/b4-12-014.wav",
+  "duration": 1.25,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 20.29,
+  "end": 21.54
+ },
+ {
+  "name": "Heidi",
+  "src": "assets/nombres/b4-12-015.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 21.99,
+  "end": 23.07
+ },
+ {
+  "name": "Tessa",
+  "src": "assets/nombres/b4-12-016.wav",
+  "duration": 0.94,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 23.45,
+  "end": 24.39
+ },
+ {
+  "name": "Yailin",
+  "src": "assets/nombres/b4-12-017.wav",
+  "duration": 1.52,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 24.77,
+  "end": 26.29
+ },
+ {
+  "name": "Sharon",
+  "src": "assets/nombres/b4-12-018.wav",
+  "duration": 1.23,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 26.67,
+  "end": 27.9
+ },
+ {
+  "name": "Eileen",
+  "src": "assets/nombres/b4-12-019.wav",
+  "duration": 1.31,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 28.25,
+  "end": 29.56
+ },
+ {
+  "name": "Keidy",
+  "src": "assets/nombres/b4-12-020.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 29.97,
+  "end": 31.06
+ },
+ {
+  "name": "Ivonne",
+  "src": "assets/nombres/b4-12-021.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 31.37,
+  "end": 32.43
+ },
+ {
+  "name": "Samira",
+  "src": "assets/nombres/b4-12-022.wav",
+  "duration": 1.17,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 32.85,
+  "end": 34.02
+ },
+ {
+  "name": "Adalet",
+  "src": "assets/nombres/b4-12-023.wav",
+  "duration": 1.12,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 34.46,
+  "end": 35.58
+ },
+ {
+  "name": "Greta",
+  "src": "assets/nombres/b4-12-024.wav",
+  "duration": 1.07,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 36.17,
+  "end": 37.24
+ },
+ {
+  "name": "Erica",
+  "src": "assets/nombres/b4-12-025.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 37.76,
+  "end": 38.82
+ },
+ {
+  "name": "Clarissa",
+  "src": "assets/nombres/b4-12-026.wav",
+  "duration": 1.24,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 39.32,
+  "end": 40.56
+ },
+ {
+  "name": "Grace",
+  "src": "assets/nombres/b4-12-027.wav",
+  "duration": 1.07,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 40.93,
+  "end": 42
+ },
+ {
+  "name": "Xareni",
+  "src": "assets/nombres/b4-12-028.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 42.41,
+  "end": 43.61
+ },
+ {
+  "name": "Marifer",
+  "src": "assets/nombres/b4-12-029.wav",
+  "duration": 1.19,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 44,
+  "end": 45.19
+ },
+ {
+  "name": "Marleny",
+  "src": "assets/nombres/b4-12-030.wav",
+  "duration": 1.4,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 45.71,
+  "end": 47.11
+ },
+ {
+  "name": "Odette",
+  "src": "assets/nombres/b4-12-031.wav",
+  "duration": 0.85,
+  "lead": 0.025,
+  "audio": 12,
+  "start": 47.55,
+  "end": 48.4
+ },
+ {
+  "name": "Nael",
+  "src": "assets/nombres/b4-13-001.wav",
+  "duration": 1.03,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 0.13,
+  "end": 1.16
+ },
+ {
+  "name": "Lex",
+  "src": "assets/nombres/b4-13-002.wav",
+  "duration": 0.85,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 1.38,
+  "end": 2.23
+ },
+ {
+  "name": "Aarav",
+  "src": "assets/nombres/b4-13-003.wav",
+  "duration": 0.82,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 2.65,
+  "end": 3.47
+ },
+ {
+  "name": "Denzel",
+  "src": "assets/nombres/b4-13-004.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 3.91,
+  "end": 5.07
+ },
+ {
+  "name": "Edrian",
+  "src": "assets/nombres/b4-13-005.wav",
+  "duration": 1.13,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 5.35,
+  "end": 6.48
+ },
+ {
+  "name": "Zayne",
+  "src": "assets/nombres/b4-13-006.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 6.85,
+  "end": 7.95
+ },
+ {
+  "name": "Ezekiel",
+  "src": "assets/nombres/b4-13-007.wav",
+  "duration": 1.34,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 8.22,
+  "end": 9.56
+ },
+ {
+  "name": "Jaden",
+  "src": "assets/nombres/b4-13-008.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 9.8,
+  "end": 10.96
+ },
+ {
+  "name": "Arden",
+  "src": "assets/nombres/b4-13-009.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 11.28,
+  "end": 12.37
+ },
+ {
+  "name": "Marilyn",
+  "src": "assets/nombres/b4-13-010.wav",
+  "duration": 1.24,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 12.63,
+  "end": 13.87
+ },
+ {
+  "name": "Alena",
+  "src": "assets/nombres/b4-13-011.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 14.18,
+  "end": 15.27
+ },
+ {
+  "name": "Isra",
+  "src": "assets/nombres/b4-13-012.wav",
+  "duration": 0.96,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 15.59,
+  "end": 16.55
+ },
+ {
+  "name": "Azaria",
+  "src": "assets/nombres/b4-13-013.wav",
+  "duration": 1.16,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 16.84,
+  "end": 18
+ },
+ {
+  "name": "Jalen",
+  "src": "assets/nombres/b4-13-014.wav",
+  "duration": 1.18,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 18.32,
+  "end": 19.5
+ },
+ {
+  "name": "Kyara",
+  "src": "assets/nombres/b4-13-015.wav",
+  "duration": 0.99,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 19.82,
+  "end": 20.81
+ },
+ {
+  "name": "Aisha",
+  "src": "assets/nombres/b4-13-016.wav",
+  "duration": 1.12,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 21.17,
+  "end": 22.29
+ },
+ {
+  "name": "Aviana",
+  "src": "assets/nombres/b4-13-017.wav",
+  "duration": 1.25,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 22.61,
+  "end": 23.86
+ },
+ {
+  "name": "Everly",
+  "src": "assets/nombres/b4-13-018.wav",
+  "duration": 1.09,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 24.21,
+  "end": 25.3
+ },
+ {
+  "name": "Elysia",
+  "src": "assets/nombres/b4-13-019.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 25.63,
+  "end": 26.83
+ },
+ {
+  "name": "Yakira",
+  "src": "assets/nombres/b4-13-020.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 27.06,
+  "end": 28.26
+ },
+ {
+  "name": "Kairi",
+  "src": "assets/nombres/b4-13-021.wav",
+  "duration": 0.98,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 28.56,
+  "end": 29.54
+ },
+ {
+  "name": "Adalyn",
+  "src": "assets/nombres/b4-13-022.wav",
+  "duration": 1.13,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 29.83,
+  "end": 30.96
+ },
+ {
+  "name": "Stacy",
+  "src": "assets/nombres/b4-13-023.wav",
+  "duration": 1.2,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 31.26,
+  "end": 32.46
+ },
+ {
+  "name": "Brooke",
+  "src": "assets/nombres/b4-13-024.wav",
+  "duration": 0.96,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 32.7,
+  "end": 33.66
+ },
+ {
+  "name": "Siena",
+  "src": "assets/nombres/b4-13-025.wav",
+  "duration": 0.99,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 34.09,
+  "end": 35.08
+ },
+ {
+  "name": "Ariela",
+  "src": "assets/nombres/b4-13-026.wav",
+  "duration": 1.04,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 35.39,
+  "end": 36.43
+ },
+ {
+  "name": "Mirabel",
+  "src": "assets/nombres/b4-13-027.wav",
+  "duration": 1.23,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 36.74,
+  "end": 37.97
+ },
+ {
+  "name": "Madina",
+  "src": "assets/nombres/b4-13-028.wav",
+  "duration": 1.15,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 38.21,
+  "end": 39.36
+ },
+ {
+  "name": "Zelia",
+  "src": "assets/nombres/b4-13-029.wav",
+  "duration": 1.03,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 39.73,
+  "end": 40.76
+ },
+ {
+  "name": "Evelina",
+  "src": "assets/nombres/b4-13-030.wav",
+  "duration": 1.21,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 41.1,
+  "end": 42.31
+ },
+ {
+  "name": "Nylah",
+  "src": "assets/nombres/b4-13-031.wav",
+  "duration": 1.1,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 42.62,
+  "end": 43.72
+ },
+ {
+  "name": "Arlette",
+  "src": "assets/nombres/b4-13-032.wav",
+  "duration": 0.81,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 44.05,
+  "end": 44.86
+ },
+ {
+  "name": "Yvette",
+  "src": "assets/nombres/b4-13-033.wav",
+  "duration": 0.71,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 45.29,
+  "end": 46
+ },
+ {
+  "name": "Bradley",
+  "src": "assets/nombres/b4-13-034.wav",
+  "duration": 1.07,
+  "lead": 0.025,
+  "audio": 13,
+  "start": 46.45,
+  "end": 47.52
+ },
+ {
+  "name": "Imanol",
+  "src": "assets/nombres/b4-14-001.wav",
+  "duration": 0.99,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 0.07,
+  "end": 1.06
+ },
+ {
+  "name": "Adelita",
+  "src": "assets/nombres/b4-14-002.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 1.69,
+  "end": 2.77
+ },
+ {
+  "name": "Estevan",
+  "src": "assets/nombres/b4-14-003.wav",
+  "duration": 1.19,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 3.36,
+  "end": 4.55
+ },
+ {
+  "name": "Alara",
+  "src": "assets/nombres/b4-14-004.wav",
+  "duration": 0.99,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 5.18,
+  "end": 6.17
+ },
+ {
+  "name": "Fénix",
+  "src": "assets/nombres/b4-14-005.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 6.91,
+  "end": 7.81
+ },
+ {
+  "name": "Aluna",
+  "src": "assets/nombres/b4-14-006.wav",
+  "duration": 1,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 8.35,
+  "end": 9.35
+ },
+ {
+  "name": "Gianmarco",
+  "src": "assets/nombres/b4-14-007.wav",
+  "duration": 1.27,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 9.88,
+  "end": 11.15
+ },
+ {
+  "name": "Alva",
+  "src": "assets/nombres/b4-14-008.wav",
+  "duration": 0.89,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 11.71,
+  "end": 12.6
+ },
+ {
+  "name": "Gianfranco",
+  "src": "assets/nombres/b4-14-009.wav",
+  "duration": 1.36,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 13.06,
+  "end": 14.42
+ },
+ {
+  "name": "Alyana",
+  "src": "assets/nombres/b4-14-010.wav",
+  "duration": 1.12,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 14.91,
+  "end": 16.03
+ },
+ {
+  "name": "Helio",
+  "src": "assets/nombres/b4-14-011.wav",
+  "duration": 0.92,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 16.53,
+  "end": 17.45
+ },
+ {
+  "name": "Amari",
+  "src": "assets/nombres/b4-14-012.wav",
+  "duration": 1.04,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 17.98,
+  "end": 19.02
+ },
+ {
+  "name": "Ilan",
+  "src": "assets/nombres/b4-14-013.wav",
+  "duration": 0.9,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 19.51,
+  "end": 20.41
+ },
+ {
+  "name": "Anaelle",
+  "src": "assets/nombres/b4-14-014.wav",
+  "duration": 1.02,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 20.9,
+  "end": 21.92
+ },
+ {
+  "name": "Juliano",
+  "src": "assets/nombres/b4-14-015.wav",
+  "duration": 1.02,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 22.44,
+  "end": 23.46
+ },
+ {
+  "name": "Anara",
+  "src": "assets/nombres/b4-14-016.wav",
+  "duration": 0.97,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 23.89,
+  "end": 24.86
+ },
+ {
+  "name": "Kaio",
+  "src": "assets/nombres/b4-14-017.wav",
+  "duration": 0.89,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 25.32,
+  "end": 26.21
+ },
+ {
+  "name": "Anette",
+  "src": "assets/nombres/b4-14-018.wav",
+  "duration": 1,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 26.71,
+  "end": 27.71
+ },
+ {
+  "name": "Kairo",
+  "src": "assets/nombres/b4-14-019.wav",
+  "duration": 0.84,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 28.2,
+  "end": 29.04
+ },
+ {
+  "name": "Aniela",
+  "src": "assets/nombres/b4-14-020.wav",
+  "duration": 1.03,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 29.49,
+  "end": 30.52
+ },
+ {
+  "name": "Karlo",
+  "src": "assets/nombres/b4-14-021.wav",
+  "duration": 0.88,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 30.98,
+  "end": 31.86
+ },
+ {
+  "name": "Anora",
+  "src": "assets/nombres/b4-14-022.wav",
+  "duration": 0.99,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 32.3,
+  "end": 33.29
+ },
+ {
+  "name": "Kenan",
+  "src": "assets/nombres/b4-14-023.wav",
+  "duration": 0.91,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 33.76,
+  "end": 34.67
+ },
+ {
+  "name": "Arabelle",
+  "src": "assets/nombres/b4-14-024.wav",
+  "duration": 0.98,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 35.01,
+  "end": 35.99
+ },
+ {
+  "name": "Kian",
+  "src": "assets/nombres/b4-14-025.wav",
+  "duration": 0.85,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 36.55,
+  "end": 37.4
+ },
+ {
+  "name": "Araya",
+  "src": "assets/nombres/b4-14-026.wav",
+  "duration": 0.94,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 37.95,
+  "end": 38.89
+ },
+ {
+  "name": "Leovanni",
+  "src": "assets/nombres/b4-14-027.wav",
+  "duration": 1.18,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 39.51,
+  "end": 40.69
+ },
+ {
+  "name": "Ariane",
+  "src": "assets/nombres/b4-14-028.wav",
+  "duration": 1.06,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 41.15,
+  "end": 42.21
+ },
+ {
+  "name": "Lyan",
+  "src": "assets/nombres/b4-14-029.wav",
+  "duration": 1.08,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 42.68,
+  "end": 43.76
+ },
+ {
+  "name": "Ariella",
+  "src": "assets/nombres/b4-14-030.wav",
+  "duration": 1.02,
+  "lead": 0.025,
+  "audio": 14,
+  "start": 44.17,
+  "end": 45.19
+ }
+]
