@@ -74,6 +74,35 @@ function booksText(pkgId,books){return PACKAGES[pkgId].books==='included'?'Inclu
 const payName=c=>c.pay==='yape'?'Yape o Plin':c.pay==='crypto'?'Binance Pay, Airtm o Takenos':'PayPal';
 const whatsappUrl=text=>`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
 
+/* ---------- WhatsApp oficial (wa.me) con mensaje automático ----------
+   Todos los enlaces con data-wa abren https://wa.me/51917823560 con el paquete elegido,
+   el monto y el nombre del niño o niña, calculados en el momento del clic. */
+let choice=store.get('aldea-wa-choice');if(!choice||!PACKAGES[choice.pkg])choice={pkg:'video3',books:false};
+function setChoice(pkg,books){if(!PACKAGES[pkg])return;choice={pkg,books:PACKAGES[pkg].books==='included'?true:!!books};store.set('aldea-wa-choice',choice);refreshWaLinks();}
+function childName(){
+  const fields=['#ap-child','#child-name','#letter-name'].map(s=>document.querySelector(s)?.value?.trim()).filter(Boolean);
+  return (window.ALDEA_NAME?.get?.()||fields[0]||'').slice(0,40);
+}
+const WA_INTRO={
+  general:'¡Hola, La aldea de Santa! 🎅 Quiero información para un saludo de Santa.',
+  pedido:'¡Hola, La aldea de Santa! 🎅 Quiero hacer un pedido.',
+  codigo:'¡Hola, La aldea de Santa! 🎅 Quiero comprar un paquete para descargar mis videos, cuentos y libros.',
+  quiz:'¡Hola, Santa! 🎅 Completé el gran reto navideño de La aldea de Santa.',
+  pago:'¡Hola, La aldea de Santa! Ya hice mi pago 🎅'
+};
+function waMessage(kind='general',paid=false){
+  const p=PACKAGES[choice.pkg],c=country(),name=childName();
+  return [WA_INTRO[kind]||WA_INTRO.general,'',
+    `Paquete elegido: ${p.name} · ${p.title}`,
+    `Pack de 30 libros para colorear: ${booksText(p.id,choice.books)}`,
+    `${paid?'Monto pagado':'Monto'}: ${fmt(amount(p.id,choice.books))}`,
+    `País: ${c.flag} ${c.name} · pago con ${payName(c)}`,
+    `Nombre del niño/a: ${name||'(lo escribo aquí)'}`].join('\n');
+}
+function refreshWaLinks(){for(const a of document.querySelectorAll('a[data-wa]'))a.href=whatsappUrl(waMessage(a.dataset.wa,a.dataset.wa==='pago'));}
+/* Se recalcula justo antes de abrir (clic, toque largo o teclado) para usar siempre los datos actuales. */
+for(const ev of ['pointerdown','focusin','click'])document.addEventListener(ev,e=>{const a=e.target.closest?.('a[data-wa]');if(a)a.href=whatsappUrl(waMessage(a.dataset.wa,a.dataset.wa==='pago'));},true);
+
 /* Accesos */
 const EMPTY=()=>({features:[],plans:[],creator:false});
 let access=store.get('aldea-access');if(!access||!Array.isArray(access.features))access=EMPTY();
@@ -177,7 +206,7 @@ function buildGate(){
   gateDialog=document.createElement('dialog');gateDialog.className='ap-gate';gateDialog.setAttribute('aria-labelledby','ap-gate-title');
   gateDialog.innerHTML=`<button type="button" class="ap-gate-close" aria-label="Cerrar">×</button><span class="paywall-lock" aria-hidden="true">🔒</span><p class="eyebrow">DESCARGAR Y COMPARTIR</p><h2 id="ap-gate-title">Activa tu código</h2><p id="ap-gate-text"></p>
 <form class="paywall-form" id="ap-gate-form"><label>Código de 6 caracteres<input name="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="30" placeholder="Ej. K7Q2M9"></label><button type="submit" class="button">Activar</button></form><p class="paywall-status fine" id="ap-gate-status" role="status"></p>
-<div class="paywall-actions"><a class="button gold" href="#paquetes" data-close>Ver paquetes y precios</a><a class="button green" href="${whatsappUrl('¡Hola, La aldea de Santa! Quiero comprar un paquete para descargar mis videos, cuentos y libros.')}" target="_blank" rel="noopener noreferrer">Pedir mi código por WhatsApp</a></div>
+<div class="paywall-actions"><a class="button gold" href="#paquetes" data-close>Ver paquetes y precios</a><a class="button green" data-wa="codigo" href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener noreferrer">Pedir mi código por WhatsApp</a></div>
 <p class="fine">Gratis para todos: el quiz con su certificado y las 25 tarjetas de Navidad.</p>`;
   document.body.append(gateDialog);
   gateDialog.querySelector('.ap-gate-close').addEventListener('click',()=>gateDialog.close());
@@ -221,15 +250,15 @@ function refreshLocks(){
 new MutationObserver(()=>protectMedia()).observe(document.querySelector('main')||document.body,{subtree:true,childList:true});
 
 /* Sección «Paquetes y precios» */
-let selected={pkg:'video3',books:false};
+let selected={...choice};
 function packageCard(p){
   const art=document.createElement('article');art.className='ap-card';art.dataset.pkg=p.id;
   art.innerHTML=`<span class="ap-badge">${esc(p.name)}</span><h4>${esc(p.title)}</h4><p class="ap-price" data-price></p><p class="ap-was fine" data-alt></p>
 <ul class="ap-includes"><li>🎬 ${esc(p.video)}</li>${p.books==='included'?'<li>📚 Pack Completo de 30 Libros para Colorear</li>':''}<li>🎁 De regalo: ${esc(GIFTS[0])}</li><li>🎁 De regalo: ${esc(GIFTS[1])}</li></ul>
 ${p.books==='optional'?'<label class="ap-books"><input type="checkbox" data-books><span data-books-label></span></label>':''}
 <button type="button" class="button" data-choose aria-pressed="false">Elegir este paquete</button>`;
-  art.querySelector('[data-books]')?.addEventListener('change',()=>{if(selected.pkg===p.id)selected.books=art.querySelector('[data-books]').checked;renderPrices();renderPay();});
-  art.querySelector('[data-choose]').addEventListener('click',()=>{selected={pkg:p.id,books:!!art.querySelector('[data-books]')?.checked};renderPrices();renderPay();$('#ap-pay').scrollIntoView({behavior:'smooth',block:'start'});});
+  art.querySelector('[data-books]')?.addEventListener('change',()=>{if(selected.pkg===p.id){selected.books=art.querySelector('[data-books]').checked;setChoice(selected.pkg,selected.books);}renderPrices();renderPay();});
+  art.querySelector('[data-choose]').addEventListener('click',()=>{selected={pkg:p.id,books:!!art.querySelector('[data-books]')?.checked};setChoice(selected.pkg,selected.books);renderPrices();renderPay();$('#ap-pay').scrollIntoView({behavior:'smooth',block:'start'});});
   return art;
 }
 function renderFlags(){
@@ -302,7 +331,7 @@ function flagFont(){
 }
 (window.ALDEA_WHEN_SHOWN||((i,f)=>f()))(['paquetes','pedido','catalogo','buzon'],flagFont);
 
-window.ALDEA_PAY={COUNTRIES,PACKAGES,GIFTS,TYPES,country,setCountry,currency,fmt,amount,storyPrice,booksLabel,booksText,payName,whatsappUrl,renderMethods,hasAccess,isCreator,lookup,redeem,clearAccess,toast,copy,shareBar};
+window.ALDEA_PAY={COUNTRIES,PACKAGES,GIFTS,TYPES,country,setCountry,currency,fmt,amount,storyPrice,booksLabel,booksText,payName,whatsappUrl,waMessage,setChoice,getChoice:()=>({...choice}),refreshWaLinks,renderMethods,hasAccess,isCreator,lookup,redeem,clearAccess,toast,copy,shareBar};
 
 /* Enlace secreto de creador: ?creador=TOKEN (se borra de la barra de direcciones). */
 (async()=>{
@@ -314,6 +343,8 @@ window.ALDEA_PAY={COUNTRIES,PACKAGES,GIFTS,TYPES,country,setCountry,currency,fmt
 })();
 
 buildPackages();addShareBars();refreshLocks();
-window.addEventListener('aldea:country',()=>{renderFlags();renderPrices();renderPay();});
+window.addEventListener('aldea:country',()=>{renderFlags();renderPrices();renderPay();refreshWaLinks();});
+window.addEventListener('aldea:kid-name',refreshWaLinks);
+refreshWaLinks();
 window.addEventListener('storage',e=>{if(e.key==='aldea-access'){access=store.get('aldea-access')||{features:[],plans:[]};refreshLocks();}});
 })();

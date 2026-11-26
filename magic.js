@@ -87,7 +87,7 @@ function renderQuiz(){
       const message=document.createElement('textarea');message.rows=4;message.readOnly=true;message.value=`¡Hola, Santa! Soy ${quizSettings.name}. Conseguí ${quizScore} de ${quizRound.length} aciertos en el reto de La aldea de Santa. Quiero solicitar un saludo personalizado. ¿Cómo puedo pedirlo?`;label.append(message);
       const copy=document.createElement('button');copy.type='button';copy.className='button outline';copy.textContent='Copiar mi mensaje';
       copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(message.value);copy.textContent='Mensaje copiado';}catch{message.focus();message.select();copy.textContent='Seleccionado: copia el mensaje';}});
-      const contact=document.createElement('a');contact.className='button green';contact.href='https://w.app/cubasai';contact.target='_blank';contact.rel='noopener noreferrer';contact.textContent='Escribir a Santa por WhatsApp';
+      const contact=document.createElement('a');contact.className='button green';contact.href='https://wa.me/51917823560';contact.dataset.wa='quiz';contact.target='_blank';contact.rel='noopener noreferrer';contact.textContent='Escribir a Santa por WhatsApp';
       box.append(h,p,label,copy,contact);parent.append(box);
     }
     quizBlocks++;quizAccumulated+=quizScore;updateLevelInfo();
