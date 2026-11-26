@@ -53,21 +53,26 @@
 .ap-sh{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:9px 14px;border:0;border-radius:999px;color:#fff;font:inherit;font-size:.88rem;font-weight:600;text-decoration:none;cursor:pointer}
 .ap-sh-wa{background:#128c4b}.ap-sh-fb{background:#1b5fc4}.ap-sh-tt{background:#141414}.ap-sh-link{background:#6b4a52}
 footer .ap-share-title{color:inherit}
-/* Contenido bloqueado */
-:not(.is-locked)>.paywall{display:none}
-.is-locked>:not(.paywall){display:none!important}
-.paywall{padding:10px 0}
-.paywall-card{max-width:620px;margin:0 auto;padding:34px 28px;border-radius:18px;background:#fff;color:var(--ink);text-align:center;box-shadow:0 16px 40px #2a0d1426}
+/* Ventana del código para descargar y compartir */
+.ap-gate{width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 32px);padding:34px 26px 24px;border:0;border-radius:18px;background:#fff;color:var(--ink);text-align:center;box-shadow:0 20px 60px #2a0d1440}
+.ap-gate::backdrop{background:#1a0a10b3}
+.ap-gate-close{position:absolute;top:10px;right:12px;width:44px;height:44px;border:0;background:none;font-size:1.8rem;cursor:pointer;color:var(--ink)}
 .paywall-lock{display:block;font-size:2.4rem}
-.paywall-card .eyebrow{color:var(--red)}
-.paywall-card h2{margin:6px 0 10px;color:var(--ink)}
+.ap-gate .eyebrow{color:var(--red)}
+.ap-gate h2{margin:6px 0 10px}
 .paywall-form{display:flex;align-items:flex-end;gap:8px;max-width:420px;margin:18px auto 6px;text-align:left}
 .paywall-form label{flex:1;margin:0}
-.paywall-form input{text-transform:uppercase;letter-spacing:.08em}
-.paywall-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:14px}
-.ap-locked-link::after{content:' 🔒';font-size:.8em}
+.paywall-form input{text-transform:uppercase;letter-spacing:.12em}
+.paywall-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:14px 0}
+/* Marca de agua en las vistas previas sin código */
+body:not(.ap-unlocked) :is(.sl-canvas-wrap,#story-stage,.color-pages,.nb-media,#ed-frame){position:relative;overflow:hidden}
+body:not(.ap-unlocked) :is(.sl-canvas-wrap,#story-stage,.color-pages,.nb-media,#ed-frame)::after{content:'VISTA PREVIA · La aldea de Santa   VISTA PREVIA · La aldea de Santa   VISTA PREVIA';position:absolute;inset:0;z-index:5;display:grid;place-items:center;overflow:hidden;pointer-events:none;color:#ffffff59;font:700 clamp(.9rem,3.2vw,1.6rem)/1.2 'DM Sans',sans-serif;letter-spacing:.12em;text-align:center;text-shadow:0 1px 3px #0006;transform:rotate(-24deg) scale(1.4)}
+#story-stage::after{color:#b9142b33!important;text-shadow:none!important}
 .ap-free-link::after{content:' · Gratis';font-size:.75em;font-weight:700;color:#0b8a5a}
-.magic-links .ap-free-link::after,.magic-links .ap-locked-link::after{position:absolute;top:10px;right:12px}
+.magic-links .ap-free-link::after{position:absolute;top:10px;right:12px}
+/* Solo para el creador */
+.ap-creator-only{display:none!important}
+body.ap-creator .ap-creator-only{display:revert!important}
 .magic-links a{position:relative}
 #order-books-row{display:flex;gap:10px;align-items:flex-start;margin:4px 0 14px}
 #order-books-row input{flex:none;width:22px;height:22px;margin:0;accent-color:var(--red)}

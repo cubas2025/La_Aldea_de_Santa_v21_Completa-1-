@@ -13,8 +13,22 @@
     musicPreview.hidden = !track;
     if (track) { musicPreview.src = track.src; musicPreview.setAttribute('aria-label', `Escuchar ${track.title}`); }
     else musicPreview.removeAttribute('src');
-    $('#nc-music-help').textContent = track ? `${track.title} · ${track.duration.toLocaleString('es-PE', {maximumFractionDigits:1})} segundos. Se incluye la pista completa en el video descargable.` : 'El video durará 15 segundos y se descargará sin sonido.';
+    $('#nc-music-help').textContent = track ? `${track.title}. Tu video de 15 segundos usa la parte más alegre de esta canción. Cada paisaje trae su propia música; puedes cambiarla.` : 'El video durará 15 segundos y se descargará sin sonido.';
   }
+  const CLIP = 15;
+  /* Título automático para compartir: cuenta regresiva + hashtags de la aldea. */
+  function countdownTag(d = dateState()) {
+    if (d.christmas) return '#feliznavidad';
+    if (d.days === 0) return '#esnochebuena';
+    return d.days === 1 ? '#falta1dia' : `#faltan${d.days}dias`;
+  }
+  function caption() {
+    const d = dateState(), recipient = personal ? name.value.trim() : '';
+    const head = d.christmas ? '🎄 ¡Feliz Navidad desde La aldea de Santa! ✨' : `🎄 ${countdownTag(d)} para Navidad ✨${recipient ? ` Para ${recipient}.` : ''}`;
+    return `${head}\n${d.christmas ? '#feliznavidad ' : ''}#cubas.ai #laaldeadesanta #cubasai #navidad #santaclaus #fyp`;
+  }
+  function trackFor(index) { return tracks[index % tracks.length]; }
+  function setDesignMusic(index) { musicSelect.value = trackFor(index).id; musicState(); }
   const serif = '"Cormorant Garamond", Georgia, serif', sans = '"DM Sans", Arial, sans-serif';
   let personal = false, automatic = true, currentDay = '', active = 0, renderVersion = 0;
   let ready = false, exporting = false, exportJob = 0, engine = null, enginePromise = null;
@@ -60,8 +74,11 @@
     videoBlob = null; $('#nc-share').disabled = true;
     $('#nc-result').pause(); $('#nc-result').hidden = true; $('#nc-result').removeAttribute('src');
     if (videoURL) URL.revokeObjectURL(videoURL); videoURL = '';
-    status.textContent = 'Video vertical 9:16 · 720 × 1280 · Con tu audio completo.';
+    status.textContent = 'Video vertical 9:16 · 720 × 1280 · 15 segundos con música.';
+    shareLabel('Compartir video');
+    const cap = $('#nc-caption'); if (cap) cap.value = caption();
   }
+  function shareLabel(text) { const b = $('#nc-share'); if (b) b.textContent = text; }
   function liveLabel(d) {
     return d.christmas ? '¡Hoy es Navidad! Que tu día se llene de amor.' : `Faltan ${d.days} días, ${d.hours} horas, ${d.minutes} minutos y ${d.seconds} segundos para Navidad.`;
   }
@@ -119,14 +136,14 @@
   }
   function choose(index, updatePhrase = true) {
     active = index; if (updatePhrase) phrase.value = designs[index].phrase;
-    gallerySelection(); invalidateVideo(); render();
+    setDesignMusic(index); gallerySelection(); invalidateVideo(); render();
   }
   function setMode(useName) {
     personal = useName; automatic = !useName;
     $('#nc-auto').setAttribute('aria-pressed', String(!useName)); $('#nc-personal').setAttribute('aria-pressed', String(useName));
     $('#nc-name-label').hidden = !useName; name.required = useName;
     $('#nc-mode-help').textContent = useName ? 'Escribe un nombre y elige el paisaje y la frase que más te gusten.' : 'El diseño y la frase cambian cada día. Puedes elegir otro paisaje cuando quieras.';
-    if (useName) name.focus(); else { const d = dateState(); active = ((d.civilDay % 25) + 25) % 25; phrase.value = designs[active].phrase; gallerySelection(); }
+    if (useName) name.focus(); else { const d = dateState(); active = ((d.civilDay % 25) + 25) % 25; phrase.value = designs[active].phrase; setDesignMusic(active); gallerySelection(); }
     invalidateVideo(); render();
   }
   function save(blob, filename) {
@@ -139,7 +156,7 @@
     for (const node of form.querySelectorAll('input,select,textarea,button')) node.disabled = value;
     for (const node of $('#nc-gallery').querySelectorAll('button')) node.disabled = value;
     $('#nc-video').disabled = value; $('#nc-image').disabled = value;
-    $('#nc-share').disabled = value || !videoBlob;
+    $('#nc-share').disabled = value;
     $('#nc-cancel').hidden = !value; progress.hidden = !value;
   }
   async function getEngine(job) {
@@ -156,16 +173,16 @@
     })();
     return enginePromise;
   }
-  async function exportVideo() {
-    if (exporting || !valid()) return;
-    if (videoBlob) { save(videoBlob, videoName); return; }
+  async function exportVideo(download = true) {
+    if (exporting || !valid()) return false;
+    if (videoBlob) { if (download) save(videoBlob, videoName); return true; }
     const job = ++exportJob; lock(true); progress.value = 0;
     musicPreview.pause();
     status.textContent = 'Preparando tu MP4… La primera vez se descarga el módulo de video (32 MB).';
     try {
       await render(); if (!ready) throw new Error('Espera a que cargue tu paisaje y vuelve a intentarlo.');
       const still = new Uint8Array(await (await canvasBlob('image/jpeg', .94)).arrayBuffer());
-      const track = selectedMusic(), duration = track ? track.duration : 15;
+      const track = selectedMusic(), duration = CLIP, start = track ? Math.max(0, Math.min(track.start || 0, track.duration - CLIP)) : 0;
       const [ff, music] = await Promise.all([getEngine(job),track ? fetch(track.src).then(r=>{if(!r.ok)throw new Error('No se pudo cargar la música.');return r.arrayBuffer();}) : Promise.resolve(null)]);
       if (job !== exportJob) return;
       status.textContent = 'Creando tu video… Mantén esta página abierta.';
@@ -173,21 +190,23 @@
       ff.on('progress', onProgress);
       await ff.writeFile('tarjeta.jpg',still); if (music) await ff.writeFile('musica.mp3',new Uint8Array(music));
       const args = ['-loop','1','-framerate','24','-i','tarjeta.jpg'];
-      if (music) args.push('-i','musica.mp3');
+      if (music) args.push('-ss',String(start),'-i','musica.mp3');
       args.push('-t',String(duration),'-vf',`scale=720:1280,fade=t=in:st=0:d=0.65,fade=t=out:st=${duration-1}:d=1`,'-c:v','libx264','-preset','ultrafast','-crf','23','-pix_fmt','yuv420p');
-      if (music) args.push('-af',`apad,atrim=duration=${duration}`,'-c:a','aac','-b:a','160k'); else args.push('-an');
+      if (music) args.push('-af',`apad,atrim=duration=${duration},afade=t=in:st=0:d=0.6,afade=t=out:st=${duration-1.5}:d=1.5`,'-c:a','aac','-b:a','160k'); else args.push('-an');
       args.push('-movflags','+faststart','navidad.mp4');
       const result = await ff.exec(args,180000);
       if (job !== exportJob) return;
       if (result !== 0) throw new Error('No se pudo terminar el MP4. Prueba de nuevo o descarga la imagen.');
       const bytes = await ff.readFile('navidad.mp4'); videoBlob = new Blob([bytes], {type:'video/mp4'});
       videoName = `${fileBase}.mp4`; videoURL = URL.createObjectURL(videoBlob);
-      window.SANTA_VIDEO_SHARE.update('nc',videoBlob,videoName);
+      window.SANTA_VIDEO_SHARE.update('nc',videoBlob,videoName,caption());
       $('#nc-result').src = videoURL; $('#nc-result').hidden = false;
-      progress.value = 100; status.textContent = track ? `¡Tu MP4 está listo con ${track.title}! Puedes descargarlo de nuevo o compartirlo.` : '¡Tu MP4 sin sonido está listo! Puedes descargarlo de nuevo o compartirlo.';
-      save(videoBlob,videoName);
+      progress.value = 100; status.textContent = track ? `¡Tu video de 15 segundos está listo con ${track.title}!` : '¡Tu video de 15 segundos sin sonido está listo!';
+      if (download) save(videoBlob,videoName);
+      return true;
     } catch (err) {
       if (job === exportJob) status.textContent = `${err.message || 'No se pudo crear el video.'} Puedes volver a intentarlo o descargar la imagen.`;
+      return false;
     } finally {
       if (job === exportJob) { engine?.terminate(); engine=null;enginePromise=null;lock(false); }
     }
@@ -209,11 +228,23 @@
   $('#nc-new-phrase').addEventListener('click',()=>{automatic=false;phraseIndex=(phraseIndex+7)%25;phrase.value=designs[phraseIndex].phrase;invalidateVideo();render();});
   form.addEventListener('submit',e=>{e.preventDefault();if(valid()){invalidateVideo();render();}});
   $('#nc-image').addEventListener('click',async()=>{if(!valid())return;await render();if(ready)save(await canvasBlob(),`${fileBase}.png`);});
-  $('#nc-video').addEventListener('click',exportVideo);
+  $('#nc-video').addEventListener('click',()=>exportVideo(true));
   $('#nc-cancel').addEventListener('click',()=>{++exportJob;engine?.terminate();engine=null;enginePromise=null;lock(false);status.textContent='Video cancelado. Puedes volver a intentarlo cuando quieras.';});
-  $('#nc-share').addEventListener('click',async()=>{if(!videoBlob)return;const file=new File([videoBlob],videoName,{type:'video/mp4'});if(navigator.canShare?.({files:[file]})){try{await navigator.share({files:[file],title:'Mi tarjeta de Navidad'});return;}catch(err){if(err.name==='AbortError')return;}}save(videoBlob,videoName);status.textContent='Video descargado. Puedes adjuntarlo en TikTok, WhatsApp o tu aplicación favorita.';});
+  /* Compartir: crea el video de 15 s si hace falta, copia el título con #faltan y abre el menú del celular. */
+  const copyCaption=async()=>{const text=caption();$('#nc-caption').value=text;try{await navigator.clipboard.writeText(text);return true;}catch{const area=$('#nc-caption');area.select();try{return document.execCommand('copy');}catch{return false;}}};
+  $('#nc-share').addEventListener('click',async()=>{
+    if(!videoBlob){shareLabel('Creando tu video…');const ok=await exportVideo(false);if(!ok){shareLabel('Compartir video');return;}await copyCaption();shareLabel('✓ Listo: toca para compartir');status.textContent='Tu video está listo y el título ya está copiado. Toca «Compartir» para elegir TikTok, WhatsApp o Instagram.';return;}
+    const copied=await copyCaption();const file=new File([videoBlob],videoName,{type:'video/mp4'});
+    if(navigator.canShare?.({files:[file]})){try{await navigator.share({files:[file],title:'Mi tarjeta de Navidad',text:caption()});status.textContent=copied?'¡Compartido! Si la app no muestra el título, pégalo: ya está copiado.':'¡Compartido!';return;}catch(err){if(err.name==='AbortError')return;if(err.name==='NotAllowedError'){shareLabel('✓ Listo: toca para compartir');return;}}}
+    save(videoBlob,videoName);status.textContent=copied?'Video descargado y título copiado. Súbelo a TikTok o Instagram y pega el título.':'Video descargado. Puedes adjuntarlo en TikTok, WhatsApp o tu aplicación favorita.';
+  });
+  /* Caja con el título automático, lista para copiar. */
+  const capBox=document.createElement('div');capBox.className='nc-caption-box';
+  capBox.innerHTML='<label>Título para tu publicación (se copia solo al compartir)<textarea id="nc-caption" rows="3" readonly></textarea></label><button type="button" class="button outline small" id="nc-copy-caption">Copiar título y hashtags</button>';
+  $('.nc-downloads').after(capBox);
+  $('#nc-copy-caption').addEventListener('click',async()=>{const ok=await copyCaption();status.textContent=ok?'Título y hashtags copiados ✨':'Selecciona el título y cópialo.';});
   function tick(){if(exporting)return;const d=dateState();if(currentDay!==d.key){currentDay=d.key;if(automatic){active=((d.civilDay%25)+25)%25;phrase.value=designs[active].phrase;gallerySelection();}invalidateVideo();}if(!document.hidden)render();}
-  const d=dateState();currentDay=d.key;active=((d.civilDay%25)+25)%25;phraseIndex=active;phrase.value=designs[active].phrase;gallerySelection();render();
+  const d=dateState();currentDay=d.key;active=((d.civilDay%25)+25)%25;phraseIndex=active;phrase.value=designs[active].phrase;setDesignMusic(active);gallerySelection();$('#nc-share').disabled=false;$('#nc-caption').value=caption();render();
   // Refresh the card only while its section is on screen; all updates use the real clock.
   let onScreen=false;new IntersectionObserver(entries=>{onScreen=entries[0].isIntersecting;if(onScreen)tick();},{rootMargin:'120px'}).observe($('#tarjeta-navidad'));
   setInterval(()=>{if(onScreen)tick();},1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden&&onScreen)tick();});window.addEventListener('pageshow',()=>{if(onScreen)tick();});

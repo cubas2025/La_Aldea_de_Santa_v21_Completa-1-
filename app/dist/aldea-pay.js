@@ -23,24 +23,31 @@ const PACKAGES={
 const GIFTS=['1 cuento personalizado con su nombre','1 tarjeta de felicitación lista para enviar a amigos y familiares'];
 const FEATURES={videos:'Videos de Santa',cuentos:'Cuentos personalizados',tarjetas:'Tarjetas de felicitación',colorear:'30 libros para colorear'};
 const BASE=['videos','cuentos','tarjetas'], ALL=[...BASE,'colorear'];
-/* Solo se guardan huellas SHA-256 de los códigos, no los códigos en texto. */
-const CODES={
-  'ff7bdc84e071ee24d29d5b8170b15000d01a353b0ee2611cb2ffe8374378ca64':{plan:'Combo 1 · video corto + 30 libros',features:ALL},
-  '6df73cbe0b03dce75b140b07bdceb771f532b21682e271e40d85a46ef952ceec':{plan:'Paquete 2 · video de 3 minutos',features:BASE},
-  '644de4d351c0a1c96a2e34c59867328a376794c6b3475bcce8e11c022a0273d7':{plan:'Paquete 2 + 30 libros',features:ALL},
-  '90d57f6c4801d115507e19cb76bce6a9f9e4aafd9d1bd61c005f158b40317d28':{plan:'Paquete 3 · video de 5 minutos',features:BASE},
-  '256bae4e593787f410622375039d95d480e39facc664e43042596c40d1529f7f':{plan:'Paquete 3 + 30 libros',features:ALL},
-  'ffb9b9637fea9376187964b8b9976bd22348a5c69a56a36dea32b59479c9f36f':{plan:'Acceso total de Santa',features:ALL}
+/* Tipos de código. Los códigos en sí (6 caracteres al azar) solo los tiene el creador;
+   access-codes.js guarda únicamente sus huellas PBKDF2. */
+const TYPES={
+  1:{plan:'Combo 1 · video corto + 30 libros',features:ALL},
+  2:{plan:'Paquete 2 · video de 3 minutos',features:BASE},
+  3:{plan:'Paquete 2 + 30 libros',features:ALL},
+  4:{plan:'Paquete 3 · video de 5 minutos',features:BASE},
+  5:{plan:'Paquete 3 + 30 libros',features:ALL},
+  9:{plan:'Creador de La aldea de Santa',features:ALL,creator:true}
 };
-/* Secciones de pago. El quiz (#juegos) y su certificado quedan siempre gratis. */
-const LOCKED={'lista-buenos':'videos',buenos:'videos','ninos-buenos':'videos',llamadas:'videos',editor:'videos','tarjeta-qr':'videos',cuentos:'cuentos',tarjetas:'tarjetas','tarjeta-navidad':'tarjetas',cumpleanos:'tarjetas',colorear:'colorear'};
-const SECTION_NAMES={'lista-buenos':'La lista de los buenos',buenos:'40 escenas de Santa','ninos-buenos':'Niños buenos',llamadas:'Videollamada y llamadas de Santa',editor:'Editor de videos','tarjeta-qr':'Tarjeta con QR',cuentos:'Cuentos con su nombre',tarjetas:'Tarjetas mágicas','tarjeta-navidad':'Tarjeta de Navidad',cumpleanos:'Invitaciones de cumpleaños',colorear:'Los 30 libros para colorear'};
-const LOCK_TEXT={
-  videos:'Los videos de Santa con su nombre, la videollamada y el editor se activan con cualquier paquete.',
-  cuentos:'Los cuentos personalizados vienen de regalo en todos los paquetes de video.',
-  tarjetas:'Las tarjetas de felicitación vienen de regalo en todos los paquetes de video.',
-  colorear:'El Pack Completo de 30 Libros para Colorear viene en el Combo 1, o agrégalo al Paquete 2 o al Paquete 3.'
+/* Todo se puede crear y ver gratis. Descargar y compartir pide código.
+   Gratis siempre: el quiz con su certificado y las 25 tarjetas de Navidad (#tarjeta-navidad). */
+const GATES=[
+  ['videos','#lv-export,#lv-image,#sl-video,#sl-png,#sl-pdf,#sl-share-image,#sl-share-video,#ed-download,[data-video-sharing="lv"] button,[data-video-sharing="sl"] button,[data-video-sharing="ed"] button,#ninos-buenos [data-act="share"],#ninos-buenos [data-act="download"],[data-download="qr"],[data-pdf="qr"],[data-share="qr"]'],
+  ['tarjetas','[data-download="card"],[data-pdf="card"],[data-share="card"],[data-download="invite"],[data-pdf="invite"],[data-share="invite"]'],
+  ['colorear','#color-download'],
+  ['cuentos','#story-stage button']
+];
+const GATE_TEXT={
+  videos:'Puedes crear y ver los videos de Santa gratis. Para descargarlos o compartirlos, activa el código de tu paquete.',
+  cuentos:'Lee y escucha el cuento gratis. Para descargarlo, activa tu código: el cuento viene de regalo en todos los paquetes.',
+  tarjetas:'Crea tu tarjeta gratis. Para descargarla o enviarla, activa tu código: viene de regalo en todos los paquetes.',
+  colorear:'Mira los libros gratis. Para descargar el PDF necesitas el Pack de 30 Libros para Colorear (Combo 1, o agrégalo al Paquete 2 o 3).'
 };
+const isEditButton=b=>/Editar este video|Escuchar|Siguiente|Anterior|Volver|Elegir|Empezar|Leer/i.test(b.textContent)&&!/Descargar|Compartir|PDF/i.test(b.textContent);
 
 const store={get(k){try{return JSON.parse(localStorage.getItem(k));}catch{return null;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}},del(k){try{localStorage.removeItem(k);}catch{}}};
 
@@ -68,20 +75,33 @@ const payName=c=>c.pay==='yape'?'Yape o Plin':c.pay==='crypto'?'Binance Pay, Air
 const whatsappUrl=text=>`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
 
 /* Accesos */
-let access=store.get('aldea-access');if(!access||!Array.isArray(access.features))access={features:[],plans:[]};
-const hasAccess=f=>access.features.includes(f);
-async function sha(text){const data=new TextEncoder().encode(text);const buf=await crypto.subtle.digest('SHA-256',data);return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');}
-async function redeem(raw){
-  const code=String(raw||'').toUpperCase().replace(/\s+/g,'');
-  if(!code)return {ok:false,message:'Escribe tu código de acceso.'};
-  if(!window.crypto?.subtle)return {ok:false,message:'Abre la web con https para activar tu código.'};
-  const entry=CODES[await sha('aldea-santa:'+code)];
-  if(!entry)return {ok:false,message:'Ese código no es válido. Revisa que esté bien escrito o escríbenos por WhatsApp.'};
-  access={features:[...new Set([...access.features,...entry.features])],plans:[...new Set([...(access.plans||[]),entry.plan])]};
-  store.set('aldea-access',access);refreshLocks();window.dispatchEvent(new CustomEvent('aldea:access',{detail:access}));
-  return {ok:true,entry,message:`¡Código activado! ${entry.plan}. Ya puedes usar: ${entry.features.map(f=>FEATURES[f]).join(', ')}.`};
+const EMPTY=()=>({features:[],plans:[],creator:false});
+let access=store.get('aldea-access');if(!access||!Array.isArray(access.features))access=EMPTY();
+const hasAccess=f=>access.creator||access.features.includes(f);
+const isCreator=()=>!!access.creator;
+async function fingerprint(code){
+  const cfg=window.ALDEA_CODES,enc=new TextEncoder();
+  const key=await crypto.subtle.importKey('raw',enc.encode(code),'PBKDF2',false,['deriveBits']);
+  const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:enc.encode(cfg.salt),iterations:cfg.iterations},key,64);
+  return [...new Uint8Array(bits)].map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-function clearAccess(){access={features:[],plans:[]};store.del('aldea-access');refreshLocks();window.dispatchEvent(new CustomEvent('aldea:access',{detail:access}));}
+async function lookup(raw){
+  const code=String(raw||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(!code)return {error:'Escribe tu código de acceso.'};
+  if(!window.crypto?.subtle||!window.ALDEA_CODES)return {error:'Abre la web con https para activar tu código.'};
+  const entry=TYPES[window.ALDEA_CODES.map[await fingerprint(code)]];
+  return entry?{entry}:{error:'Ese código no es válido. Revisa que esté bien escrito (6 letras y números) o escríbenos por WhatsApp.'};
+}
+function grant(entry){
+  access={features:[...new Set([...access.features,...entry.features])],plans:[...new Set([...(access.plans||[]),entry.plan])],creator:access.creator||!!entry.creator};
+  store.set('aldea-access',access);refreshLocks();window.dispatchEvent(new CustomEvent('aldea:access',{detail:access}));
+}
+async function redeem(raw){
+  const r=await lookup(raw);if(r.error)return {ok:false,message:r.error};
+  grant(r.entry);
+  return {ok:true,entry:r.entry,message:r.entry.creator?'¡Modo creador activado! Tienes acceso libre a todo en este dispositivo.':`¡Código activado! ${r.entry.plan}. Ya puedes descargar y compartir: ${r.entry.features.map(f=>FEATURES[f]).join(', ')}.`};
+}
+function clearAccess(){access=EMPTY();store.del('aldea-access');refreshLocks();window.dispatchEvent(new CustomEvent('aldea:access',{detail:access}));}
 
 /* Utilidades */
 let toastTimer=0;
@@ -133,33 +153,63 @@ function renderMethods(el){
   el.innerHTML=html;
 }
 
-/* Paywall de cada sección de pago */
-function buildPaywalls(){
-  for(const [id,feature] of Object.entries(LOCKED)){
-    const section=document.getElementById(id);if(!section||section.querySelector(':scope > .paywall'))continue;
-    const wall=document.createElement('div');wall.className='paywall';wall.dataset.feature=feature;
-    wall.innerHTML=`<div class="paywall-card"><span class="paywall-lock" aria-hidden="true">🔒</span><p class="eyebrow">CONTENIDO DE PAGO</p><h2>${esc(SECTION_NAMES[id])}</h2><p>${esc(LOCK_TEXT[feature])}</p>
-<form class="paywall-form"><label>Código de acceso<input name="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="30" placeholder="Escribe tu código"></label><button type="submit" class="button">Desbloquear</button></form><p class="paywall-status fine" role="status"></p>
-<div class="paywall-actions"><a class="button gold" href="#paquetes">Ver paquetes y precios</a><a class="button outline" href="#juegos">Jugar gratis el quiz</a></div></div>`;
-    wall.querySelector('form').addEventListener('submit',async e=>{
-      e.preventDefault();const status=wall.querySelector('.paywall-status');const r=await redeem(e.target.code.value);
-      if(r.ok&&!hasAccess(feature)){status.textContent=`Tu código se activó, pero no incluye: ${FEATURES[feature].toLowerCase()}. Puedes pedirlo desde «Paquetes y precios».`;return;}
-      status.textContent=r.message;if(r.ok)toast(r.message);
-    });
-    section.prepend(wall);
+/* Candado de descargas: se puede crear y ver todo, pero descargar o compartir pide código. */
+function gateFor(el){
+  for(const [feature,sel] of GATES){
+    const hit=el.closest(sel);if(!hit)continue;
+    if(feature==='cuentos'&&!/Descargar|Compartir|PDF|Imprimir/i.test(hit.textContent))continue;
+    if(hit.matches('[data-video-sharing] button')&&isEditButton(hit))continue;
+    return {feature,el:hit};
+  }
+  return null;
+}
+let gateDialog=null,pending=null,bypass=false;
+function buildGate(){
+  gateDialog=document.createElement('dialog');gateDialog.className='ap-gate';gateDialog.setAttribute('aria-labelledby','ap-gate-title');
+  gateDialog.innerHTML=`<button type="button" class="ap-gate-close" aria-label="Cerrar">×</button><span class="paywall-lock" aria-hidden="true">🔒</span><p class="eyebrow">DESCARGAR Y COMPARTIR</p><h2 id="ap-gate-title">Activa tu código</h2><p id="ap-gate-text"></p>
+<form class="paywall-form" id="ap-gate-form"><label>Código de 6 caracteres<input name="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="30" placeholder="Ej. K7Q2M9"></label><button type="submit" class="button">Activar</button></form><p class="paywall-status fine" id="ap-gate-status" role="status"></p>
+<div class="paywall-actions"><a class="button gold" href="#paquetes" data-close>Ver paquetes y precios</a><a class="button green" href="${whatsappUrl('¡Hola, La aldea de Santa! Quiero comprar un paquete para descargar mis videos, cuentos y libros.')}" target="_blank" rel="noopener noreferrer">Pedir mi código por WhatsApp</a></div>
+<p class="fine">Gratis para todos: el quiz con su certificado y las 25 tarjetas de Navidad.</p>`;
+  document.body.append(gateDialog);
+  gateDialog.querySelector('.ap-gate-close').addEventListener('click',()=>gateDialog.close());
+  gateDialog.querySelector('[data-close]').addEventListener('click',()=>gateDialog.close());
+  gateDialog.addEventListener('click',e=>{if(e.target===gateDialog)gateDialog.close();});
+  gateDialog.querySelector('form').addEventListener('submit',async e=>{
+    e.preventDefault();const status=$('#ap-gate-status'),btn=e.target.querySelector('button');btn.disabled=true;status.textContent='Comprobando…';
+    const r=await redeem(e.target.code.value);btn.disabled=false;
+    if(!r.ok){status.textContent=r.message;return;}
+    if(pending&&!hasAccess(pending.feature)){status.textContent=`Tu código se activó, pero no incluye: ${FEATURES[pending.feature].toLowerCase()}. Puedes agregarlo desde «Paquetes y precios».`;return;}
+    toast(r.message);gateDialog.close();e.target.code.value='';
+    const target=pending?.el;pending=null;
+    if(target&&document.contains(target)){bypass=true;try{target.click();}finally{bypass=false;}}
+  });
+}
+function openGate(feature,el){
+  if(!gateDialog)buildGate();pending={feature,el};
+  $('#ap-gate-text').textContent=GATE_TEXT[feature];$('#ap-gate-status').textContent='';
+  gateDialog.showModal();gateDialog.querySelector('input').focus();
+}
+document.addEventListener('click',e=>{
+  if(bypass)return;const g=gateFor(e.target);if(!g||hasAccess(g.feature))return;
+  e.preventDefault();e.stopImmediatePropagation();openGate(g.feature,g.el);
+},true);
+/* Sin código: los videos no muestran el menú de descarga del navegador y no se pueden guardar con clic derecho. */
+const PROTECTED='#lista-buenos,#buenos,#ninos-buenos,#editor,#cuentos,#colorear,#tarjetas,#cumpleanos,#tarjeta-qr';
+document.addEventListener('contextmenu',e=>{if(isCreator()||access.features.length)return;if(e.target.closest('video,canvas,img')&&e.target.closest(PROTECTED))e.preventDefault();});
+function protectMedia(){
+  const open=access.features.length>0||isCreator();
+  for(const v of $$(`${PROTECTED.split(',').map(s=>s+' video').join(',')}`)){
+    if(open){v.removeAttribute('controlslist');v.disablePictureInPicture=false;}else{v.setAttribute('controlslist','nodownload noplaybackrate');v.disablePictureInPicture=true;}
   }
 }
 function refreshLocks(){
-  for(const [id,feature] of Object.entries(LOCKED)){
-    const section=document.getElementById(id);if(!section)continue;
-    const locked=!hasAccess(feature);section.classList.toggle('is-locked',locked);
-    if(locked)for(const m of section.querySelectorAll('audio,video'))m.pause();
-  }
-  for(const a of $$('.site-header nav a, .magic-links a, .hero-actions a')){
-    const id=a.hash.slice(1);a.classList.toggle('ap-locked-link',!!LOCKED[id]&&!hasAccess(LOCKED[id]));a.classList.toggle('ap-free-link',id==='juegos');
-  }
-  renderAccessList();
+  document.body.classList.toggle('ap-unlocked',access.features.length>0||isCreator());
+  document.body.classList.toggle('ap-creator',isCreator());
+  for(const a of $$('.magic-links a, .site-header nav a'))a.classList.toggle('ap-free-link',a.hash==='#juegos'||a.hash==='#tarjeta-navidad');
+  protectMedia();renderAccessList();
+  window.dispatchEvent(new CustomEvent('aldea:creator',{detail:{creator:isCreator()}}));
 }
+new MutationObserver(()=>protectMedia()).observe(document.querySelector('main')||document.body,{subtree:true,childList:true});
 
 /* Sección «Paquetes y precios» */
 let selected={pkg:'video3',books:false};
@@ -198,8 +248,8 @@ function renderPay(){
 }
 function renderAccessList(){
   const list=$('#ap-access-list');if(!list)return;
-  list.innerHTML=Object.entries(FEATURES).map(([f,name])=>`<li class="${hasAccess(f)?'on':''}">${hasAccess(f)?'✓':'🔒'} ${esc(name)}</li>`).join('')+'<li class="on">✓ Quiz navideño y certificado · gratis</li>';
-  $('#ap-logout').hidden=!access.features.length;
+  list.innerHTML=Object.entries(FEATURES).map(([f,name])=>`<li class="${hasAccess(f)?'on':''}">${hasAccess(f)?'✓ Descarga activada:':'🔒 Ver gratis · descargar con código:'} ${esc(name)}</li>`).join('')+'<li class="on">✓ Gratis: quiz con certificado y las 25 tarjetas de Navidad</li>';
+  $('#ap-logout').hidden=!access.features.length&&!isCreator();
   $('#ap-plans').textContent=access.plans?.length?`Activado en este dispositivo: ${access.plans.join(' · ')}`:'Todavía no activaste ningún código en este dispositivo.';
 }
 function buildPackages(){
@@ -209,7 +259,7 @@ function buildPackages(){
 <h3 class="ap-step">1. ¿Desde dónde pagas?</h3><div class="ap-flags" role="radiogroup" aria-label="País o región de pago">${COUNTRIES.map(c=>`<button type="button" role="radio" data-country="${c.id}" aria-checked="false"><span class="ap-flag" aria-hidden="true">${c.flag}</span>${esc(c.name)}</button>`).join('')}</div><p class="fine" id="ap-currency" aria-live="polite"></p>
 <h3 class="ap-step">2. Elige tu paquete</h3><div class="ap-packages" id="ap-packages"></div>
 <div class="ap-bottom"><div class="panel ap-pay" id="ap-pay"><h3 class="ap-step">3. Paga y envía tu comprobante</h3><div class="ap-summary" id="ap-summary" aria-live="polite"></div><label>Nombre del niño o niña<input id="ap-child" maxlength="40" autocomplete="off" placeholder="Para su video, cuento y tarjeta"></label><div class="ap-methods" id="ap-methods"></div><a class="button green ap-wa" id="ap-wa" href="#" target="_blank" rel="noopener noreferrer">${icons.wa}<span>Enviar comprobante por WhatsApp</span></a><p class="fine">Se abre WhatsApp con el resumen de tu paquete, el monto exacto y el nombre del niño o niña. Adjunta la captura de tu pago y te enviamos tu código de acceso.</p><a class="ap-more" href="#pedido" id="ap-to-order">¿Quieres contarnos más detalles para el video? Completa el formulario del saludo →</a></div>
-<div class="panel ap-unlock" id="ap-unlock"><h3 class="ap-step">4. Activa tu código de acceso</h3><p>Escribe el código que te enviamos por WhatsApp para desbloquear tu contenido en este dispositivo.</p><form id="ap-code-form" class="ap-code-form"><input id="ap-code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="30" placeholder="Tu código" aria-label="Código de acceso"><button type="submit" class="button">Activar</button></form><p id="ap-code-status" class="fine" role="status"></p><ul class="ap-access" id="ap-access-list"></ul><p class="fine" id="ap-plans"></p><button type="button" class="button outline small" id="ap-logout" hidden>Quitar el código de este dispositivo</button></div></div></div>`;
+<div class="panel ap-unlock" id="ap-unlock"><h3 class="ap-step">4. Activa tu código de acceso</h3><p>Crear y ver es gratis. Con el código de 6 caracteres que te enviamos por WhatsApp puedes descargar y compartir tus videos cortos, cuentos, tarjetas y libros. Los videos de 3 minutos o más los preparamos nosotros y te los enviamos por WhatsApp.</p><form id="ap-code-form" class="ap-code-form"><input id="ap-code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="30" placeholder="Tu código" aria-label="Código de acceso"><button type="submit" class="button">Activar</button></form><p id="ap-code-status" class="fine" role="status"></p><ul class="ap-access" id="ap-access-list"></ul><p class="fine" id="ap-plans"></p><button type="button" class="button outline small" id="ap-logout" hidden>Quitar el código de este dispositivo</button></div></div></div>`;
   const grid=$('#ap-packages');for(const p of Object.values(PACKAGES))grid.append(packageCard(p));
   root.querySelector('.wrap').append(shareBar({heading:'Comparte La aldea de Santa con tu familia',text:'🎅 Mira La aldea de Santa: videos de Santa con su nombre, cuentos, tarjetas y un quiz navideño gratis con certificado.'}));
   const flags=root.querySelector('.ap-flags');
@@ -237,9 +287,18 @@ function addShareBars(){
 /* Windows no dibuja banderas con emojis: cargamos solo esos símbolos de Noto Color Emoji. */
 (()=>{const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap&text='+encodeURIComponent(COUNTRIES.map(c=>c.flag).join(''));document.head.append(l);})();
 
-window.ALDEA_PAY={COUNTRIES,PACKAGES,GIFTS,country,setCountry,currency,fmt,amount,storyPrice,booksLabel,booksText,payName,whatsappUrl,renderMethods,hasAccess,redeem,toast};
+window.ALDEA_PAY={COUNTRIES,PACKAGES,GIFTS,TYPES,country,setCountry,currency,fmt,amount,storyPrice,booksLabel,booksText,payName,whatsappUrl,renderMethods,hasAccess,isCreator,lookup,redeem,clearAccess,toast,copy,shareBar};
 
-buildPaywalls();buildPackages();addShareBars();refreshLocks();
+/* Enlace secreto de creador: ?creador=TOKEN (se borra de la barra de direcciones). */
+(async()=>{
+  const params=new URLSearchParams(location.search),token=params.get('creador');if(!token)return;
+  params.delete('creador');history.replaceState(null,'',location.pathname+(params.toString()?'?'+params:'')+location.hash);
+  const r=await lookup(token);
+  if(r.entry?.creator){grant(r.entry);toast('Modo creador activado en este dispositivo.');location.hash='creador';}
+  else toast('El enlace de creador no es válido.');
+})();
+
+buildPackages();addShareBars();refreshLocks();
 window.addEventListener('aldea:country',()=>{renderFlags();renderPrices();renderPay();});
 window.addEventListener('storage',e=>{if(e.key==='aldea-access'){access=store.get('aldea-access')||{features:[],plans:[]};refreshLocks();}});
 })();
