@@ -8,7 +8,7 @@
      (access-codes.js). Cuando importes tus códigos a Supabase desde /admin, cámbialo a
      false para que solo valgan los de Supabase (así puedes desactivarlos). */
 window.ALDEA_SUPABASE = {
-  url: '',
-  anonKey: '',
+  url: 'https://mjoojcyhejtuypwoyyul.supabase.co',
+  anonKey: 'sb_publishable_aKMu71RE4IiWx2Br25ejqA_NzzOPN3T',
   codigosEstaticos: true
 };
