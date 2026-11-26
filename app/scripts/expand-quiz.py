@@ -4,7 +4,7 @@ from pathlib import Path
 from fractions import Fraction
 
 ROOT = Path(__file__).resolve().parents[1]
-original = json.loads((ROOT/'dist/quiz-data.js').read_text().split('=',1)[1].strip().rstrip(';'))
+original = json.loads((ROOT.parent/'quiz-data.js').read_text().split('=',1)[1].strip().rstrip(';'))
 original = [q for q in original if q['id'].startswith('christmas-')]
 new = []
 def add(category, question, answer, wrong, explanation, level=1):
@@ -258,5 +258,5 @@ all_questions=original+new
 assert len(all_questions)==1000
 assert len({q['question'].casefold() for q in all_questions})==1000
 assert len({q['id'] for q in all_questions})==1000
-(ROOT/'dist/quiz-data.js').write_text('window.SANTA_QUIZ = '+json.dumps(all_questions,ensure_ascii=False,indent=2)+';\n')
+(ROOT.parent/'quiz-data.js').write_text('window.SANTA_QUIZ = '+json.dumps(all_questions,ensure_ascii=False,indent=2)+';\n')
 print('1000 unique questions generated; original Christmas set retained.')

@@ -1,0 +1,10 @@
+// Cloudflare (Workers con archivos estáticos): publica la web desde la raíz del repositorio.
+// Sin compilación: el sitio ya es HTML, CSS y JS listos.
+// Los archivos que NO se publican están en .assetsignore.
+{
+  "name": "la-aldea-de-santa",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./"
+  }
+}

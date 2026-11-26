@@ -1,0 +1,15 @@
+.git
+.gitattributes
+.vercelignore
+.assetsignore
+wrangler.jsonc
+vercel.json
+app
+documentacion
+catalogos
+INVENTARIO_ARCHIVOS.csv
+LEEME_PRIMERO.txt
+VERSION_FINAL.json
+INICIAR_WINDOWS.bat
+iniciar_macos_linux.sh
+*.zip

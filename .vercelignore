@@ -1,4 +1,12 @@
+app
 documentacion
 catalogos
 INVENTARIO_ARCHIVOS.csv
+LEEME_PRIMERO.txt
+VERSION_FINAL.json
+INICIAR_WINDOWS.bat
+iniciar_macos_linux.sh
+wrangler.jsonc
+.assetsignore
+_headers
 *.zip

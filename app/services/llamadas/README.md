@@ -8,7 +8,7 @@ La web publicada es estática y no contiene credenciales de telefonía. La prueb
 2. Crear un espacio KV en Cloudflare y añadir su identificador a `wrangler.toml` con binding `CALLS_KV`.
 3. Configurar como secretos `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM_NUMBER` (formato E.164) y `CALL_ACCESS_CODE` (al menos 16 caracteres). El código se entrega solo a quien esté autorizado a solicitar llamadas. `PUBLIC_ORIGIN` es opcional y debe ser la URL HTTPS definitiva del Worker. Mantener el hostname de la app en `ALLOWED_ORIGIN` y `ASSET_ORIGIN`.
 4. Desplegar el Worker desde esta carpeta con la herramienta oficial de Cloudflare; su empaquetador incluye el módulo de audio y la biblioteca vendorizada. Este paso todavía no se ha ejecutado.
-5. Confirmar que `/ready` devuelve `enabled: true`. Poner únicamente la URL HTTPS del Worker en `dist/calls-config.js` y volver a publicar la app. El código de acceso y las claves nunca van en ese archivo.
+5. Confirmar que `/ready` devuelve `enabled: true`. Poner únicamente la URL HTTPS del Worker en `calls-config.js` (raíz del repositorio) y volver a publicar la app. El código de acceso y las claves nunca van en ese archivo.
 6. Hacer una primera llamada a un número propio autorizado, comprobar el audio del duende, pulsar 1 y verificar el nombre. Las llamadas tienen coste; no se ha hecho ninguna llamada real de prueba.
 
 ## Flujo implementado

@@ -1,7 +1,7 @@
 """Append exactly 500 authored general-knowledge questions; preserve the existing bank."""
 from pathlib import Path
 import json,unicodedata,collections
-root=Path(__file__).resolve().parents[1];folder=root/'scripts/culture-general';path=root/'dist/quiz-data.js'
+root=Path(__file__).resolve().parents[1];folder=root/'scripts/culture-general';path=root.parent/'quiz-data.js'
 existing=json.loads(path.read_text().split('=',1)[1].strip().rstrip(';'));existing=[q for q in existing if not q['id'].startswith('culture-')];new=[]
 sources={
  'capitales':'https://ungegn.un.org/dashboard/cities/index',

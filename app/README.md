@@ -1,6 +1,6 @@
 # La aldea de Santa
 
-Responsive, buildless Spanish Christmas web app. Hosted assets are in `dist/`; `.openai/hosting.json` retains the existing Site identity. Preserve the Site's public audience.
+Responsive, buildless Spanish Christmas web app. Hosted assets are at the repository root; `.openai/hosting.json` retains the existing Site identity. Preserve the Site's public audience.
 
 - `data.js`: 54 greeting titles and their categories, price tiers and reference image rectangles. Prices: PEN 3 / USD 1 and PEN 5 / USD 2. The larger tier is five minutes or more; the shorter tier is one to three minutes. Calls and professional greetings currently use the base tier.
 - `content.js`: 30 original six-page personalized story outlines with two narrative choices and ten coloring book definitions.

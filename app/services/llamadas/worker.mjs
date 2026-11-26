@@ -1,6 +1,6 @@
 // Optional, separately deployed telephony service. It is not an active phone service until configured.
-import phone from '../../dist/vendor/libphonenumber-max.js';
-import {prepareCall,findName,CALL_PROFILES} from '../../dist/call-audio.mjs';
+import phone from '../../../vendor/libphonenumber-max.js';
+import {prepareCall,findName,CALL_PROFILES} from '../../../call-audio.mjs';
 const DEFAULT_ORIGIN='https://la-aldea-de-santa.orangemirth32.chatgpt.site';
 const xmlEscape=s=>String(s).replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c]));
 const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json;charset=utf-8','Cache-Control':'no-store'}});

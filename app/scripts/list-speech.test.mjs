@@ -4,9 +4,9 @@ import vm from 'node:vm';
 
 let now=0;
 const context=vm.createContext({window:{},performance:{now:()=>now}});
-for(const file of ['name-audio-data.js','list-speech.js'])vm.runInContext(readFileSync(new URL('../dist/'+file,import.meta.url),'utf8'),context);
+for(const file of ['name-audio-data.js','list-speech.js'])vm.runInContext(readFileSync(new URL('../../'+file,import.meta.url),'utf8'),context);
 const {SANTA_NAME_AUDIO:catalog,SANTA_LIST_SPEECH:sync}=context.window;
-const bytes=path=>new Uint8Array(readFileSync(new URL('../dist/'+path,import.meta.url)));
+const bytes=path=>new Uint8Array(readFileSync(new URL('../../'+path,import.meta.url)));
 const announcements=Object.fromEntries(Object.entries(sync.voices).map(([gender,path])=>[gender,bytes(path)]));
 let checked=0,longest=0;
 for(const recording of catalog){

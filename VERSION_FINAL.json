@@ -58,7 +58,7 @@
     "inicio_nombre_nino": 4.24,
     "fin_anuncio_nina": 3.9,
     "inicio_nombre_nina": 3.94,
-    "archivo_comun": "app/dist/list-speech.js"
+    "archivo_comun": "list-speech.js"
   },
   "llamadas": {
     "prueba_local": true,
