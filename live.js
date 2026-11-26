@@ -111,12 +111,29 @@ function loadTrack(i){bgIndex=((i%liveMusic.length)+liveMusic.length)%liveMusic.
 bg.addEventListener('ended',()=>{loadTrack(bgIndex+1);bgVol();bg.play().catch(()=>{});});
 bg.addEventListener('error',()=>{if(bgLoaded>=0){loadTrack(bgIndex+1);bg.play().catch(()=>{});}});   // si una canción falla, pasa a la siguiente
 function startBg(){if(!liveMusic.length)return;if(bgLoaded<0)loadTrack(bgIndex);bgVol();bg.play().catch(()=>{});}
-function duckFor(sec){duck=.6;bgVol();clearTimeout(duckTimer);duckTimer=setTimeout(()=>{duck=1;bgVol();},Math.max(.5,sec)*1000);}
+function duckFor(sec){duck=.6;bgVol();clearTimeout(duckTimer);duckTimer=setTimeout(()=>{duck=1;duckTimer=0;bgVol();},Math.max(.5,sec)*1000);}
+/* Vigilante: si el celular pausó la música (cambio de canción en segundo plano, corte de red,
+   bloqueo de pantalla), la reanuda; si se trabó, pasa a la siguiente canción. */
+let bgWanted=false,bgLastTime=-1,bgStuck=0;
+function ensureBg(){
+  if(!bgWanted||!liveMusic.length||document.hidden)return;
+  if(bgLoaded<0){startBg();return;}
+  if(bg.ended){loadTrack(bgIndex+1);bgVol();bg.play().catch(()=>{});bgStuck=0;return;}
+  if(bg.paused){bgVol();bg.play().catch(()=>{});return;}
+  if(Math.abs(bg.currentTime-bgLastTime)<.05){if(++bgStuck>=8){loadTrack(bgIndex+1);bgVol();bg.play().catch(()=>{});bgStuck=0;}}else bgStuck=0;
+  bgLastTime=bg.currentTime;
+  if(duck<1&&!duckTimer){duck=1;}
+  bgVol();
+}
+setInterval(ensureBg,1000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)ensureBg();});
+const bgPlay=()=>{bgWanted=true;startBg();};
+const bgStop=()=>{bgWanted=false;bg.pause();};
 
 /* ---------- Canal público ---------- */
 const root=$('#en-vivo');
 let channelTimer=0,current=-1,soundOn=false,overlay=null,namer=null;
-function playBg(){if(!soundOn)return;bgBase=.5;startBg();}
+function playBg(){if(!soundOn)return;bgBase=.5;bgPlay();}
 function buildChannel(){
   if(!root)return;
   root.innerHTML=`<div class="wrap"><div class="section-heading"><div><p class="eyebrow" data-s="eyebrow"></p><h2 id="live-heading" data-h="h2"></h2></div><p data-s="intro"></p></div>
@@ -154,7 +171,7 @@ function applyAudio(){
   const lista=mode==='lista',T=STR[lang];
   v.muted=lista?true:!soundOn;
   namer?.setSound(lista&&soundOn);
-  if(lista&&soundOn)playBg();else bg.pause();
+  if(lista&&soundOn)playBg();else bgStop();
   $('#live-sound').textContent=soundOn?T.soundOff:lista?T.soundLista:T.soundRetrans;
 }
 function renderMode(){
@@ -204,7 +221,7 @@ function updateListInfo(){
 }
 window.addEventListener('aldea:live-names',updateListInfo);
 function startChannel(){if(channelTimer||!items.length)return;current=-1;syncChannel();channelTimer=setInterval(syncChannel,1000);if(mode==='lista')namer?.start();applyAudio();updateListInfo();}
-function stopChannel(){clearInterval(channelTimer);channelTimer=0;const v=$('#live-video');if(v){v.pause();}bg.pause();namer?.stop();}
+function stopChannel(){clearInterval(channelTimer);channelTimer=0;const v=$('#live-video');if(v){v.pause();}bgStop();namer?.stop();}
 
 /* Cartel global cuando Santa está en vivo en TikTok */
 function liveBanner(){
@@ -287,14 +304,14 @@ function openPresenter(){
     $('#lp-kicker').textContent=it.kind==='client'?PT.special:PT.now;
     $('#lp-title').textContent=it.kind==='client'?it.name:it.title;
     presenter.dataset.kind=it.kind;
-    if(it.kind==='santa'&&pMusic&&liveMusic.length){bgBase=.5;startBg();v.volume=pNamer?.25:.5;}else{bg.pause();v.volume=1;}
+    if(it.kind==='santa'&&pMusic&&liveMusic.length){bgBase=.5;bgPlay();v.volume=pNamer?.25:.5;}else{bgStop();v.volume=1;}
     if(it.kind==='santa')pNamer?.start();else pNamer?.stop();
     $('#lp-lower').hidden=it.kind==='santa'&&!!pNamer;
     const upcoming=pOrder.slice(pIndex+1).filter(x=>x.kind==='client').map(x=>x.name);
     pOverlay.setExtra(upcoming.length?`${PT.upcoming} ${upcoming.join(' · ')}`:PT.chat);
   }
   v.addEventListener('ended',advance);
-  const close=()=>{pNamer?.stop();clearInterval(clock);pOverlay.destroy();clearTimeout(pTimer);clearTimeout(hideTimer);bg.pause();v.pause();presenter.remove();presenter=null;document.body.classList.remove('modal-open');if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});document.removeEventListener('keydown',keys);};
+  const close=()=>{pNamer?.stop();clearInterval(clock);pOverlay.destroy();clearTimeout(pTimer);clearTimeout(hideTimer);bgStop();v.pause();presenter.remove();presenter=null;document.body.classList.remove('modal-open');if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});document.removeEventListener('keydown',keys);};
   presenter.addEventListener('click',e=>{const b=e.target.closest('[data-lp]');if(!b)return;const a=b.dataset.lp;
     if(a==='next')advance();else if(a==='prev'){pIndex=Math.max(-1,pIndex-2);advance();}else if(a==='pause'){if(v.paused)v.play();else v.pause();}else if(a==='full')(presenter.requestFullscreen||presenter.webkitRequestFullscreen)?.call(presenter);else if(a==='exit')close();});
   const showControls=()=>{presenter.classList.add('show-controls');clearTimeout(hideTimer);hideTimer=setTimeout(()=>presenter?.classList.remove('show-controls'),2500);};
