@@ -35,6 +35,17 @@ window.ALDEA_LIVE = {
     { src: 'assets/en-vivo/musica/sleigh-bells-dance.mp3', title: "The Sleigh Bells' Dance", gain: 0.91 },
     { src: 'assets/en-vivo/musica/christmas-orchestral.mp3', title: 'A Christmas Orchestral', gain: 0.88 },
     { src: 'assets/en-vivo/musica/galactic-sleigh-ride-2.mp3', title: 'Galactic Sleigh Ride · II', gain: 1 },
-    { src: 'assets/en-vivo/musica/gallop-of-the-sleigh.mp3', title: 'Gallop of the Sleigh', gain: 0.81 }
+    { src: 'assets/en-vivo/musica/gallop-of-the-sleigh.mp3', title: 'Gallop of the Sleigh', gain: 0.81 },
+    { src: 'assets/navidad/village-christmas-lights.mp3', title: 'Village Christmas Lights', gain: 0.8 },
+    { src: 'assets/musica/sleigh-bells.mp3', title: 'Sleigh Bells in the Air', gain: 1 },
+    { src: 'assets/musica/sleigh-takeoff.mp3', title: 'Sleigh Takeoff', gain: 0.88 },
+    { src: 'assets/musica/sleigh-takeoff-2.mp3', title: 'Sleigh Takeoff · II', gain: 0.81 },
+    { src: 'assets/musica/final-bell.mp3', title: 'The Final Bell', gain: 0.95 },
+    { src: 'assets/musica/final-bell-2.mp3', title: 'The Final Bell · II', gain: 0.93 },
+    { src: 'assets/musica/fourth-note.mp3', title: 'The Fourth Note', gain: 0.96 },
+    { src: 'assets/musica/fourth-note-2.mp3', title: 'The Fourth Note · II', gain: 1 },
+    { src: 'assets/musica/music-box-waltz.mp3', title: 'The Music Box Waltz', gain: 0.91 },
+    { src: 'assets/musica/final-note.mp3', title: 'The Final Note', gain: 0.9 },
+    { src: 'assets/musica/crystal-chime.mp3', title: 'Crystal Chime', gain: 0.91 }
   ]
 };

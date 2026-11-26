@@ -102,18 +102,21 @@ function guessLang(){
 let lang=guessLang();
 
 /* ---------- Música de fondo: volumen igualado, transición suave y baja cuando habla Santa ---------- */
-const bg=new Audio();bg.preload='none';
-let bgIndex=Math.floor(Date.now()/1000/180)%Math.max(1,liveMusic.length),duck=1,fade=1,duckTimer=0,bgBase=.22;
+/* Todas las canciones en orden, una tras otra; al terminar la última, vuelve a empezar. */
+const bg=new Audio();bg.preload='auto';
+let bgIndex=0,bgLoaded=-1,duck=1,fade=1,duckTimer=0,bgBase=.5;
 function bgVol(){const t=liveMusic[bgIndex%liveMusic.length]||{gain:1};bg.volume=Math.max(0,Math.min(1,bgBase*(t.gain||1)*duck*fade));}
-bg.addEventListener('timeupdate',()=>{const left=bg.duration-bg.currentTime;fade=Math.max(0,Math.min(1,bg.currentTime/2,Number.isFinite(left)?left/2.5:1));bgVol();});
-bg.addEventListener('ended',()=>{bgIndex=(bgIndex+1)%liveMusic.length;bg.src='';startBg();});
-function startBg(){if(!liveMusic.length)return;if(!bg.src||bg.ended||!bg.currentSrc){bg.src=liveMusic[bgIndex%liveMusic.length].src;fade=0;}bgVol();bg.play().catch(()=>{});}
-function duckFor(sec){duck=.4;bgVol();clearTimeout(duckTimer);duckTimer=setTimeout(()=>{duck=1;bgVol();},Math.max(.5,sec)*1000);}
+bg.addEventListener('timeupdate',()=>{const left=bg.duration-bg.currentTime;fade=Math.max(0,Math.min(1,bg.currentTime/1.5,Number.isFinite(left)?left/2:1));bgVol();});
+function loadTrack(i){bgIndex=((i%liveMusic.length)+liveMusic.length)%liveMusic.length;bg.src=liveMusic[bgIndex].src;bgLoaded=bgIndex;fade=0;}
+bg.addEventListener('ended',()=>{loadTrack(bgIndex+1);bgVol();bg.play().catch(()=>{});});
+bg.addEventListener('error',()=>{if(bgLoaded>=0){loadTrack(bgIndex+1);bg.play().catch(()=>{});}});   // si una canción falla, pasa a la siguiente
+function startBg(){if(!liveMusic.length)return;if(bgLoaded<0)loadTrack(bgIndex);bgVol();bg.play().catch(()=>{});}
+function duckFor(sec){duck=.6;bgVol();clearTimeout(duckTimer);duckTimer=setTimeout(()=>{duck=1;bgVol();},Math.max(.5,sec)*1000);}
 
 /* ---------- Canal público ---------- */
 const root=$('#en-vivo');
 let channelTimer=0,current=-1,soundOn=false,overlay=null,namer=null;
-function playBg(){if(!soundOn)return;bgBase=.22;startBg();}
+function playBg(){if(!soundOn)return;bgBase=.5;startBg();}
 function buildChannel(){
   if(!root)return;
   root.innerHTML=`<div class="wrap"><div class="section-heading"><div><p class="eyebrow" data-s="eyebrow"></p><h2 id="live-heading" data-h="h2"></h2></div><p data-s="intro"></p></div>
@@ -284,7 +287,7 @@ function openPresenter(){
     $('#lp-kicker').textContent=it.kind==='client'?PT.special:PT.now;
     $('#lp-title').textContent=it.kind==='client'?it.name:it.title;
     presenter.dataset.kind=it.kind;
-    if(it.kind==='santa'&&pMusic&&liveMusic.length){bgBase=pNamer?.22:.35;startBg();v.volume=pNamer?.25:.5;}else{bg.pause();v.volume=1;}
+    if(it.kind==='santa'&&pMusic&&liveMusic.length){bgBase=.5;startBg();v.volume=pNamer?.25:.5;}else{bg.pause();v.volume=1;}
     if(it.kind==='santa')pNamer?.start();else pNamer?.stop();
     $('#lp-lower').hidden=it.kind==='santa'&&!!pNamer;
     const upcoming=pOrder.slice(pIndex+1).filter(x=>x.kind==='client').map(x=>x.name);
