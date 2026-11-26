@@ -13,3 +13,9 @@ VERSION_FINAL.json
 INICIAR_WINDOWS.bat
 iniciar_macos_linux.sh
 *.zip
+supabase
+worker
+functions
+.dev.vars
+.dev.vars.example
+.gitignore

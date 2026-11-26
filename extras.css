@@ -58,3 +58,20 @@
 @keyframes letter-fly{40%{transform:translateY(-6px) rotate(-3deg)}100%{transform:translate(40px,-60px) rotate(8deg);opacity:.3}}
 @media (max-width:860px){.game-layout,.letter-layout{grid-template-columns:1fr}.game-frame{max-width:440px;width:100%;margin:0 auto}}
 @media (max-width:520px){.kid-box{grid-template-columns:1fr}.route-bar>a{font-size:.85rem}}
+
+/* Contadores públicos en vivo (inicio) */
+.live-counters{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.live-counters>div{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:14px;background:#0b1838a6;border:1px solid #ffffff33;color:#fff;backdrop-filter:blur(6px)}
+.live-counters i{width:9px;height:9px;border-radius:50%;background:#3ee07a;box-shadow:0 0 0 0 #3ee07a99;animation:counter-pulse 1.8s infinite}
+.live-counters strong{font-size:1.5rem;font-variant-numeric:tabular-nums;color:#ffe7b0}
+.live-counters span{font-size:.88rem}
+.live-counters strong.bump{animation:counter-bump .6s ease}
+@keyframes counter-pulse{70%{box-shadow:0 0 0 8px #3ee07a00}}
+@keyframes counter-bump{40%{transform:scale(1.25);color:#fff}}
+/* Pasos de la llamada */
+.call-steps{display:grid;gap:8px;margin:10px 0 16px;padding:0;list-style:none}
+.call-steps li{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #eaddd1;border-radius:12px;background:#fff;font-size:.92rem}
+.call-steps li span{display:grid;place-items:center;flex:none;width:28px;height:28px;border-radius:50%;background:#f3e6da;font-weight:700}
+.call-steps li.active{border-color:var(--red);box-shadow:0 0 0 2px var(--red) inset}
+.call-steps li.active span{background:var(--red);color:#fff}
+.call-steps li.done span{background:#0b6b47;color:#fff}

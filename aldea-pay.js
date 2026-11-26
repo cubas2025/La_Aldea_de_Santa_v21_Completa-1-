@@ -85,12 +85,21 @@ async function fingerprint(code){
   const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:enc.encode(cfg.salt),iterations:cfg.iterations},key,64);
   return [...new Uint8Array(bits)].map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-async function lookup(raw){
+/* Valida un código: primero la lista guardada en la web (incluye el de creador) y luego Supabase,
+   donde cada código tiene límite de dispositivos y se puede desactivar desde /admin.
+   verifyOnly: no gasta usos en Supabase (para el panel del creador). */
+async function lookup(raw,{verifyOnly=false}={}){
   const code=String(raw||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
   if(!code)return {error:'Escribe tu código de acceso.'};
-  if(!window.crypto?.subtle||!window.ALDEA_CODES)return {error:'Abre la web con https para activar tu código.'};
-  const entry=TYPES[window.ALDEA_CODES.map[await fingerprint(code)]];
-  return entry?{entry}:{error:'Ese código no es válido. Revisa que esté bien escrito (6 letras y números) o escríbenos por WhatsApp.'};
+  const db=window.ALDEA_DB;let entry=null;
+  if(window.crypto?.subtle&&window.ALDEA_CODES){
+    const t=window.ALDEA_CODES.map[await fingerprint(code)];
+    if(t===9||(t&&(!db?.configured||db.staticCodes)))entry=TYPES[t];
+  }else if(!db?.configured)return {error:'Abre la web con https para activar tu código.'};
+  if(!entry&&db?.configured&&!verifyOnly&&/^[A-Z0-9]{6,12}$/.test(code)){
+    try{const t=await db.redeemCode(code);if(t)entry=TYPES[t];}catch(err){return {error:err.message};}
+  }
+  return entry?{entry}:{error:verifyOnly&&db?.configured?'No está en la lista guardada en la web. Los códigos de Supabase se revisan en el panel /admin.':'Ese código no es válido o ya se usó en el máximo de dispositivos. Revisa que esté bien escrito (6 letras y números) o escríbenos por WhatsApp.'};
 }
 function grant(entry){
   access={features:[...new Set([...access.features,...entry.features])],plans:[...new Set([...(access.plans||[]),entry.plan])],creator:access.creator||!!entry.creator};

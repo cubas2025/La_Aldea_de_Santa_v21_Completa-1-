@@ -1,10 +1,9 @@
 (() => {
 'use strict';
-/* Buzón de cartas a Santa: escribe, «Enviar al Polo Norte», y descarga la carta como
-   imagen o envíala por WhatsApp a la aldea. Todo se crea en el dispositivo. */
+/* Buzón de cartas a Santa: escribe y «Enviar al Polo Norte». La carta se guarda en el
+   buzón privado (Supabase); el niño puede guardar una copia como imagen. */
 const $=s=>document.querySelector(s);
 const form=$('#letter-form');if(!form)return;
-const WA='51917823560';
 const canvas=$('#letter-canvas'),ctx=canvas.getContext('2d'),result=$('#letter-result'),status=$('#letter-status');
 const countrySel=$('#letter-country');
 const pay=window.ALDEA_PAY;
@@ -60,20 +59,25 @@ async function render(d){
   ctx.textAlign='center';ctx.font=`500 22px ${sans}`;ctx.fillStyle='#8a6f5f';ctx.fillText('Escrita en el Buzón de Cartas de La aldea de Santa',W/2,H-80);
   return new Promise(r=>canvas.toBlob(b=>r(b),'image/png'));
 }
-function message(d){
-  return ['🎅 ¡Hola, Santa! Te envío mi carta desde el Buzón de La aldea de Santa ✉️','',`Nombre: ${d.name}`,d.age?`Edad: ${d.age} años`:'',`País: ${d.country.flag} ${d.country.name}${d.city?' · '+d.city:''}`,'',d.letter?`Querido Santa: ${d.letter}`:'',d.good?`Este año me porté bien porque ${d.good.replace(/^porque\s+/i,'')}`:'',d.wishes.length?`Mis deseos: ${d.wishes.map((w,i)=>`${i+1}) ${w}`).join(' ')}`:'','','(Si quieres, adjunto también la imagen de mi carta.)'].filter((l,i,a)=>l!==''||a[i-1]!=='').join('\n');
-}
+/* La carta se guarda solo en el buzón privado (Supabase · tabla cartas_santa). No se abre WhatsApp. */
+let sentKey='';
 form.addEventListener('submit',async e=>{
   e.preventDefault();if(!form.reportValidity())return;
   const d=data();if(!d.letter&&!d.wishes.length){status.textContent='Escribe tu carta o al menos un deseo para Santa.';form.querySelector('[name="letter"]').focus();return;}
+  const db=window.ALDEA_DB;
+  if(!db?.configured){status.textContent='El buzón del Polo Norte todavía no está abierto. Vuelve a intentarlo pronto.';return;}
+  const key=JSON.stringify(d);
   const btn=form.querySelector('[type="submit"]');btn.disabled=true;form.classList.add('letter-flying');status.textContent='✉️ Tu carta vuela al Polo Norte…';
   try{
+    if(key!==sentKey){
+      await db.saveLetter({nombre:d.name,edad:d.age?Number(d.age):null,pais:d.country.name,ciudad:d.city,mensaje:d.letter,se_porto_bien:d.good,deseos:d.wishes});
+      sentKey=key;
+    }
     blob=await render(d);fileName=`carta-a-santa-${d.name.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/gi,'-').toLowerCase()||'nino'}.png`;
-    $('#letter-wa').href=`https://wa.me/${WA}?text=${encodeURIComponent(message(d))}`;
-    await new Promise(r=>setTimeout(r,900));
-    result.hidden=false;$('#letter-empty').hidden=true;status.textContent=`¡Tu carta llegó al buzón de Santa, ${d.name}! Descárgala o envíala por WhatsApp.`;
+    await new Promise(r=>setTimeout(r,700));
+    result.hidden=false;$('#letter-empty').hidden=true;status.textContent=`¡Tu carta llegó al buzón de Santa, ${d.name}! Santa la leerá muy pronto. Si quieres, guarda una copia.`;
     result.scrollIntoView({behavior:'smooth',block:'start'});
-  }catch{status.textContent='No se pudo preparar la carta. Inténtalo otra vez.';}
+  }catch(err){status.textContent=err?.message||'No se pudo enviar la carta. Inténtalo otra vez.';}
   finally{btn.disabled=false;form.classList.remove('letter-flying');}
 });
 $('#letter-download').addEventListener('click',()=>{if(!blob)return;const a=document.createElement('a'),u=URL.createObjectURL(blob);a.href=u;a.download=fileName;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000);status.textContent='Tu carta se descargó como imagen.';});
@@ -82,6 +86,6 @@ $('#letter-share').addEventListener('click',async()=>{
   if(navigator.canShare?.({files:[file]})){try{await navigator.share({files:[file],title:'Mi carta a Santa',text:'✉️ Mi carta a Santa desde La aldea de Santa #cubas.ai #laaldeadesanta'});return;}catch(err){if(err.name==='AbortError')return;}}
   $('#letter-download').click();status.textContent='Tu navegador no comparte imágenes directo: la descargamos para que la adjuntes.';
 });
-$('#letter-again').addEventListener('click',()=>{result.hidden=true;$('#letter-empty').hidden=false;form.querySelector('[name="letter"]').value='';for(const n of ['wish1','wish2','wish3','good'])form.querySelector(`[name="${n}"]`).value='';status.textContent='Escribe una nueva carta para Santa.';form.scrollIntoView({behavior:'smooth'});});
+$('#letter-again').addEventListener('click',()=>{result.hidden=true;sentKey='';$('#letter-empty').hidden=false;form.querySelector('[name="letter"]').value='';for(const n of ['wish1','wish2','wish3','good'])form.querySelector(`[name="${n}"]`).value='';status.textContent='Escribe una nueva carta para Santa.';form.scrollIntoView({behavior:'smooth'});});
 const counter=$('#letter-count'),area=form.querySelector('[name="letter"]');area.addEventListener('input',()=>{counter.textContent=`${area.value.length}/600`;});
 })();

@@ -1,0 +1,7 @@
+# Plantilla de variables para probar el Worker en tu PC con "npx wrangler dev".
+# Copia este archivo como .dev.vars y pega tus datos. NUNCA subas .dev.vars a GitHub.
+# En producción, estas variables se guardan como "Secrets" en el panel de Cloudflare.
+TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_AUTH_TOKEN=pega-aqui-tu-auth-token
+TWILIO_PHONE_NUMBER=+15551234567
+CALL_ACCESS_CODE=escribe-un-codigo-largo-de-16-o-mas

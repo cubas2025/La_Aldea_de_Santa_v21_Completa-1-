@@ -1,10 +1,17 @@
-// Cloudflare (Workers con archivos estáticos): publica la web desde la raíz del repositorio.
-// Sin compilación: el sitio ya es HTML, CSS y JS listos.
-// Los archivos que NO se publican están en .assetsignore.
+// Cloudflare: publica la web (archivos estáticos de la raíz) y la API de llamadas (/api/llamadas).
+// Sin compilación: el sitio ya es HTML, CSS y JS listos. Los archivos que NO se publican están en .assetsignore.
+// Las claves de Twilio NO van aquí: se guardan como "Secrets" en el panel de Cloudflare (ver worker/index.mjs).
 {
   "name": "la-aldea-de-santa",
+  "main": "worker/index.mjs",
   "compatibility_date": "2026-11-01",
   "assets": {
-    "directory": "./"
+    "directory": "./",
+    "binding": "ASSETS"
+  },
+  // Conserva las variables que pongas en el panel de Cloudflare (p. ej. ALLOWED_ORIGINS) en cada despliegue.
+  "keep_vars": true,
+  "vars": {
+    "MAX_CALL_SECONDS": "180"
   }
 }

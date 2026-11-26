@@ -1,9 +1,0 @@
-name = "aldea-santa-llamadas"
-main = "worker.mjs"
-compatibility_date = "2026-11-24"
-# Create a KV namespace and add a [[kv_namespaces]] binding called CALLS_KV before deployment.
-# Set secrets in the provider dashboard or with wrangler secret put; never commit credentials.
-[vars]
-ALLOWED_ORIGIN = "https://la-aldea-de-santa.orangemirth32.chatgpt.site"
-ASSET_ORIGIN = "https://la-aldea-de-santa.orangemirth32.chatgpt.site"
-MAX_CALLS_PER_DAY = "5"

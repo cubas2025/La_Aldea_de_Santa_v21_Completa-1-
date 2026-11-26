@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#b9142b">
+<title>Panel privado · La aldea de Santa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="admin.css">
+<script defer src="supabase-config.js"></script><script defer src="admin.js"></script>
+</head>
+<body class="admin-body">
+<header class="admin-header"><a class="brand" href="./"><span class="brand-icon" aria-hidden="true">✧</span><span>La aldea <i>de Santa</i></span></a><span class="admin-tag">Panel privado</span><button type="button" class="button outline small" id="ad-logout" hidden>Cerrar sesión</button></header>
+<main class="admin-main">
+  <section id="ad-setup" class="panel admin-card" hidden>
+    <h1>Conecta Supabase</h1>
+    <p>Este panel necesita la URL y la clave pública (anon) de tu proyecto en <code>supabase-config.js</code>, y haber ejecutado <code>supabase/esquema.sql</code> en el SQL Editor de Supabase.</p>
+  </section>
+  <section id="ad-login" class="panel admin-card" hidden>
+    <h1>Entrar al panel</h1>
+    <p class="fine">Solo para el creador de La aldea de Santa. Usa el correo y la contraseña de tu usuario administrador de Supabase.</p>
+    <form id="ad-login-form"><label>Correo<input type="email" name="email" autocomplete="username" required></label><label>Contraseña<input type="password" name="password" autocomplete="current-password" required minlength="8"></label><button type="submit" class="button">Entrar</button></form>
+    <p id="ad-login-status" class="fine" role="status"></p>
+  </section>
+  <section id="ad-app" hidden>
+    <nav class="admin-tabs" role="tablist" aria-label="Secciones del panel">
+      <button type="button" role="tab" data-tab="resumen" aria-selected="true">Resumen</button>
+      <button type="button" role="tab" data-tab="cartas" aria-selected="false">Cartas <span class="admin-badge" id="ad-unread" hidden></span></button>
+      <button type="button" role="tab" data-tab="nombres" aria-selected="false">Nombres nuevos</button>
+      <button type="button" role="tab" data-tab="codigos" aria-selected="false">Códigos</button>
+    </nav>
+    <div class="admin-pane" data-pane="resumen">
+      <div class="admin-stats" id="ad-stats"></div>
+      <p class="fine">Los contadores públicos se actualizan solos en la página de inicio. El público solo ve los números.</p>
+    </div>
+    <div class="admin-pane" data-pane="cartas" hidden>
+      <div class="admin-tools"><div class="admin-chips" role="group" aria-label="Filtrar cartas"><button type="button" data-letters="unread" aria-pressed="true">Sin leer</button><button type="button" data-letters="all" aria-pressed="false">Todas</button></div><input type="search" id="ad-letter-search" placeholder="Buscar por nombre o país" aria-label="Buscar cartas"><button type="button" class="button outline small" id="ad-letters-refresh">Actualizar</button></div>
+      <div id="ad-letters" class="admin-list"></div><button type="button" class="button outline" id="ad-letters-more" hidden>Ver más cartas</button>
+    </div>
+    <div class="admin-pane" data-pane="nombres" hidden>
+      <div class="admin-tools"><div class="admin-chips" role="group" aria-label="Filtrar nombres"><button type="button" data-names="missing" aria-pressed="true">Sin grabar</button><button type="button" data-names="all" aria-pressed="false">Todos</button></div><button type="button" class="button outline small" id="ad-names-copy">Copiar lista</button><button type="button" class="button outline small" id="ad-names-refresh">Actualizar</button></div>
+      <p class="fine">Nombres que las familias escribieron en la web. «Sin grabar» son los que Santa todavía no tiene en su voz.</p>
+      <div id="ad-names" class="admin-table-wrap"></div>
+    </div>
+    <div class="admin-pane" data-pane="codigos" hidden>
+      <div class="admin-grid">
+        <form id="ad-gen-form" class="panel admin-card"><h2>Generar códigos</h2><label>Paquete<select name="tipo"><option value="1">Combo 1 · video corto + 30 libros</option><option value="2">Paquete 2 · video 3 min</option><option value="3">Paquete 2 + 30 libros</option><option value="4">Paquete 3 · video 5 min</option><option value="5">Paquete 3 + 30 libros</option></select></label><div class="two-fields"><label>Cantidad<input name="cantidad" type="number" min="1" max="50" value="1"></label><label>Dispositivos por código<input name="max" type="number" min="1" max="10" value="3"></label></div><label>Cliente <span class="optional">Opcional</span><input name="cliente" maxlength="60"></label><label>WhatsApp del cliente <span class="optional">Opcional, con código de país</span><input name="whatsapp" maxlength="20" inputmode="tel" placeholder="51999888777"></label><button type="submit" class="button">Generar</button><div id="ad-gen-result" class="admin-gen"></div></form>
+        <div class="panel admin-card"><h2>Importar tus 1 500 códigos</h2><p>Elige el archivo <code>codigos-de-acceso.csv</code> de tu PC (carpeta <code>codigos-privados</code>). Se suben a Supabase sin duplicar.</p><label class="cr-file">Archivo CSV<input type="file" id="ad-import" accept=".csv,text/csv"></label><p id="ad-import-status" class="fine" role="status"></p><p class="fine">Después de importarlos, cambia <code>codigosEstaticos</code> a <code>false</code> en <code>supabase-config.js</code> para poder desactivar cualquier código desde aquí.</p></div>
+      </div>
+      <div class="admin-tools"><input type="search" id="ad-code-search" placeholder="Buscar código o cliente" aria-label="Buscar códigos"><select id="ad-code-filter" aria-label="Filtrar códigos"><option value="all">Todos</option><option value="free">Sin entregar</option><option value="given">Entregados</option><option value="used">Usados</option><option value="off">Desactivados</option></select><button type="button" class="button outline small" id="ad-codes-refresh">Actualizar</button></div>
+      <div id="ad-codes" class="admin-table-wrap"></div><button type="button" class="button outline" id="ad-codes-more" hidden>Ver más códigos</button>
+    </div>
+  </section>
+  <p id="ad-toast" class="admin-toast" role="status" hidden></p>
+</main>
+</body></html>
