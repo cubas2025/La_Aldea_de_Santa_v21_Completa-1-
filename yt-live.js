@@ -169,17 +169,34 @@ function say(text){
 }
 function hush(){try{window.speechSynthesis?.cancel();}catch{}if(EMBED&&parent!==window)parent.postMessage({yt:'speak-stop'},'*');}
 window.speechSynthesis?.getVoices?.();
-/* Partidas: 60 s de presentador y luego 10 preguntas de 25 s (18 para responder y 7 para la respuesta).
-   Todo va con la hora: todos ven la misma partida, la misma frase y la misma pregunta. */
-const QZ=25000,QSHOW=18000,HOST=60000,PER=10,ROUND=HOST+PER*QZ,HOSTS=window.SANTA_QUIZ_HOST||[];
+/* Partidas: 60 s de presentador y luego 10 preguntas. Cada pregunta dura lo que necesita:
+   lectura (según sus palabras) + 8 s para responder + respuesta y explicación (según sus palabras).
+   El calendario es igual en todas las pantallas: todos ven la misma pregunta en el mismo segundo. */
+const PER=10,HOST=60000,THINK=8000,HOSTS=window.SANTA_QUIZ_HOST||[];
+const wc=x=>String(x||'').split(/\s+/).filter(Boolean).length;
+const READ=q=>Math.max(5,(wc(q.question)+wc([q.answer,...q.wrong].join(' '))+6)*.42+2.5)*1000;
+const ANS=q=>Math.max(7,(wc(q.answer)+wc(q.explanation)+7)*.42+4)*1000;
+const SCHED=(()=>{const rounds=[];let t=0;const n=Math.floor(QUIZ.length/PER);
+  for(let r=0;r<n;r++){const st=t;t+=HOST;const qs=[];
+    for(let i=0;i<PER;i++){const q=QUIZ[quizOrder[r*PER+i]],sh=READ(q)+THINK,d=sh+ANS(q);qs.push({s:t,show:sh,d});t+=d;}
+    rounds.push({s:st,qs});}
+  return {rounds,total:t};})();
+function quizPos(now){
+  const R=SCHED.rounds,c=Math.floor(now/SCHED.total),p=now%SCHED.total;let lo=0,hi=R.length-1;
+  while(lo<hi){const m=(lo+hi+1)>>1;if(R[m].s<=p)lo=m;else hi=m-1;}
+  const r=R[lo],round=c*R.length+lo;
+  if(p-r.s<HOST)return {host:true,round,pos:p-r.s};
+  let qn=r.qs.findIndex(x=>p>=x.s&&p<x.s+x.d);if(qn<0)qn=PER-1;const x=r.qs[qn];
+  return {host:false,round,qn,t:p-x.s,show:x.show,k:lo*PER+qn};
+}
 let quizIdx=-1,quizQ=null,quizOpts=[],hostKey='',hostSaid=-1;
 function hostPlan(h){const w=h.frases.map(f=>f.split(/\s+/).length),tot=w.reduce((a,b)=>a+b,0);let t=2500;return h.frases.map((f,i)=>{const st=t;t+=w[i]/tot*54500;return {s:st,e:t,f};});}
-function partidaDelDia(now){const d=new Date(now),m=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();return Math.floor((now-m)/ROUND)+1;}
+function partidaDelDia(now,round){const d=new Date(now),m=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();return round-quizPos(m).round+1;}
 function quizTick(){
-  if(!QUIZ.length)return;
-  const now=Date.now(),round=Math.floor(now/ROUND),pos=now%ROUND,L=Y[lang],num=partidaDelDia(now);
-  if(pos<HOST&&HOSTS.length){
-    const hi=round%HOSTS.length,h=HOSTS[hi],plan=hostPlan(h),key='h'+round;
+  if(!QUIZ.length||!SCHED.rounds.length)return;
+  const now=Date.now(),P=quizPos(now),L=Y[lang],num=partidaDelDia(now,P.round);
+  if(P.host&&HOSTS.length){
+    const hi=P.round%HOSTS.length,h=HOSTS[hi],plan=hostPlan(h),key='h'+P.round,pos=P.pos;
     if(hostKey!==key){
       hostKey=key;quizIdx=-1;hostSaid=-1;
       show.innerHTML=`<div class="ys-quiz ys-host"><span class="ys-chip">🎅 ${esc(L.quiz)} · Partida ${num}</span><h2>${esc(h.titulo)}</h2><p class="ys-line"></p><div class="ys-score">${hi===0?'🏆 Cuenta tus aciertos: al final escribe tu puntaje en los comentarios':'🏆 ¿Cuántas acertaste? Escríbelo en los comentarios: <b>__ / 10</b>'}</div><p class="ys-chat ys-start"></p></div>`;
@@ -192,9 +209,10 @@ function quizTick(){
     const st=show.querySelector('.ys-start');if(st)st.textContent=`⏱ La partida ${num} empieza en ${Math.ceil((HOST-pos)/1000)} s`;
     return;
   }
-  const qn=Math.max(0,Math.floor((pos-HOST)/QZ)),t=(pos-HOST)%QZ,k=round*PER+qn;
+  if(P.host)return;
+  const {qn,t,show:QSHOW}=P,k=P.round*PER+qn;
   if(k!==quizIdx){
-    quizIdx=k;hostKey='';const q=QUIZ[quizOrder[k%QUIZ.length]],r=rng(k*7919+13);
+    quizIdx=k;hostKey='';const q=QUIZ[quizOrder[P.k]],r=rng(P.k*7919+13);
     const opts=[q.answer,...q.wrong].map(o=>[r(),o]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);quizQ=q;quizOpts=opts;
     if(t<4000)say(`Pregunta ${qn+1}. ${q.question} ${opts.map((o,i)=>`${'ABCD'[i]}: ${o}.`).join(' ')}`);
     show.innerHTML=`<div class="ys-quiz"><span class="ys-chip">🎯 Partida ${num} · Pregunta ${qn+1} de ${PER} · ${esc(CAT[q.category]||q.category)}</span><h2>${esc(q.question)}</h2><ol class="ys-opts">${opts.map((o,i)=>`<li data-ok="${o===q.answer}"><b>${'ABCD'[i]}</b><span>${esc(o)}</span></li>`).join('')}</ol><div class="ys-timer"><i></i><span></span></div><p class="ys-expl"><strong>${esc(L.ok)}</strong> ${esc(q.explanation||'')}</p><p class="ys-chat">${esc(L.chat)}</p></div>`;
@@ -203,7 +221,7 @@ function quizTick(){
   box.querySelector('.ys-timer span').textContent=t<QSHOW?Math.ceil((QSHOW-t)/1000):'✓';
   box.querySelector('.ys-timer i').style.width=Math.max(0,(QSHOW-t)/QSHOW*100)+'%';
   if(t>=QSHOW&&!box.classList.contains('reveal')){box.classList.add('reveal');chime();
-    if(quizQ&&t<QSHOW+2500){const i=quizOpts.indexOf(quizQ.answer);setTimeout(()=>say(`¡La respuesta correcta es la ${'ABCD'[i]}: ${quizQ.answer}! ${quizQ.explanation||''}`),700);}}
+    if(quizQ&&t<QSHOW+2500){const i=quizOpts.indexOf(quizQ.answer);setTimeout(()=>say(`¡La respuesta correcta es la ${'ABCD'[i]}: ${quizQ.answer}! ${quizQ.explanation||''}`),600);}}
 }
 /* Solo música: las 25 tarjetas pasan cada 12 s con movimiento suave, igual para todos. */
 let slideIdx=-1;
