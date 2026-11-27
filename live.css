@@ -109,3 +109,12 @@
 .cr-link span{font-weight:700;font-size:.9rem}
 .cr-link input{min-width:0;padding:8px 10px;border:1px solid #d9c9cd;border-radius:8px;font:inherit;font-size:.85rem;background:#fff8f5}
 @media (max-width:640px){.cr-link{grid-template-columns:1fr auto auto}.cr-link span{grid-column:1/-1}}
+
+/* Selector Vertical / Horizontal del canal público */
+.live-format{display:inline-flex;gap:4px;margin:0 0 14px;padding:4px;border-radius:999px;background:#ffffff1a;border:1px solid #ffffff40}
+.live-format button{min-height:42px;padding:6px 18px;border:0;border-radius:999px;background:transparent;color:#fff;font:inherit;font-weight:800;cursor:pointer}
+.live-format button[aria-pressed=true]{background:#fff;color:#7a0d1d}
+.live-h-frame{position:relative;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 20px 50px #0008}
+.live-h-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.live-h-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px}
+.live-h-bar p{flex:1 1 320px;margin:0}

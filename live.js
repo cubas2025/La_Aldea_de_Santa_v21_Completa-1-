@@ -21,7 +21,7 @@ const liveMusic=cfg.musica?.length?cfg.musica:cardMusic.map(m=>({src:m.src,title
 /* ---------- Textos en tres idiomas ---------- */
 const fmtN=(n,loc)=>Number(n).toLocaleString(loc);
 const STR={
-  es:{loc:'es-PE',eyebrow:'DESDE EL POLO NORTE · AHORA MISMO',h2:'Santa <em>en vivo.</em>',intro:'Mira a Santa en su aldea a cualquier hora. Cuando Santa transmite en TikTok, aquí aparece el botón para entrar a su en vivo y saludarlo.',
+  es:{loc:'es-PE',fmtV:'▯ Vertical',fmtH:'▭ Horizontal',hNote:'Transmisión horizontal: Santa con su bolsa de polvo mágico, la lista de los buenos y el Episodio 1. Pulsa «Iniciar transmisión con sonido».',hEp:'🎬 Ver el Episodio 1',hOpen:'Abrir en pantalla completa ↗',eyebrow:'DESDE EL POLO NORTE · AHORA MISMO',h2:'Santa <em>en vivo.</em>',intro:'Mira a Santa en su aldea a cualquier hora. Cuando Santa transmite en TikTok, aquí aparece el botón para entrar a su en vivo y saludarlo.',
     tabLista:'🔴 Lista de los buenos',tabRetrans:'📺 Retransmisión: saludos de Santa',langLabel:'Idioma de la lista:',live:'EN VIVO',replay:'RETRANSMISIÓN',kickerLista:'Ahora en la aldea',kickerRetrans:'Saludo grabado de Santa',
     soundOff:'🔇 Silenciar',soundLista:'🔊 Activar sonido · Santa lee los nombres',soundRetrans:'🔊 Activar sonido del saludo',full:'⛶ Pantalla completa',next:'A continuación',addName:'¿Quieres que Santa diga tu nombre? Escríbelo aquí',
     readToday:n=>`✨ Santa ya leyó ${n} nombres hoy`,approved:n=>n==='1'?'1 nombre en la lista de hoy':`${n} niños y niñas en la lista de hoy`,recorded:n=>`${n} nombres en la lista de los buenos`,
@@ -31,7 +31,7 @@ const STR={
     tiktokText:'Santa está transmitiendo ahora mismo. ¡Entra, salúdalo y escribe el nombre de tu niño o niña en el chat!',tiktokBtn:'Ver a Santa en TikTok LIVE',tiktokBadge:'EN VIVO EN TIKTOK',
     share:'Invita a tu familia a ver a Santa en vivo',shareText:'🎅🔴 Santa está en vivo desde el Polo Norte. ¡Míralo aquí!',recent:'Santa acaba de nombrar a:',
     ticker:d=>[d>0?`🎄 Faltan ${d===1?'1 día':d+' días'} para Navidad`:d===0?'🎄 ¡Mañana es Navidad!':'🎄 ¡Feliz Navidad desde la aldea de Santa!','🎅 Bienvenidos al canal en vivo de La aldea de Santa','✨ Escribe tu nombre en la web y Santa lo leerá en vivo','📬 Envía tu carta al Polo Norte desde la pestaña Gratis','🎁 Juega gratis «Regalos en los techos»','💬 Pide tu saludo personalizado de Santa por WhatsApp']},
-  en:{loc:'en-US',eyebrow:'FROM THE NORTH POLE · RIGHT NOW',h2:'Santa <em>live.</em>',intro:"Watch Santa in his village any time. When Santa streams on TikTok, a button appears here to join his live and say hi.",
+  en:{loc:'en-US',fmtV:'▯ Vertical',fmtH:'▭ Horizontal',hNote:'Horizontal stream: Santa with his magic dust bag, the nice list and Episode 1. Press «Start stream with sound».',hEp:'🎬 Watch Episode 1',hOpen:'Open full screen ↗',eyebrow:'FROM THE NORTH POLE · RIGHT NOW',h2:'Santa <em>live.</em>',intro:"Watch Santa in his village any time. When Santa streams on TikTok, a button appears here to join his live and say hi.",
     tabLista:"🔴 Santa's Nice List",tabRetrans:'📺 Replay: greetings from Santa',langLabel:'List language:',live:'LIVE',replay:'REPLAY',kickerLista:'Now in the village',kickerRetrans:"Santa's recorded greeting",
     soundOff:'🔇 Mute',soundLista:'🔊 Turn on sound · Santa reads the names',soundRetrans:'🔊 Turn on greeting sound',full:'⛶ Full screen',next:'Up next',addName:'Want Santa to say your name? Write it here',
     readToday:n=>`✨ Santa has read ${n} names today`,approved:n=>n==='1'?'1 name on today\'s list':`${n} children on today's list`,recorded:n=>`${n} names on the nice list`,
@@ -41,7 +41,7 @@ const STR={
     tiktokText:'Santa is streaming right now. Join, say hi and write your child\'s name in the chat!',tiktokBtn:'Watch Santa on TikTok LIVE',tiktokBadge:'LIVE ON TIKTOK',
     share:'Invite your family to watch Santa live',shareText:'🎅🔴 Santa is live from the North Pole. Watch here!',recent:'Santa just named:',
     ticker:d=>[d>0?`🎄 ${d===1?'1 day':d+' days'} until Christmas`:d===0?'🎄 Christmas is tomorrow!':'🎄 Merry Christmas from Santa\'s village!',"🎅 Welcome to Santa's village live channel",'✨ Write your name on the site and Santa will read it live','📬 Send your letter to the North Pole from the Free tab','🎁 Play «Gifts on the Rooftops» for free','💬 Order a personalized greeting from Santa on WhatsApp']},
-  pt:{loc:'pt-BR',eyebrow:'DO POLO NORTE · AGORA MESMO',h2:'Papai Noel <em>ao vivo.</em>',intro:'Veja o Papai Noel na sua vila a qualquer hora. Quando ele transmitir no TikTok, aqui aparece o botão para entrar na live e dizer oi.',
+  pt:{loc:'pt-BR',fmtV:'▯ Vertical',fmtH:'▭ Horizontal',hNote:'Transmissão horizontal: Papai Noel com sua bolsa de pó mágico, a lista dos bonzinhos e o Episódio 1. Toque em «Iniciar transmissão com som».',hEp:'🎬 Ver o Episódio 1',hOpen:'Abrir em tela cheia ↗',eyebrow:'DO POLO NORTE · AGORA MESMO',h2:'Papai Noel <em>ao vivo.</em>',intro:'Veja o Papai Noel na sua vila a qualquer hora. Quando ele transmitir no TikTok, aqui aparece o botão para entrar na live e dizer oi.',
     tabLista:'🔴 Lista dos bonzinhos',tabRetrans:'📺 Reprise: saudações do Papai Noel',langLabel:'Idioma da lista:',live:'AO VIVO',replay:'REPRISE',kickerLista:'Agora na vila',kickerRetrans:'Saudação gravada do Papai Noel',
     soundOff:'🔇 Silenciar',soundLista:'🔊 Ativar som · Papai Noel lê os nomes',soundRetrans:'🔊 Ativar som da saudação',full:'⛶ Tela cheia',next:'A seguir',addName:'Quer que o Papai Noel diga seu nome? Escreva aqui',
     readToday:n=>`✨ O Papai Noel já leu ${n} nomes hoje`,approved:n=>n==='1'?'1 nome na lista de hoje':`${n} crianças na lista de hoje`,recorded:n=>`${n} nomes na lista dos bonzinhos`,
@@ -143,14 +143,16 @@ function playBg(){if(!soundOn)return;bgBase=.5;bgPlay();}
 function buildChannel(){
   if(!root)return;
   root.innerHTML=`<div class="wrap"><div class="section-heading"><div><p class="eyebrow" data-s="eyebrow"></p><h2 id="live-heading" data-h="h2"></h2></div><p data-s="intro"></p></div>
-<div class="live-modes" role="tablist" aria-label="Canal"><button type="button" role="tab" data-mode="lista" data-s="tabLista"></button><button type="button" role="tab" data-mode="retrans" data-s="tabRetrans"></button></div>
+<div class="live-format" role="group" aria-label="Formato"><button type="button" data-fmt="v" data-s="fmtV"></button><button type="button" data-fmt="h" data-s="fmtH"></button></div>
+<div class="live-h" id="live-h" hidden><div class="live-h-frame"><iframe id="live-h-frame" title="Santa en vivo · horizontal" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe></div><div class="live-h-bar"><p class="fine" data-s="hNote"></p><button type="button" class="button small" id="live-h-ep" data-s="hEp"></button><a class="button outline small" id="live-h-open" target="_blank" rel="noopener" data-s="hOpen"></a></div></div>
+<div class="live-v" id="live-v"><div class="live-modes" role="tablist" aria-label="Canal"><button type="button" role="tab" data-mode="lista" data-s="tabLista"></button><button type="button" role="tab" data-mode="retrans" data-s="tabRetrans"></button></div>
 <div class="live-layout"><div class="live-player" id="live-player"><video id="live-video" muted playsinline autoplay loop preload="auto" aria-label="Canal en vivo de Santa"></video><canvas id="live-sky" class="live-sky" width="1080" height="1920" aria-hidden="true"></canvas><p class="sr-only" id="live-name-said" aria-live="polite"></p><span class="live-badge" id="live-badge"><i></i><b></b></span><span class="live-clock" id="live-clock"></span><div class="live-lower"><small id="live-kicker"></small><strong id="live-now"></strong></div></div>
 <div class="live-side panel"><div class="live-lang" id="live-lang" role="group" aria-label="Idioma de la lista"><span data-s="langLabel"></span><button type="button" data-lang="es">🇪🇸 Español · voz de Santa</button><button type="button" data-lang="en">🇺🇸 English</button><button type="button" data-lang="pt">🇧🇷 Português</button></div><p class="fine" id="live-lang-note"></p><div class="live-tiktok" id="live-tiktok" hidden><span class="live-badge static"><i></i><b data-s="tiktokBadge"></b></span><p data-s="tiktokText"></p><a class="button" id="live-tiktok-link" target="_blank" rel="noopener noreferrer" data-s="tiktokBtn"></a></div>
 <div class="live-buttons"><button type="button" class="button" id="live-sound"></button><button type="button" class="button outline" id="live-full" data-s="full"></button></div>
 <div class="live-list"><strong id="live-list-count"></strong><span id="live-list-source"></span><button type="button" class="button green small" id="live-add-name" data-s="addName"></button></div>
 <h3 data-s="next"></h3><ol class="live-next" id="live-next"></ol>
 <div class="notice live-ask"><strong data-s="askTitle"></strong><p data-s="askText"></p><a class="button green small" href="#pedido" data-s="askBtn"></a></div></div></div>
-<div class="live-youtube" id="live-youtube" hidden></div></div>`;
+</div><div class="live-youtube" id="live-youtube" hidden></div></div>`;
   root.querySelector('.wrap').append(pay.shareBar({heading:STR[lang].share,text:STR[lang].shareText,hash:'#en-vivo'}));
   overlay=mountOverlay($('#live-player'),()=>lang);
   $('#live-sound').addEventListener('click',()=>{soundOn=!soundOn;applyAudio();});
@@ -160,7 +162,21 @@ function buildChannel(){
   for(const b of $$('[data-lang]'))b.addEventListener('click',()=>setLang(b.dataset.lang));
   if(!retrans.length)$('[data-mode="retrans"]').hidden=true;
   renderTexts();renderMode();
+  for(const b of $$('[data-fmt]'))b.addEventListener('click',()=>setFmt(b.dataset.fmt));
+  $('#live-h-ep').addEventListener('click',()=>setFmt('h',true));
+  setFmt(fmt);
   $('#live-full').addEventListener('click',()=>{const p=$('#live-player');(p.requestFullscreen||p.webkitRequestFullscreen)?.call(p);});
+}
+let fmt=pref.get('aldea-live-fmt','')||(matchMedia('(min-width:900px)').matches?'h':'v'),pageOn=false;
+const hUrl=(ep)=>`en-vivo-youtube.html?lang=${lang}${ep?'&modo=episodio1':''}`;
+function setFmt(next,ep){
+  fmt=next;pref.set('aldea-live-fmt',fmt);
+  for(const b of $$('[data-fmt]'))b.setAttribute('aria-pressed',String(b.dataset.fmt===fmt));
+  const h=fmt==='h',frame=$('#live-h-frame');
+  $('#live-h').hidden=!h;$('#live-v').hidden=h;
+  $('#live-h-open').href=hUrl(false);
+  if(h&&pageOn){stopChannel();const url=hUrl(ep);const cur=frame.getAttribute('src')||'';if(ep||!cur||cur==='about:blank')frame.src=url;}
+  else{frame.removeAttribute('src');frame.src='about:blank';if(pageOn)startChannel();}
 }
 function renderTexts(){
   const T=STR[lang];
@@ -202,7 +218,7 @@ function setMode(next){
 }
 function setLang(next){
   if(!STR[next]||next===lang)return;
-  lang=next;pref.set('aldea-live-lang',lang);namer?.setLang(lang);renderTexts();renderMode();applyAudio();overlay?.relang();
+  lang=next;pref.set('aldea-live-lang',lang);namer?.setLang(lang);renderTexts();renderMode();applyAudio();overlay?.relang();if(fmt==='h'&&pageOn){$('#live-h-frame').src=hUrl(false);}$('#live-h-open').href=hUrl(false);
 }
 function syncChannel(){
   const v=$('#live-video'),list=CHANNELS[mode];if(!v||!list.length)return;
@@ -362,5 +378,5 @@ function openPresenter(){
 /* ---------- Arranque ---------- */
 buildChannel();buildCreator();liveBanner();
 if(panel)renderQueue();
-window.addEventListener('aldea:navigate',e=>{const page=e.detail.page;if(page==='en-vivo')startChannel();else stopChannel();});
+window.addEventListener('aldea:navigate',e=>{const page=e.detail.page;pageOn=page==='en-vivo';if(!root)return;if(pageOn)setFmt(fmt);else{stopChannel();const f=$('#live-h-frame');if(f){f.removeAttribute('src');f.src='about:blank';}}});
 })();
