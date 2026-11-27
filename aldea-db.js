@@ -64,6 +64,18 @@ async function liveNames(){
   return (data||[]).map(r=>({nombre:String(r.nombre||''),grabado:!!r.grabado})).filter(r=>r.nombre);
 }
 
+/* Nombres al aire: los que el creador envía desde /admin. onRow({nombre,turno}) por cada uno (los ya enviados y los nuevos). */
+async function watchOnAir(onRow){
+  const sb=await client();
+  const desde=Math.floor(Date.now()/10000)-1;
+  const {data,error}=await sb.from('nombres_al_aire').select('nombre,turno').gte('turno',desde).order('turno');
+  if(error)throw error;
+  for(const r of data||[])onRow(r);
+  sb.channel('nombres-al-aire')
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'nombres_al_aire'},p=>{if(p.new?.nombre)onRow(p.new);})
+    .subscribe();
+}
+
 /* Interruptor «Estoy en vivo» (tabla transmision, se cambia desde /admin). */
 async function liveStatus(){
   const sb=await client();
@@ -72,7 +84,7 @@ async function liveStatus(){
   return data?{liveNow:!!data.en_vivo,tiktokUser:data.tiktok_usuario||'',youtube:data.youtube||''}:null;
 }
 
-window.ALDEA_DB={configured,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,liveNames,liveStatus,staticCodes:cfg.codigosEstaticos!==false};
+window.ALDEA_DB={configured,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,liveNames,liveStatus,watchOnAir,staticCodes:cfg.codigosEstaticos!==false};
 
 /* Cada video generado (lista de los buenos, escenas, tarjeta de Navidad, editor) suma 1. */
 const share=window.SANTA_VIDEO_SHARE;

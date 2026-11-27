@@ -45,3 +45,8 @@
 .admin-card .vc-check{display:flex;flex-direction:row;align-items:center;gap:10px;font-weight:700;cursor:pointer}
 .admin-card .vc-check input{width:22px;height:22px;accent-color:#b9142b;margin:0}
 #ad-live-form{max-width:640px}
+
+#ad-air-form{max-width:640px;margin-bottom:18px}
+.ad-air-row{display:flex;gap:8px}.ad-air-row input{flex:1;min-width:0}
+.ad-air-queue{margin:8px 0 0;padding-left:22px;display:grid;gap:4px}
+.ad-air-queue span{color:#b9142b;font-weight:700}

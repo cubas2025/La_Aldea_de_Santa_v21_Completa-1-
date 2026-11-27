@@ -43,10 +43,36 @@ $('#ad-logout').addEventListener('click',async()=>{await sb.auth.signOut();show(
 function openTab(name){
   for(const b of $$('[data-tab]'))b.setAttribute('aria-selected',String(b.dataset.tab===name));
   for(const p of $$('[data-pane]'))p.hidden=p.dataset.pane!==name;
-  ({resumen:loadStats,cartas:()=>loadLetters(true),nombres:loadNames,codigos:()=>loadCodes(true),transmision:loadLive})[name]?.();
+  ({resumen:loadStats,cartas:()=>loadLetters(true),nombres:loadNames,codigos:()=>loadCodes(true),transmision:()=>{loadLive();loadAir();}})[name]?.();
 }
 for(const b of $$('[data-tab]'))b.addEventListener('click',()=>openTab(b.dataset.tab));
 const chips=(attr,cb)=>{for(const b of $$(`[data-${attr}]`))b.addEventListener('click',()=>{for(const o of $$(`[data-${attr}]`))o.setAttribute('aria-pressed',String(o===b));cb(b.dataset[attr]);});};
+
+/* Nombres al aire: cada uno sale en su propio turno de 10 s, dejando 2 turnos de margen para que lleguen a todos. */
+const recorded=new Map((window.SANTA_NAME_AUDIO||[]).map(r=>[r.name.toLocaleLowerCase('es'),r.name]));
+const turnoAhora=()=>Math.floor(Date.now()/10000);
+let airTimer=0;
+async function loadAir(){
+  const dl=$('#ad-air-names');if(dl&&!dl.childElementCount)dl.innerHTML=[...new Set(recorded.values())].sort((a,b)=>a.localeCompare(b,'es')).map(n=>`<option value="${esc(n)}">`).join('');
+  const {data,error}=await sb.from('nombres_al_aire').select('id,nombre,turno').gte('turno',turnoAhora()).order('turno');
+  if(error){$('#ad-air-status').textContent='Falta crear la tabla: ejecuta supabase/actualizacion-nombres-al-aire.sql en Supabase.';return [];}
+  const q=$('#ad-air-queue');
+  const paint=()=>{const now=Date.now()/10000;q.innerHTML=(data||[]).filter(r=>r.turno>=Math.floor(now)).map(r=>{const s=Math.max(0,Math.round((r.turno-now)*10+4.6));return `<li><strong>${esc(r.nombre)}</strong> ${recorded.has(r.nombre.toLocaleLowerCase('es'))?'✓ voz de Santa':'✦ escrito en el cielo'} · <span>${s>0?`sale en ${s} s`:'¡al aire!'}</span></li>`;}).join('')||'<li class="fine">No hay nombres en cola.</li>';};
+  paint();clearInterval(airTimer);airTimer=setInterval(()=>{if($('#ad-air-form').closest('[data-pane]').hidden){clearInterval(airTimer);return;}paint();},1000);
+  return data||[];
+}
+$('#ad-air-form').addEventListener('submit',async e=>{
+  e.preventDefault();const f=e.target,st=$('#ad-air-status'),btn=f.querySelector('button');
+  const names=f.nombre.value.split(/[,\n]+/).map(n=>n.trim().replace(/\s+/g,' ')).filter(Boolean).slice(0,20).map(n=>recorded.get(n.toLocaleLowerCase('es'))||n.charAt(0).toLocaleUpperCase('es')+n.slice(1));
+  if(!names.length)return;btn.disabled=true;st.textContent='Enviando…';
+  const queued=await loadAir();
+  let t=Math.max(turnoAhora()+2,...queued.map(r=>r.turno+1));
+  const rows=names.map(n=>({nombre:n.slice(0,40),turno:t++}));
+  const {error}=await sb.from('nombres_al_aire').insert(rows);
+  btn.disabled=false;
+  if(error){st.textContent='No se pudo enviar. ¿Ejecutaste supabase/actualizacion-nombres-al-aire.sql?';return;}
+  f.nombre.value='';st.textContent=`✓ Enviado${rows.length>1?`s ${rows.length} nombres`:''}. Santa lo dirá en el en vivo.`;loadAir();f.nombre.focus();
+});
 
 /* Transmisión: interruptor «Estoy en vivo» */
 async function loadLive(){

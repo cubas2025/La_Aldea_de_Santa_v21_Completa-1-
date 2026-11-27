@@ -288,7 +288,8 @@ function buildCreator(){
 <div><h4>1 · Abre tus cuentas</h4><div class="cr-row"><a class="button" href="https://www.youtube.com/live_dashboard" target="_blank" rel="noopener noreferrer">▶ YouTube Studio · En vivo</a><a class="button" href="https://www.tiktok.com/studio/download" target="_blank" rel="noopener noreferrer">♪ TikTok LIVE Studio</a><a class="button outline small" href="https://www.tiktok.com/login" target="_blank" rel="noopener noreferrer">Iniciar sesión en TikTok</a></div></div>
 <div><h4>2 · Programas gratis</h4><div class="cr-row"><a class="button outline small" href="https://obsproject.com/download" target="_blank" rel="noopener noreferrer">OBS Studio</a><a class="button outline small" href="https://obsproject.com/forum/resources/aitum-vertical.1715/" target="_blank" rel="noopener noreferrer">Plugin vertical + horizontal (Aitum Vertical)</a><a class="button outline small" href="https://obsproject.com/forum/resources/multiple-rtmp-outputs-plugin.964/" target="_blank" rel="noopener noreferrer">Plugin para transmitir a las dos a la vez</a></div></div>
 </div>
-<h4>3 · Enlaces para OBS (fuente «Navegador»)</h4><div class="cr-links" id="cr-links"></div>
+<h4>3 · Ventana exacta para TikTok LIVE Studio (Captura de ventana)</h4><div class="cr-row"><button type="button" class="button" data-win="v">▯ Abrir ventana vertical 9:16</button><button type="button" class="button" data-win="h">▭ Abrir ventana horizontal 16:9</button></div><p class="fine">Se abre una ventana con la medida justa, sin botones encima: la transmisión se ve completa. Toca la ventana una vez para activar el sonido y elige esa ventana en «Captura de ventana».</p>
+<h4>Enlaces para OBS (fuente «Navegador»)</h4><div class="cr-links" id="cr-links"></div>
 <h4>4 · Avisa en la web que estás en vivo</h4><div class="cr-row"><a class="button green" href="admin.html#transmision" target="_blank" rel="noopener">🔴 Encender «Santa está EN VIVO»</a><button type="button" class="button outline" id="cr-share-live">Compartir el en vivo con las familias</button></div>
 <details><summary>Paso a paso en OBS</summary><ol class="cr-steps">
 <li><strong>Escena horizontal (YouTube):</strong> en OBS, <em>Ajustes → Video</em>: 1920 × 1080. Agrega una fuente <em>Navegador</em>, pega el enlace horizontal, ancho 1920, alto 1080 y marca <em>Controlar audio mediante OBS</em>.</li>
@@ -310,6 +311,11 @@ function buildCreator(){
   const links=[['▭ Horizontal · YouTube (1920 × 1080)','en-vivo-youtube.html?obs=1'],['▯ Vertical · TikTok (1080 × 1920)','en-vivo-vertical.html?obs=1'],['🎬 Todos los episodios + lista · horizontal','en-vivo-youtube.html?modo=episodios&obs=1'],['🎬 Todos los episodios + lista · vertical','en-vivo-vertical.html?modo=episodios&obs=1']];
   $('#cr-links').innerHTML=links.map(([l,u])=>`<div class="cr-link"><span>${esc(l)}</span><input readonly value="${esc(base+u)}" aria-label="${esc(l)}"><button type="button" class="button small" data-copy>Copiar</button><a class="button outline small" href="${esc(u.replace(/[?&]obs=1/,''))}" target="_blank" rel="noopener">Ver</a></div>`).join('');
   $('#cr-links').addEventListener('click',async e=>{const b=e.target.closest('[data-copy]');if(!b)return;const inp=b.previousElementSibling;try{await navigator.clipboard.writeText(inp.value);}catch{inp.select();document.execCommand('copy');}pay.toast('Enlace copiado. Pégalo en la fuente «Navegador» de OBS.');});
+  for(const b of $$('[data-win]'))b.addEventListener('click',()=>{
+    const v=b.dataset.win==='v',sh=screen.availHeight||900,sw=screen.availWidth||1600;
+    let h=Math.round(sh*.9),w=Math.round(v?h*9/16:h*16/9);if(w>sw*.95){w=Math.round(sw*.95);h=Math.round(v?w*16/9:w*9/16);}
+    window.open(`${v?'en-vivo-vertical':'en-vivo-youtube'}.html?obs=1&lang=${pLang}`,v?'santa-vertical':'santa-horizontal',`popup=yes,width=${w},height=${h}`);
+  });
   $('#cr-share-live').addEventListener('click',async()=>{const url=new URL('#en-vivo',location.href).href,text=STR.es.shareText;if(navigator.share){try{await navigator.share({title:'Santa en vivo',text,url});return;}catch{}}window.open(`https://wa.me/?text=${encodeURIComponent(text+' '+url)}`,'_blank','noopener');});
   $('#cr-music').addEventListener('change',e=>{pMusic=e.target.checked;});
   $('#cr-names').addEventListener('change',e=>{pNames=e.target.checked;});
