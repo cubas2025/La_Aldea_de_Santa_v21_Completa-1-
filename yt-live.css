@@ -88,3 +88,6 @@ html,body{margin:0;height:100%;background:#000;color:#fff;overflow:hidden;font-f
 .yt-note:empty{display:none}
 body.obs .yt-controls{display:none}
 @media (prefers-reduced-motion:reduce){.yt-move{animation-duration:150s}}
+/* Durante un episodio: sin rótulo de música (el episodio trae la suya) y sin la caja vacía de nombres */
+.yt-stage.episode .yt-music{display:none}
+.yt-recent:has(ol:empty){display:none}
