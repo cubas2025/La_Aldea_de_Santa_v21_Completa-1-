@@ -191,35 +191,49 @@ function quizPos(now){
 }
 let quizIdx=-1,quizQ=null,quizOpts=[],hostKey='',hostSaid=-1;
 function partidaDelDia(now,round){const d=new Date(now),m=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();return round-quizPos(m).round+1;}
+let champs=[],champSeen=new Set(),champPending=[],scoreWatch=false;
+function scoreRow(r,old){if(!r||champSeen.has(r.id))return;champSeen.add(r.id);champs.unshift(r);champs.length=Math.min(champs.length,8);if(!old)champPending.push(r);}
+function startScoreWatch(){if(!scoreWatch&&window.ALDEA_DB?.configured&&window.ALDEA_DB.watchScores){scoreWatch=true;window.ALDEA_DB.watchScores(scoreRow).catch(()=>{scoreWatch=false;});}}
+function champText(list,max=6){const t=list.slice(0,max).map(r=>`${r.nombre}${r.lugar?`, desde ${r.lugar},`:''} con ${r.puntaje} de 10`);
+  const mas=list.length-t.length,y=mas?`; y a ${mas===1?'1 campeón más':mas+' campeones más'}: ¡miren sus nombres en pantalla!`:'.';
+  return `¡Campeones de la partida! Felicidades a ${mas||t.length<2?t.join('; a '):t.slice(0,-1).join('; a ')+' y a '+t.at(-1)}${y} ¡Los estamos escuchando y Santa está muy orgulloso!`;}
 function startElfWatch(){if(!elfWatch&&window.ALDEA_DB?.configured&&window.ALDEA_DB.watchElf){elfWatch=true;window.ALDEA_DB.watchElf(elfRow).catch(()=>{elfWatch=false;});}}
 function renderBand(){
   let band=$('#yt-names');
-  if(!band){band=document.createElement('div');band.id='yt-names';band.className='ys-names';stage.append(band);}
-  band.hidden=mode!=='quiz'||!elfBand.length;if(band.hidden)return;
+  if(!band){band=document.createElement('div');band.id='yt-names';band.className='ys-names';
+    band.innerHTML=`<b></b><div class="ys-names-track"></div><div class="ys-archive"><span class="ys-archive-ico">📖</span><span><strong>Archivo mágico de Santa</strong><em></em></span></div>`;stage.append(band);}
+  band.hidden=mode!=='quiz';if(band.hidden)return;
+  band.querySelector('.ys-archive em').textContent=`${archived} ${archived===1?'carta guardada':'cartas guardadas'}`;
+  const lab=band.querySelector('b'),track=band.querySelector('.ys-names-track');
+  if(!elfBand.length){const ph=BAND_EMPTY[Math.floor(Date.now()/9000)%BAND_EMPTY.length],k='empty'+ph;if(bandKey===k)return;bandKey=k;
+    lab.textContent='📜 Nombres para Santa';track.innerHTML=`<p class="ys-names-empty">${esc(ph)}</p>`;return;}
   const key=elfBand.map(r=>r.id).join(',');if(key===bandKey)return;bandKey=key;
   const fresh=r=>Date.now()-new Date(r.creado).getTime()<120000;
   const items=elfBand.map(r=>`<span class="${fresh(r)?'new':''}">${fresh(r)?'✨ ':''}${esc(r.nombre)}${r.lugar?` <small>(${esc(r.lugar)})</small>`:''}</span>`).join('<i>✦</i>');
-  band.innerHTML=`<b>📜 Estelvia envió a Santa</b><div class="ys-names-track"><div class="ys-names-move">${items}<i>✦</i>${items}<i>✦</i></div></div>`;
+  lab.textContent='📜 Estelvia envió a Santa';track.innerHTML=`<div class="ys-names-move">${items}<i>✦</i>${items}<i>✦</i></div>`;
   const mv=band.querySelector('.ys-names-move');mv.style.animationDuration=Math.max(25,elfBand.length*7)+'s';
 }
 function quizTick(){
   if(!QUIZ.length||!SCHED.rounds.length)return;
-  startElfWatch();renderBand();
+  startElfWatch();startScoreWatch();renderBand();
   const now=Date.now(),P=quizPos(now),L=Y[lang],num=partidaDelDia(now,P.round);
   if(P.host&&HOSTS){
     const conHora=Math.floor(P.startAbs/3600000)!==Math.floor(P.prevAbs/3600000),plan=HOSTS.build(P.round,num,conHora),key='h'+P.round,pos=P.pos;
     if(hostKey!==key){
       hostKey=key;quizIdx=-1;hostSaid=-1;
-      show.innerHTML=`<div class="ys-quiz ys-host"><span class="ys-chip">🎅 Sabelín · ${esc(L.quiz)} · Partida ${num}</span><p class="ys-kind"></p><p class="ys-line"></p><div class="ys-score">🏆 ¿Cuántas acertaste? Escríbelo en los comentarios: <b>__ / 10</b></div><p class="ys-chat ys-start"></p></div>`;
+      show.innerHTML=`<div class="ys-quiz ys-host"><span class="ys-chip">🎅 Sabelín · ${esc(L.quiz)} · Partida ${num}</span><p class="ys-kind"></p><p class="ys-line"></p><div class="ys-score">🏆 ¿Cuántas acertaste? Escríbelo en los comentarios: <b>__ / 10</b></div><div class="ys-champs" hidden></div><p class="ys-chat ys-start"></p></div>`;
     }
     let idx=-1;for(let i=0;i<plan.length;i++)if(pos>=plan[i].t)idx=i;
     const line=show.querySelector('.ys-line');
     if(line&&idx>=0&&line.dataset.i!==String(idx)){
-      const it=plan[idx],text=typeof it.texto==='function'?it.texto():it.texto;
-      line.dataset.i=idx;line.textContent=text;show.querySelector('.ys-kind').textContent=HOSTS.tipos[it.tipo]||'';
+      const it=plan[idx],slot=(plan[idx+1]?.t??HOST)-it.t,champNow=champPending.length&&it.tipo!=='final'&&it.tipo!=='apertura'&&slot>=12000,text=champNow?champText(champPending.splice(0),Math.max(1,Math.floor((slot/1000-7)/4.5))):typeof it.texto==='function'?it.texto():it.texto;
+      line.dataset.i=idx;line.textContent=text;show.querySelector('.ys-kind').textContent=champNow?'🏆 Campeones de la partida':HOSTS.tipos[it.tipo]||'';
       line.classList.remove('in');void line.offsetWidth;line.classList.add('in');
       if(pos-it.t<1500&&hostSaid!==idx){hostSaid=idx;say(text);}
     }
+    const ch=show.querySelector('.ys-champs'),sc=show.querySelector('.ys-score');
+    if(ch){const recent=champs.filter(r=>Date.now()-new Date(r.creado).getTime()<15*60000),k=recent.map(r=>r.id).join(',');
+      if(ch.dataset.k!==k){ch.dataset.k=k;ch.hidden=!recent.length;sc.hidden=!!recent.length;ch.innerHTML=`<strong>🏆 Campeones de la partida</strong>${recent.map(r=>`<span>${esc(r.nombre)} <b>${r.puntaje}/10</b>${r.lugar?` <small>${esc(r.lugar)}</small>`:''}</span>`).join('')}`;}}
     const left=Math.ceil((HOST-pos)/1000),st=show.querySelector('.ys-start');
     if(st)st.textContent=`⏱ La partida ${num} empieza en ${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`;
     return;
@@ -301,8 +315,25 @@ const ELF_RELLENO=['¿Quieres que tu nombre llegue hoy a Santa? Escribe tu nombr
   'Cada nombre que me escriben lo llevo con cuidado en mi bolso de cartas viajeras.','¡Qué lindo es ver tantos niños de toda Latinoamérica! Escriban su país en el chat.',
   'Santa me pidió que no se me escape ningún nombre. ¡Escríbanlos con su ciudad!','Ser amable es la magia más poderosa del mundo. ¡Nunca lo olviden!'];
 let elfQ=[],elfSeen=new Set(),elfWatch=false,elfT0=0,elfIdx=-1,elfLast=-1,elfN=Math.floor(Math.random()*8);
-let elfBand=[],bandKey='';
-function elfRow(r){if(!r||elfSeen.has(r.id))return;elfSeen.add(r.id);elfBand.unshift(r);elfBand.length=Math.min(elfBand.length,15);if(mode!=='duende'&&new Date(r.creado).getTime()<Date.now()-600000)return;elfQ.push(r);}
+let elfBand=[],bandKey='',letterQ=[],letterBusy=false,bandT0=Date.now(),archived=0;
+const BAND_EMPTY=['✍️ ¡Escribe tu nombre y desde dónde nos ves en los comentarios!','📜 Estelvia está lista para enviar tu nombre a Santa Claus',
+  '✨ Tu nombre puede brillar aquí en letras doradas: ¡escríbelo con tu ciudad!','🎅 ¿Quieres que Santa conozca tu nombre? ¡Déjalo en el chat con tu país!'];
+function playLetter(r){
+  if(mode!=='quiz')return;letterQ.push(r);if(letterBusy)return;
+  const next=()=>{const it=letterQ.shift();if(!it||mode!=='quiz'){letterBusy=false;return;}letterBusy=true;
+    const band=$('#yt-names'),el=document.createElement('div');el.className='ys-letter';band?.classList.add('busy');
+    const dx=V?415:790,dy=V?170:135,rnd=(a,b)=>a+Math.random()*(b-a);
+    let stars='';for(let i=0;i<18;i++)stars+=`<i class="ys-spark" style="left:${rnd(28,72)}%;top:${rnd(5,85)}%;animation-delay:${rnd(0,1.2).toFixed(2)}s;font-size:${rnd(18,38)|0}px">✦</i>`;
+    let trail='';for(let k=1;k<=9;k++){const f=k/10;trail+=`<i class="ys-trail" style="--x:${(f*dx)|0}px;--y:${(-4*190*f*(1-f)+dy*f*f)|0}px;animation-delay:${(4.42+f*1.9).toFixed(2)}s">✦</i>`;}
+    el.style.setProperty('--dx',dx+'px');el.style.setProperty('--dy',dy+'px');
+    el.innerHTML=`<div class="ys-sparks">${stars}</div><div class="ys-halo"></div><p class="ys-letter-name">${esc(it.nombre)}</p>${it.lugar?`<p class="ys-letter-place">📍 ${esc(it.lugar)}</p>`:''}${trail}<div class="ys-fly"><div class="ys-env"><span class="ys-paper">${esc(it.nombre)}</span><span class="ys-env-front"></span><span class="ys-env-flap"></span><span class="ys-env-seal">✦</span><span class="ys-ring"></span></div></div>`;
+    stage.append(el);
+    setTimeout(()=>{archived++;bandKey='';renderBand();const a=band?.querySelector('.ys-archive');if(a){a.classList.remove('got');void a.offsetWidth;a.classList.add('got');}},5900);
+    setTimeout(()=>{el.remove();band?.classList.remove('busy');next();},6900);};
+  next();
+}
+function elfRow(r){if(!r||elfSeen.has(r.id))return;elfSeen.add(r.id);elfBand.unshift(r);elfBand.length=Math.min(elfBand.length,15);
+  if(Date.now()-new Date(r.creado).getTime()<60000&&Date.now()-bandT0>3000)playLetter(r);else archived++;if(mode!=='duende'&&new Date(r.creado).getTime()<Date.now()-600000)return;elfQ.push(r);}
 function startElf(){
   stopShow();mode='duende';elfT0=Date.now();elfIdx=-1;elfLast=-1;
   stage.classList.remove('episode','vertical-src');stage.classList.add('show','show-duende');show.hidden=false;$('#yt-ep').hidden=true;namer?.stop();
@@ -412,6 +443,9 @@ function tick(){
   const date=now.toLocaleDateString(T.loc,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   $('#yt-date').textContent=date.charAt(0).toLocaleUpperCase(T.loc)+date.slice(1);
   $('#yt-read').textContent='✨ '+T.namesRead(fmtN(window.ALDEA_LIVE_NAMES?.namesToday?.()||0,T.loc));
+  let big=$('#yt-big');if(!big){big=document.createElement('div');big.id='yt-big';big.className='yt-big';big.innerHTML='<span class="yt-big-ico">🎄</span><b></b><i></i><span class="yt-big-time"></span><em></em>';stage.append(big);}
+  big.querySelector('b').textContent=d.xmas?'🎁':d.days;big.querySelector('i').textContent=d.xmas?T.xmas:(d.days===1?'día para Navidad':'días para Navidad');
+  big.querySelector('.yt-big-time').textContent=`${p2(d.h)}:${p2(d.m)}:${p2(d.s)}`;big.querySelector('em').textContent=`🕒 ${p2(now.getHours())}:${p2(now.getMinutes())}:${p2(now.getSeconds())}`;
   $('#yt-mini').textContent=`🎄 ${d.xmas?T.xmas:T.days(d.days)} · ${p2(d.h)}:${p2(d.m)}:${p2(d.s)}   🕒 ${p2(now.getHours())}:${p2(now.getMinutes())}:${p2(now.getSeconds())}`;
 }
 const move=$('#yt-move');let pending=null;

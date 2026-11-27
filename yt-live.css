@@ -228,3 +228,94 @@ body.embed .yt-controls{display:none}
 .ys-names-move span.new{color:#ffd65c}
 .ys-names-move i{font-style:normal;color:#ffe7b0}
 .yt-stage.vertical .ys-names{height:64px}
+
+/* Franja de nombres en letras doradas, como magia */
+.ys-names{height:84px;background:linear-gradient(90deg,#120a04f2,#2a1606f2 50%,#120a04f2);border-top:2px solid #ffd65c;box-shadow:0 -8px 30px #ffd65c33}
+.ys-names b{background:linear-gradient(180deg,#1f8a4c,#145c33);font-size:20px;text-align:center;line-height:1.1;padding:0 18px}
+.ys-names-move span,.ys-names-empty{font:700 40px/1 'Cormorant Garamond',serif;background:linear-gradient(180deg,#fff6c9,#ffd65c 45%,#c9902b);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 8px #ffd65c88)}
+.ys-names-move span small{font:600 24px/1 'DM Sans',sans-serif;color:#ffe7b0;-webkit-text-fill-color:#ffe7b0}
+.ys-names-move span.new{filter:drop-shadow(0 0 14px #fff2a8)}
+.ys-names-empty{margin:0;padding-left:22px;font-size:34px;white-space:nowrap;animation:ys-in .8s ease-out}
+.yt-stage.vertical .ys-names{height:88px}
+.yt-stage.vertical .ys-names-move span,.yt-stage.vertical .ys-names-empty{font-size:36px}
+/* Campeones de la partida (en la animación de Sabelín) */
+.ys-champs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 14px;padding:14px 18px;border-radius:16px;background:linear-gradient(135deg,#7a0d1d,#b9142b);color:#fff}
+.ys-champs[hidden]{display:none}
+.ys-champs strong{flex-basis:100%;text-align:center;font-size:26px;color:#ffe7b0}
+.ys-champs span{padding:4px 14px;border-radius:999px;background:#0004;font-size:24px;font-weight:700}
+.ys-champs span b{color:#ffd65c}
+.ys-champs span small{font-size:18px;color:#ffe7b0}
+.ys-score[hidden]{display:none}
+
+/* ===== Quiz: franja más alta y grande, archivo mágico y contador grande ===== */
+.ys-names{height:150px;bottom:64px}
+.ys-names b{font-size:24px;padding:0 22px;max-width:190px}
+.ys-names-move span,.ys-names-empty{font-size:60px}
+.ys-names-move span small{font-size:30px}
+.ys-names-empty{font-size:46px}
+.ys-names-track{transition:opacity .5s}
+.ys-names.busy .ys-names-track{opacity:.12}
+.ys-archive{flex:none;align-self:stretch;display:flex;align-items:center;gap:12px;padding:0 22px;width:300px;background:linear-gradient(180deg,#3b1f6b,#1d0f3a);border-left:2px solid #ffd65c;color:#fff}
+.ys-archive-ico{font-size:58px;filter:drop-shadow(0 0 10px #c7a6ff)}
+.ys-archive strong{display:block;font:700 26px/1.05 'Cormorant Garamond',serif;color:#ffe7b0}
+.ys-archive em{display:block;margin-top:4px;font-style:normal;font-size:19px;font-weight:700;color:#d9c8ff}
+.ys-archive.got{animation:ys-got 1s ease-out}
+.ys-archive.got .ys-archive-ico{animation:ys-gotico 1s ease-out}
+@keyframes ys-got{0%{box-shadow:inset 0 0 0 #ffd65c}30%{box-shadow:inset 0 0 60px #ffd65c,0 0 50px #ffd65c}100%{box-shadow:inset 0 0 0 #ffd65c}}
+@keyframes ys-gotico{0%{transform:scale(1)}30%{transform:scale(1.35) rotate(-8deg)}100%{transform:scale(1)}}
+.yt-stage.vertical .ys-names{height:160px;bottom:540px;border-bottom:2px solid #ffd65c;box-shadow:0 0 40px #ffd65c44}
+.yt-stage.vertical .ys-names b{font-size:20px;max-width:150px;padding:0 14px}
+.yt-stage.vertical .ys-names-move span{font-size:54px}
+.yt-stage.vertical .ys-names-empty{font-size:40px}
+.yt-stage.vertical .ys-archive{width:250px;padding:0 14px}
+.yt-stage.vertical .ys-archive strong{font-size:22px}
+
+/* Carta mágica: el nombre brilla, entra en una carta, se sella con lacre y vuela con estela al archivo */
+.ys-letter{position:absolute;left:0;right:0;bottom:64px;height:420px;z-index:7;pointer-events:none}
+.ys-sparks{position:absolute;inset:0}
+.ys-spark{position:absolute;font-style:normal;color:#fff3b0;text-shadow:0 0 12px #ffd65c,0 0 24px #ffb84d;opacity:0;animation:ys-spark 1.6s ease-in-out 2 both}
+@keyframes ys-spark{0%{opacity:0;transform:scale(.2) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(90deg)}100%{opacity:0;transform:scale(.2) rotate(180deg)}}
+.ys-halo{position:absolute;left:50%;top:150px;width:900px;height:240px;margin-left:-450px;border-radius:50%;background:radial-gradient(closest-side,#ffd65c66,#ffd65c22 60%,transparent);opacity:0;animation:ys-halo 6.9s ease-in-out forwards}
+@keyframes ys-halo{0%{opacity:0;transform:scale(.4)}10%,40%{opacity:1;transform:scale(1)}55%,100%{opacity:0;transform:scale(.6)}}
+.ys-letter-name{position:absolute;left:50%;top:170px;margin:0;white-space:nowrap;font:700 104px/1 'Cormorant Garamond',serif;background:linear-gradient(100deg,#c9902b 0%,#ffd65c 30%,#fffbe6 45%,#ffd65c 60%,#c9902b 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 16px #ffd65c) drop-shadow(0 4px 6px #000a);animation:ys-ln 6.9s ease-in-out forwards,ys-shine 1.6s linear 2}
+@keyframes ys-shine{0%{background-position:100% 0}100%{background-position:-50% 0}}
+@keyframes ys-ln{0%{opacity:0;transform:translateX(-50%) scale(.3);letter-spacing:.4em}11%{opacity:1;transform:translateX(-50%) scale(1.06);letter-spacing:0}16%,38%{opacity:1;transform:translateX(-50%) scale(1)}50%{opacity:0;transform:translate(-50%,70px) scale(.12)}100%{opacity:0}}
+.ys-letter-place{position:absolute;left:50%;top:288px;margin:0;transform:translateX(-50%);white-space:nowrap;font-size:36px;font-weight:800;color:#fff;text-shadow:0 0 12px #000,0 0 22px #ffd65c88;opacity:0;animation:ys-lp 6.9s ease-in-out forwards}
+@keyframes ys-lp{0%,9%{opacity:0;transform:translate(-50%,12px)}16%,38%{opacity:1;transform:translate(-50%,0)}46%,100%{opacity:0}}
+.ys-fly{position:absolute;left:50%;top:210px;width:0;height:0;animation:ys-flyx 6.9s forwards}
+.ys-env{position:absolute;left:-85px;top:-56px;width:170px;height:112px;perspective:500px;opacity:0;animation:ys-env 6.9s forwards}
+.ys-paper{position:absolute;left:12px;right:12px;top:8px;height:80px;border-radius:6px;background:#fffdf3;color:#8a5a12;font:700 20px/80px 'Cormorant Garamond',serif;text-align:center;overflow:hidden;white-space:nowrap;animation:ys-paper 6.9s forwards}
+.ys-env-front{position:absolute;inset:0;border-radius:10px;background:linear-gradient(160deg,#fff8e5,#efd8a4);clip-path:polygon(0 30%,50% 72%,100% 30%,100% 100%,0 100%);box-shadow:0 0 0 2px #e2c58a inset}
+.ys-env::before{content:'';position:absolute;inset:0;border-radius:10px;background:#e8cf98;box-shadow:0 12px 30px #0009,0 0 30px #ffd65c88}
+.ys-env-flap{position:absolute;left:0;right:0;top:0;height:70px;background:linear-gradient(160deg,#f6e6bf,#ddbd7c);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transform:rotateX(180deg);animation:ys-flap 6.9s forwards}
+.ys-env-seal{position:absolute;left:50%;top:48px;width:44px;height:44px;margin-left:-22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#e0384f,#8c0f22);color:#ffe7b0;display:grid;place-items:center;font-size:24px;box-shadow:0 2px 6px #0008;opacity:0;animation:ys-seal 6.9s forwards}
+.ys-ring{position:absolute;left:50%;top:70px;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:4px solid #fff3b0;opacity:0;animation:ys-ring 6.9s forwards}
+.ys-trail{position:absolute;left:50%;top:210px;font-style:normal;font-size:30px;color:#fff3b0;text-shadow:0 0 10px #ffd65c,0 0 20px #ffb84d;opacity:0;transform:translate(var(--x),var(--y));animation:ys-trail .9s ease-out both}
+@keyframes ys-trail{0%{opacity:0;transform:translate(var(--x),var(--y)) scale(.3)}25%{opacity:1;transform:translate(var(--x),var(--y)) scale(1.2)}100%{opacity:0;transform:translate(var(--x),calc(var(--y) + 30px)) scale(.2)}}
+@keyframes ys-env{0%,40%{opacity:0;transform:translateY(0) scale(.4)}50%,64%{opacity:1;transform:translateY(0) scale(1)}76%{opacity:1;transform:translateY(-170px) scale(.7)}92%{opacity:1;transform:translateY(var(--dy)) scale(.3)}96%,100%{opacity:0;transform:translateY(var(--dy)) scale(.1)}}
+@keyframes ys-flyx{0%,64%{transform:translateX(0)}92%,100%{transform:translateX(var(--dx))}}
+@keyframes ys-paper{0%,49%{transform:translateY(-70px)}56%,100%{transform:translateY(0)}}
+@keyframes ys-flap{0%,55%{transform:rotateX(180deg)}61%,100%{transform:rotateX(0)}}
+@keyframes ys-seal{0%,60%{opacity:0;transform:scale(2.4)}63%,100%{opacity:1;transform:scale(1)}}
+@keyframes ys-ring{0%,62%{opacity:0;transform:scale(.5)}64%{opacity:1}70%,100%{opacity:0;transform:scale(4)}}
+.yt-stage.vertical .ys-letter{height:460px;bottom:540px}
+.yt-stage.vertical .ys-letter-name{font-size:88px;top:190px}
+.yt-stage.vertical .ys-letter-place{top:292px;font-size:34px}
+.yt-stage.vertical .ys-halo{width:1000px;margin-left:-500px}
+
+/* Contador grande de días para Navidad (solo en el quiz) */
+.yt-big{display:none}
+.yt-stage.show-quiz .yt-mini{display:none}
+.yt-stage.show-quiz .yt-big{display:grid;position:absolute;z-index:3;left:24px;top:200px;width:290px;justify-items:center;padding:22px 10px 18px;border-radius:26px;background:linear-gradient(170deg,#9b1026f2,#5c0a17f2);border:3px solid #ffd65c;box-shadow:0 18px 40px #000a,0 0 30px #ffd65c55;color:#fff;text-align:center}
+.yt-big-ico{font-size:52px;line-height:1}
+.yt-big b{font:900 150px/1 'DM Sans',sans-serif;font-variant-numeric:tabular-nums;color:#ffe7b0;text-shadow:0 0 22px #ffd65c99}
+.yt-big i{font-style:normal;font-size:28px;font-weight:900;line-height:1.1;color:#fff}
+.yt-big-time{margin-top:12px;padding:6px 16px;border-radius:14px;background:#0005;font-size:44px;font-weight:900;font-variant-numeric:tabular-nums;color:#ffd65c}
+.yt-big em{margin-top:10px;font-style:normal;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;color:#ffe7b0}
+.yt-stage.vertical.show-quiz .yt-big{left:50%;top:150px;width:auto;transform:translateX(-50%);display:flex;align-items:center;gap:14px;padding:10px 26px;border-radius:999px;white-space:nowrap}
+.yt-stage.vertical .yt-big-ico{font-size:42px}
+.yt-stage.vertical .yt-big b{font-size:76px}
+.yt-stage.vertical .yt-big i{font-size:26px;max-width:120px;white-space:normal;text-align:left}
+.yt-stage.vertical .yt-big-time{margin:0;font-size:40px}
+.yt-stage.vertical .yt-big em{display:none}
+.yt-stage.vertical.show-quiz .ys-quiz{top:290px}

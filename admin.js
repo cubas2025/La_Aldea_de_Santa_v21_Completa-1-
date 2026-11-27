@@ -154,6 +154,17 @@ $('#ad-air-form').addEventListener('submit',async e=>{
   f.nombre.value='';st.textContent=`✓ Enviado${rows.length>1?`s ${rows.length} nombres`:''}. Santa lo dirá en el en vivo.`;loadAir();f.nombre.focus();
 });
 
+/* Campeones de la partida: «Nombre — puntaje» o «Nombre — puntaje — lugar», uno por línea. */
+$('#ad-score-form').addEventListener('submit',async e=>{
+  e.preventDefault();const f=e.target,st=$('#ad-score-status');
+  const rows=f.puntajes.value.split(/\n+/).map(l=>l.trim()).filter(Boolean).slice(0,20).map(l=>{const m=l.split(/\s+[—–-]\s+/);const n=m.findIndex(x=>/^\d{1,2}(\s*\/\s*10)?$/.test(x.trim()));
+    if(n<1)return null;return {nombre:m.slice(0,n).join(' ').trim().slice(0,60),puntaje:Math.min(10,Math.max(0,parseInt(m[n],10))),lugar:(m.slice(n+1).join(', ')||'').trim().slice(0,60)};}).filter(Boolean);
+  if(!rows.length){st.textContent='Escribe una línea por persona: «María López — 9».';return;}
+  st.textContent='Enviando…';const {error}=await sb.from('puntajes_quiz').insert(rows);
+  if(error){st.textContent='No se pudo enviar. ¿Ejecutaste supabase/actualizacion-puntajes.sql?';return;}
+  f.puntajes.value='';st.textContent=`✓ ${rows.length===1?'Enviado':`Enviados ${rows.length} campeones`}. Sabelín los felicitará en vivo.`;toast('Campeones enviados.');
+});
+
 /* Actualización de nombres con Estelvia: una línea por persona, «Nombre — Lugar». */
 $('#ad-elf-form').addEventListener('submit',async e=>{
   e.preventDefault();const f=e.target,st=$('#ad-elf-status'),def=f.lugar.value.trim().slice(0,80);

@@ -188,6 +188,10 @@ function horaEnVivo() {
 }
 /* Arma la animación de una partida: [{t, tipo, texto (o función)}]; dura 3 minutos.
    conHora: true solo en la primera animación de cada hora. */
+const DURACION = 180000;
+/* Tiempo que tarda el narrador en leer una frase (ms): ~0,43 s por palabra + pausas en signos + respiro. */
+const dur = txt => { const w = String(txt).split(/\s+/).filter(Boolean).length, sig = (String(txt).match(/[.,!?¡¿;:]/g) || []).length;
+  return Math.round((w * 0.43 + sig * 0.12 + 2.2) * 1000); };
 function build(round, num, conHora) {
   const r = rng(round * 2654435761 >>> 0), plan = [], used = new Set();
   const take = tipo => { let t, k = 0; do { t = pick(r, pools[tipo]); } while (used.has(t) && k++ < 12); used.add(t); return t; };
@@ -201,8 +205,16 @@ function build(round, num, conHora) {
     [r() < .5 ? 'reglas' : 'curioso', null], ['saludo', saludo()], ['metas', take('metas')], ['bienvenida', take('bienvenida')],
     ['animo', take('animo')], ['final', take('final').replace('{n}', num)],
   ].map(([tipo, texto]) => [tipo, texto ?? take(tipo)]);
-  const times = [1500, 11500, 22000, 32500, 43500, 54000, 65000, 76000, 87000, 98000, 108500, 119000, 130000, 141000, 151500, 162000, 172500];
-  orden.forEach(([tipo, texto], i) => plan.push({ t: times[i], tipo, texto }));
+  // Cada frase dura lo que tarda el narrador en decirla, más una pausa: así ninguna queda cortada.
+  // Si no caben todas en los 3 minutos, se omiten las que sobran (nunca la hora ni el «¡A jugar!»).
+  const fin = orden.pop(), dFin = dur(fin[1]), limite = DURACION - 1000 - dFin;
+  let t = 1500;
+  for (const [tipo, texto] of orden) {
+    const d = dur(typeof texto === 'function' ? texto() : texto);
+    if (t + d > limite && tipo !== 'hora') continue;
+    plan.push({ t, tipo, texto }); t += d;
+  }
+  plan.push({ t: Math.max(t, DURACION - 1000 - dFin), tipo: fin[0], texto: fin[1] });
   return plan;
 }
 const TIPOS = { apertura: '🎅 Sabelín te saluda', bienvenida: '👋 Bienvenidos', puntaje: '🏆 Tu puntaje', saludo: '🌎 Saludos en vivo', compartir: '📲 Comparte',
@@ -214,5 +226,5 @@ const cintillo = ['👋 ¡Bienvenidos a los que se van uniendo al Quiz Navideño
   '❤️ Toca la pantalla: ¡vamos por la meta de corazones!', '🎁 Gracias por cada regalito: así seguimos día y noche',
   '🌎 Escribe desde qué ciudad juegas y Sabelín te saluda'];
 const total = Object.values(pools).reduce((a, p) => a + p.length, 0);
-window.SANTA_QUIZ_HOST = { duracion: 180000, build, tipos: TIPOS, horaEnVivo, cintillo, frases: total };
+window.SANTA_QUIZ_HOST = { duracion: DURACION, dur, build, tipos: TIPOS, horaEnVivo, cintillo, frases: total };
 })();

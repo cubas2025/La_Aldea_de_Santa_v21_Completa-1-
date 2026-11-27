@@ -86,6 +86,16 @@ async function watchElf(onRow){
   sb.channel('nombres-duende').on('postgres_changes',{event:'INSERT',schema:'public',table:'nombres_duende'},p=>{if(p.new?.nombre)onRow(p.new);}).subscribe();
 }
 
+/* Campeones de la partida (puntajes enviados desde /admin): los de los últimos 20 minutos y los nuevos al instante. */
+async function watchScores(onRow){
+  const sb=await client();
+  const desde=new Date(Date.now()-20*60000).toISOString();
+  const {data,error}=await sb.from('puntajes_quiz').select('id,nombre,puntaje,lugar,creado').gte('creado',desde).order('creado');
+  if(error)throw error;
+  for(const r of data||[])onRow(r,true);
+  sb.channel('puntajes-quiz').on('postgres_changes',{event:'INSERT',schema:'public',table:'puntajes_quiz'},p=>{if(p.new?.nombre)onRow(p.new,false);}).subscribe();
+}
+
 /* Interruptor «Estoy en vivo» (tabla transmision, se cambia desde /admin). */
 async function liveStatus(){
   const sb=await client();
@@ -110,7 +120,7 @@ if(configured&&Array.isArray(window.SANTA_NAME_AUDIO)){
   }).catch(()=>{});
 }
 
-window.ALDEA_DB={configured,extraNames,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,liveNames,liveStatus,watchOnAir,watchElf,staticCodes:cfg.codigosEstaticos!==false};
+window.ALDEA_DB={configured,extraNames,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,liveNames,liveStatus,watchOnAir,watchElf,watchScores,staticCodes:cfg.codigosEstaticos!==false};
 
 /* Cada video generado (lista de los buenos, escenas, tarjeta de Navidad, editor) suma 1. */
 const share=window.SANTA_VIDEO_SHARE;
