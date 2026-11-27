@@ -91,3 +91,7 @@ body.obs .yt-controls{display:none}
 /* Durante un episodio: sin rótulo de música (el episodio trae la suya) y sin la caja vacía de nombres */
 .yt-stage.episode .yt-music{display:none}
 .yt-recent:has(ol:empty){display:none}
+
+/* Incrustada en la web (iframe pequeño): controles compactos */
+@media (max-width:1000px){.yt-controls{top:8px;gap:4px;padding:8px 10px}.yt-controls button{min-height:32px;padding:4px 10px;font-size:12px}.yt-controls button.primary{padding:8px 16px;font-size:14px}.yt-row{font-size:12px}}
+@media (max-width:620px){.yt-controls .yt-row:not(#yt-eps){display:none}}
