@@ -145,7 +145,8 @@ function buildChannel(){
   root.innerHTML=`<div class="wrap"><div class="section-heading"><div><p class="eyebrow" data-s="eyebrow"></p><h2 id="live-heading" data-h="h2"></h2></div><p data-s="intro"></p></div>
 <div class="live-format" role="group" aria-label="Formato"><button type="button" data-fmt="v" data-s="fmtV"></button><button type="button" data-fmt="h" data-s="fmtH"></button></div>
 <div class="live-h" id="live-h" hidden><div class="live-h-frame"><iframe id="live-h-frame" title="Santa en vivo · horizontal" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe></div><div class="live-h-bar"><button type="button" class="button small" id="live-h-sound" data-s="hSound"></button><button type="button" class="button outline small" data-hcmd="lista" data-s="hList"></button><button type="button" class="button outline small" data-hcmd="episodio" data-s="hEp"></button><button type="button" class="button outline small" data-hcmd="nochebuena">🎄 Nochebuena</button><button type="button" class="button outline small" data-hcmd="quiz">🎯 Quiz</button><button type="button" class="button outline small" data-hcmd="cuentos">📖 Cuentos</button><button type="button" class="button outline small" data-hcmd="musica">🎵 Música</button><span class="live-h-lang" role="group" aria-label="Idioma"><button type="button" data-hlang="es">ES</button><button type="button" data-hlang="en">EN</button><button type="button" data-hlang="pt">PT</button></span><button type="button" class="button outline small" id="live-h-full" data-s="hFull"></button><a class="button outline small" id="live-h-open" target="_blank" rel="noopener" data-s="hOpen"></a></div></div>
-<div class="live-v" id="live-v"><div class="live-modes" role="tablist" aria-label="Canal"><button type="button" role="tab" data-mode="lista" data-s="tabLista"></button><button type="button" role="tab" data-mode="retrans" data-s="tabRetrans"></button></div>
+<div class="live-v" id="live-v"><div class="live-modes" role="tablist" aria-label="Canal"><button type="button" role="tab" data-mode="lista" data-s="tabLista"></button><button type="button" role="tab" data-mode="retrans" data-s="tabRetrans"></button><button type="button" role="tab" data-show="nochebuena">🎄 Nochebuena</button><button type="button" role="tab" data-show="quiz">🎯 Quiz</button><button type="button" role="tab" data-show="cuentos">📖 Cuentos</button><button type="button" role="tab" data-show="musica">🎵 Música</button></div>
+<div class="live-vshow" id="live-vshow" hidden><div class="live-v-frame"><iframe id="live-v-frame" title="Santa en vivo · vertical" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe></div><div class="live-h-bar"><button type="button" class="button small" id="live-v-sound">🔇 Silenciar</button><button type="button" class="button outline small" id="live-v-full">⛶ Pantalla completa</button></div></div>
 <div class="live-layout"><div class="live-player" id="live-player"><video id="live-video" muted playsinline autoplay loop preload="auto" aria-label="Canal en vivo de Santa"></video><canvas id="live-sky" class="live-sky" width="1080" height="1920" aria-hidden="true"></canvas><p class="sr-only" id="live-name-said" aria-live="polite"></p><span class="live-badge" id="live-badge"><i></i><b></b></span><span class="live-clock" id="live-clock"></span><div class="live-lower"><small id="live-kicker"></small><strong id="live-now"></strong></div></div>
 <div class="live-side panel"><div class="live-lang" id="live-lang" role="group" aria-label="Idioma de la lista"><span data-s="langLabel"></span><button type="button" data-lang="es">🇪🇸 Español · voz de Santa</button><button type="button" data-lang="en">🇺🇸 English</button><button type="button" data-lang="pt">🇧🇷 Português</button></div><p class="fine" id="live-lang-note"></p><div class="live-tiktok" id="live-tiktok" hidden><span class="live-badge static"><i></i><b data-s="tiktokBadge"></b></span><p data-s="tiktokText"></p><a class="button" id="live-tiktok-link" target="_blank" rel="noopener noreferrer" data-s="tiktokBtn"></a></div>
 <div class="live-buttons"><button type="button" class="button" id="live-sound"></button><button type="button" class="button outline" id="live-full" data-s="full"></button></div>
@@ -162,6 +163,9 @@ function buildChannel(){
   for(const b of $$('[data-lang]'))b.addEventListener('click',()=>setLang(b.dataset.lang));
   if(!retrans.length)$('[data-mode="retrans"]').hidden=true;
   renderTexts();renderMode();
+  for(const b of $$('[data-show]'))b.addEventListener('click',()=>setShow(b.dataset.show));
+  $('#live-v-sound').addEventListener('click',()=>{vSound=!vSound;vSend({cmd:vSound?'sound':'mute'});$('#live-v-sound').textContent=vSound?'🔇 Silenciar':'🔊 Activar sonido';});
+  $('#live-v-full').addEventListener('click',()=>{const el=$('.live-v-frame');(el.requestFullscreen||el.webkitRequestFullscreen)?.call(el);});
   for(const b of $$('[data-fmt]'))b.addEventListener('click',()=>setFmt(b.dataset.fmt));
   $('#live-h-sound').addEventListener('click',()=>hSend({cmd:hSound?'mute':'sound'}));
   for(const b of $$('[data-hcmd]'))b.addEventListener('click',()=>hSend({cmd:b.dataset.hcmd}));
@@ -176,7 +180,19 @@ let hSound=false;
 const hSend=msg=>$('#live-h-frame')?.contentWindow?.postMessage(msg,location.origin);
 function hSoundBtn(){const b=$('#live-h-sound');if(b)b.textContent=STR[lang][hSound?'hMute':'hSound'];for(const x of $$('[data-hlang]'))x.setAttribute('aria-pressed',String(x.dataset.hlang===lang));}
 window.addEventListener('message',e=>{if(e.origin!==location.origin||!e.data?.yt)return;hSound=e.data.yt==='sound-on';hSoundBtn();});
+let vShow=null,vSound=true;
+const vSend=msg=>$('#live-v-frame')?.contentWindow?.postMessage(msg,location.origin);
+function setShow(m){
+  const frame=$('#live-v-frame');
+  for(const b of $$('[data-show]'))b.setAttribute('aria-selected',String(b.dataset.show===m));
+  if(m)for(const b of $$('[data-mode]'))b.setAttribute('aria-selected','false');
+  if(fmt==='h'){if(m)hSend({cmd:m});return;}
+  vShow=m;$('#live-vshow').hidden=!m;root.querySelector('.live-layout').hidden=!!m;
+  if(m){stopChannel();vSound=true;$('#live-v-sound').textContent='🔇 Silenciar';frame.onload=()=>vSend({cmd:'sound'});frame.src=`en-vivo-vertical.html?lang=${lang}&modo=${m}&embed=1`;}
+  else{frame.removeAttribute('src');frame.src='about:blank';if(pageOn)startChannel();renderMode();}
+}
 function setFmt(next,ep){
+  if(vShow&&next==='h')setShow(null);
   fmt=next;pref.set('aldea-live-fmt',fmt);
   for(const b of $$('[data-fmt]'))b.setAttribute('aria-pressed',String(b.dataset.fmt===fmt));
   const h=fmt==='h',frame=$('#live-h-frame');
@@ -218,6 +234,7 @@ function renderMode(){
   current=-1;syncChannel();updateListInfo();
 }
 function setMode(next){
+  if(vShow){setShow(null);if(next===mode)return;}
   if(!CHANNELS[next]?.length||next===mode)return;
   mode=next;pref.set('aldea-live-mode',mode);
   if(mode==='lista')namer?.start();else namer?.stop();
@@ -288,7 +305,10 @@ function buildCreator(){
 <div><h4>1 · Abre tus cuentas</h4><div class="cr-row"><a class="button" href="https://www.youtube.com/live_dashboard" target="_blank" rel="noopener noreferrer">▶ YouTube Studio · En vivo</a><a class="button" href="https://www.tiktok.com/studio/download" target="_blank" rel="noopener noreferrer">♪ TikTok LIVE Studio</a><a class="button outline small" href="https://www.tiktok.com/login" target="_blank" rel="noopener noreferrer">Iniciar sesión en TikTok</a></div></div>
 <div><h4>2 · Programas gratis</h4><div class="cr-row"><a class="button outline small" href="https://obsproject.com/download" target="_blank" rel="noopener noreferrer">OBS Studio</a><a class="button outline small" href="https://obsproject.com/forum/resources/aitum-vertical.1715/" target="_blank" rel="noopener noreferrer">Plugin vertical + horizontal (Aitum Vertical)</a><a class="button outline small" href="https://obsproject.com/forum/resources/multiple-rtmp-outputs-plugin.964/" target="_blank" rel="noopener noreferrer">Plugin para transmitir a las dos a la vez</a></div></div>
 </div>
-<h4>3 · Ventana exacta para TikTok LIVE Studio (Captura de ventana)</h4><div class="cr-row"><button type="button" class="button" data-win="v">▯ Abrir ventana vertical 9:16</button><button type="button" class="button" data-win="h">▭ Abrir ventana horizontal 16:9</button></div><p class="fine">Se abre una ventana con la medida justa, sin botones encima: la transmisión se ve completa. Toca la ventana una vez para activar el sonido y elige esa ventana en «Captura de ventana».</p>
+<h4>3 · Elige qué transmitir y abre la ventana (TikTok LIVE Studio: «Captura de ventana»)</h4>
+<div class="cr-pick"><label>¿Qué quieres transmitir?<select id="cr-win-mode"><option value="lista">🔴 Lista de los buenos</option><option value="nochebuena">🎄 Nochebuena (Santa vuela y dice nombres)</option><option value="quiz">🎯 Quiz navideño</option><option value="cuento">📖 Un cuento</option><option value="cuentos">📚 Todos los cuentos seguidos</option><option value="musica">🎵 Música · Laponia</option><option value="tarjetas">🖼 Música · Tarjetas</option><option value="episodio1">🎬 Episodio 1 + lista</option><option value="episodios">🎬 Todos los episodios + lista</option></select></label>
+<label class="cr-story" hidden>Cuento<select id="cr-win-story"></select></label><label class="cr-story" hidden>Protagonista <span class="optional">opcional, un niño del chat</span><input id="cr-win-name" maxlength="20" placeholder="Ej. Valentina"></label><label class="cr-story" hidden>Es<select id="cr-win-gender"><option value="girl">Niña</option><option value="boy">Niño</option></select></label></div>
+<div class="cr-row"><button type="button" class="button" data-win="v">▯ Abrir vertical 9:16 (TikTok)</button><button type="button" class="button" data-win="h">▭ Abrir horizontal 16:9 (YouTube)</button><button type="button" class="button outline small" id="cr-win-copy">Copiar enlace para OBS</button></div><p class="fine">Se abre una ventana con la medida justa, sin botones encima: la transmisión se ve completa. Toca la ventana una vez para activar el sonido y elige esa ventana en «Captura de ventana».</p>
 <h4>Enlaces para OBS (fuente «Navegador»)</h4><div class="cr-links" id="cr-links"></div>
 <h4>4 · Avisa en la web que estás en vivo</h4><div class="cr-row"><a class="button green" href="admin.html#transmision" target="_blank" rel="noopener">🔴 Encender «Santa está EN VIVO»</a><button type="button" class="button outline" id="cr-share-live">Compartir el en vivo con las familias</button></div>
 <details><summary>Paso a paso en OBS</summary><ol class="cr-steps">
@@ -311,11 +331,20 @@ function buildCreator(){
   const links=[['▭ Horizontal · YouTube (1920 × 1080)','en-vivo-youtube.html?obs=1'],['▯ Vertical · TikTok (1080 × 1920)','en-vivo-vertical.html?obs=1'],['🎬 Todos los episodios + lista · horizontal','en-vivo-youtube.html?modo=episodios&obs=1'],['🎬 Todos los episodios + lista · vertical','en-vivo-vertical.html?modo=episodios&obs=1'],['🎯 Quiz · horizontal','en-vivo-youtube.html?modo=quiz&obs=1'],['🎯 Quiz · vertical','en-vivo-vertical.html?modo=quiz&obs=1'],['📖 Todos los cuentos · horizontal','en-vivo-youtube.html?modo=cuentos&obs=1'],['📖 Todos los cuentos · vertical','en-vivo-vertical.html?modo=cuentos&obs=1'],['🎵 Música · Laponia · horizontal','en-vivo-youtube.html?modo=musica&obs=1'],['🎵 Música · Laponia · vertical','en-vivo-vertical.html?modo=musica&obs=1'],['🖼 Música · Tarjetas · horizontal','en-vivo-youtube.html?modo=tarjetas&obs=1'],['🖼 Música · Tarjetas · vertical','en-vivo-vertical.html?modo=tarjetas&obs=1'],['🎄 Nochebuena (24 y 25) · horizontal','en-vivo-youtube.html?modo=nochebuena&obs=1'],['🎄 Nochebuena (24 y 25) · vertical','en-vivo-vertical.html?modo=nochebuena&obs=1']];
   $('#cr-links').innerHTML=links.map(([l,u])=>`<div class="cr-link"><span>${esc(l)}</span><input readonly value="${esc(base+u)}" aria-label="${esc(l)}"><button type="button" class="button small" data-copy>Copiar</button><a class="button outline small" href="${esc(u.replace(/[?&]obs=1/,''))}" target="_blank" rel="noopener">Ver</a></div>`).join('');
   $('#cr-links').addEventListener('click',async e=>{const b=e.target.closest('[data-copy]');if(!b)return;const inp=b.previousElementSibling;try{await navigator.clipboard.writeText(inp.value);}catch{inp.select();document.execCommand('copy');}pay.toast('Enlace copiado. Pégalo en la fuente «Navegador» de OBS.');});
+  /* Selector: qué modo transmitir (y qué cuento) y abrir la ventana exacta en ese modo. */
+  const stories=window.SANTA_STORIES||[],audioStories=(cfg.cuentosAudio||[]).filter(c=>c.src);
+  $('#cr-win-story').innerHTML=[...audioStories.map((a,i)=>`<option value="a${i}">🔊 ${esc(a.titulo)}</option>`),...stories.map(st=>`<option value="${st.id}">${esc(st.title)}</option>`)].join('');
+  const winMode=$('#cr-win-mode');
+  winMode.addEventListener('change',()=>{for(const el of $$('.cr-story'))el.hidden=winMode.value!=='cuento';});
+  const winUrl=v=>{const m=winMode.value,q=new URLSearchParams({obs:'1',lang:pLang});if(m!=='lista')q.set('modo',m);
+    if(m==='cuento'){q.set('cuento',$('#cr-win-story').value);const n=$('#cr-win-name').value.trim();if(n){q.set('nombre',n);q.set('genero',$('#cr-win-gender').value);}}
+    return `${v?'en-vivo-vertical':'en-vivo-youtube'}.html?${q}`;};
   for(const b of $$('[data-win]'))b.addEventListener('click',()=>{
     const v=b.dataset.win==='v',sh=screen.availHeight||900,sw=screen.availWidth||1600;
     let h=Math.round(sh*.9),w=Math.round(v?h*9/16:h*16/9);if(w>sw*.95){w=Math.round(sw*.95);h=Math.round(v?w*16/9:w*9/16);}
-    window.open(`${v?'en-vivo-vertical':'en-vivo-youtube'}.html?obs=1&lang=${pLang}`,v?'santa-vertical':'santa-horizontal',`popup=yes,width=${w},height=${h}`);
+    window.open(winUrl(v),v?'santa-vertical':'santa-horizontal',`popup=yes,width=${w},height=${h}`);
   });
+  $('#cr-win-copy').addEventListener('click',async()=>{const url=new URL(winUrl(false),location.href).href;try{await navigator.clipboard.writeText(url);pay.toast('Enlace horizontal copiado. Para vertical, cambia «en-vivo-youtube» por «en-vivo-vertical».');}catch{prompt('Copia este enlace:',url);}});
   $('#cr-share-live').addEventListener('click',async()=>{const url=new URL('#en-vivo',location.href).href,text=STR.es.shareText;if(navigator.share){try{await navigator.share({title:'Santa en vivo',text,url});return;}catch{}}window.open(`https://wa.me/?text=${encodeURIComponent(text+' '+url)}`,'_blank','noopener');});
   $('#cr-music').addEventListener('change',e=>{pMusic=e.target.checked;});
   $('#cr-names').addEventListener('change',e=>{pNames=e.target.checked;});
@@ -391,5 +420,5 @@ function openPresenter(){
 /* ---------- Arranque ---------- */
 buildChannel();buildCreator();liveBanner();
 if(panel)renderQueue();
-window.addEventListener('aldea:navigate',e=>{const page=e.detail.page;pageOn=page==='en-vivo';if(!root)return;if(pageOn)setFmt(fmt);else{stopChannel();const f=$('#live-h-frame');if(f){f.removeAttribute('src');f.src='about:blank';}}});
+window.addEventListener('aldea:navigate',e=>{const page=e.detail.page;pageOn=page==='en-vivo';if(!root)return;if(pageOn)setFmt(fmt);else{stopChannel();const f=$('#live-h-frame');if(f){f.removeAttribute('src');f.src='about:blank';}if(vShow)setShow(null);}});
 })();
