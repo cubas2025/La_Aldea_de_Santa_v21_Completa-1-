@@ -47,5 +47,28 @@ window.ALDEA_LIVE = {
     { src: 'assets/musica/music-box-waltz.mp3', title: 'The Music Box Waltz', gain: 0.91 },
     { src: 'assets/musica/final-note.mp3', title: 'The Final Note', gain: 0.9 },
     { src: 'assets/musica/crystal-chime.mp3', title: 'Crystal Chime', gain: 0.91 }
-  ]
+  ],
+  /* Transmisión HORIZONTAL para YouTube (en-vivo-youtube.html, 1920 × 1080).
+     Mismo contenido que el vertical (lista de los buenos con voz y polvo de estrellas, contador,
+     hora y cintillo) con los videos de Santa con su bolsa ya preparados en 16:9. */
+  horizontal: {
+    playlist: [
+      { src: 'assets/en-vivo/horizontal/santa-polvo-estrellas.mp4', title: 'Santa esparce polvo de estrellas mágico', title_en: 'Santa sprinkles magic stardust', title_pt: 'Papai Noel espalha pó de estrelas mágico', duration: 7.93, repeat: 4 },
+      { src: 'assets/en-vivo/horizontal/santa-bolsita.mp4', title: 'Santa prepara su bolsita de estrellas', title_en: 'Santa prepares his bag of stars', title_pt: 'Papai Noel prepara sua bolsinha de estrelas', duration: 7.93, repeat: 3 },
+      { src: 'assets/en-vivo/horizontal/santa-luna.mp4', title: 'Santa saluda bajo la luna de Navidad', title_en: 'Santa waves under the Christmas moon', title_pt: 'Papai Noel acena sob a lua de Natal', duration: 7.93, repeat: 3 },
+      { src: 'assets/en-vivo/horizontal/santa-polvo.mp4', title: 'Santa lanza polvo de estrellas', title_en: 'Santa throws stardust', title_pt: 'Papai Noel lança pó de estrelas', duration: 7.93, repeat: 3 },
+      { src: 'assets/en-vivo/horizontal/santa-destellos.mp4', title: 'Santa reparte magia en la aldea', title_en: 'Santa spreads magic around the village', title_pt: 'Papai Noel espalha magia pela vila', duration: 7.93, repeat: 3 },
+      { src: 'assets/en-vivo/horizontal/santa-guirnaldas.mp4', title: 'Santa pasea por el sendero iluminado', title_en: 'Santa walks the glowing path', title_pt: 'Papai Noel passeia pelo caminho iluminado', duration: 7.93, repeat: 3 }
+    ],
+    /* Canción principal del horizontal: suena primero y vuelve entre cada canción de la lista «musica».
+       Si el archivo todavía no está en la carpeta, se salta sola y sigue con las demás. */
+    musicaDestacada: { src: 'assets/en-vivo/musica/christmas-new-year-2025.mp3', title: 'Christmas & New Year 2025 · Relaxing, Joyful, Enchanting', gain: 0.9 },
+    /* Episodio 1 · Introducción: videos de Santa hablando (con su propio audio) y subtítulos
+       sincronizados palabra por palabra: palabras = [[inicio, fin, 'palabra'], ...] en segundos.
+       Al terminar la introducción, la transmisión sigue con la lista de los buenos. */
+    episodio1: {
+      titulo: 'Episodio 1 · Introducción', titulo_en: 'Episode 1 · Introduction', titulo_pt: 'Episódio 1 · Introdução',
+      videos: []
+    }
+  }
 };

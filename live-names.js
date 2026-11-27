@@ -101,7 +101,9 @@ function speakLang(code,name,onName){
   return true;
 }
 
-function create({canvas,label='Lista de los buenos',onName,onSpeak}={}){
+function create({canvas,label='Lista de los buenos',onName,onSpeak,layout=null}={}){
+  /* layout (opcional, formato horizontal): {scale,x,y,headerY,nameY,size,maxWidth} */
+  const L0={scale:1,x:0,y:0,headerY:175,nameY:440,size:230,maxWidth:930,...(layout||{})};
   const ctx=canvas.getContext('2d');
   let running=false,raf=0,sound=false,audio=null,gain=null,current=-1,prepared=new Map(),playing=null,lastAnnounced=-1,lang='es';
   const stopVoice=()=>{playing?.stop?.();playing=null;if(lang!=='es')window.speechSynthesis?.cancel();};
@@ -173,22 +175,23 @@ function create({canvas,label='Lista de los buenos',onName,onSpeak}={}){
     raf=requestAnimationFrame(frame);
   }
   function draw(m,t){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);
     if(!m)return;
+    ctx.setTransform(L0.scale,0,0,L0.scale,L0.x,L0.y);
     const fade=t>FADE_AT?Math.max(0,1-(t-FADE_AT)/(SLOT-FADE_AT)):1;
     ctx.save();ctx.globalAlpha=fade;
     const header=Math.min(1,Math.max(0,(t-.2)/.6));
     if(header>0){
       ctx.globalAlpha=fade*header;ctx.textAlign='center';ctx.font='700 46px Georgia,serif';ctx.shadowColor='rgba(0,0,0,.6)';ctx.shadowBlur=14;ctx.fillStyle='#ffe7b0';
-      ctx.fillText(m.header||(m.recorded?`✦ ${label} ✦`:'✦ Santa también saluda a ✦'),540,175);
+      ctx.fillText(m.header||(m.recorded?`✦ ${label} ✦`:'✦ Santa también saluda a ✦'),540,L0.headerY);
       ctx.shadowBlur=0;ctx.globalAlpha=fade;
     }
-    stardust.draw(ctx,m.name,t,m.revealAt,m.write,{size:230,maxWidth:930,y:440});
+    stardust.draw(ctx,m.name,t,m.revealAt,m.write,{size:L0.size,maxWidth:L0.maxWidth,y:L0.nameY});
     ctx.restore();
   }
   return {
     async start(){if(running)return;running=true;await loadList();current=-1;lastAnnounced=-1;lastNamed=-1;raf=requestAnimationFrame(frame);},
-    stop(){running=false;cancelAnimationFrame(raf);stopVoice();ctx.clearRect(0,0,canvas.width,canvas.height);},
+    stop(){running=false;cancelAnimationFrame(raf);stopVoice();ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);},
     setSound(on){sound=!!on;prepared.clear();lastAnnounced=-1;if(on){ensureAudio();}else stopVoice();},
     /* 'es' = solo los audios grabados en español · 'en' inglés · 'pt' portugués (opciones aparte). */
     setLang(l){const next=LANGS[l]?l:'es';if(next===lang)return;stopVoice();lang=next;prepared.clear();meta.clear();current=-1;lastAnnounced=-1;lastNamed=-1;},
