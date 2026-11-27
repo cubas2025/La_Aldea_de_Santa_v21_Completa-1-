@@ -172,3 +172,13 @@ body.embed .yt-controls{display:none}
 .yt-stage:not(.vertical) .ys-slide .ys-text{left:820px;right:auto;top:330px;width:900px}
 .yt-stage.vertical .ys-card{height:auto;max-height:900px;max-width:960px}
 .yt-stage.vertical.show-cuento .ys-card{top:230px}
+
+/* Música · Laponia: los paisajes se ven completos; la canción en un rótulo */
+.yt-stage.show-musica .yt-video{visibility:visible}
+.yt-stage.show-musica .yt-video.off{visibility:hidden}
+.ys-now{position:absolute;left:64px;bottom:96px;padding:20px 30px;border-radius:22px;background:#0b0f1fcc;border:1.5px solid #ffe7b055;box-shadow:0 14px 40px #0008}
+.ys-now small{display:block;font-size:18px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#ffe7b0}
+.ys-now strong{display:block;margin-top:4px;font:700 46px/1.1 'Cormorant Garamond',serif}
+.yt-stage.vertical .ys-now{left:36px;right:36px;bottom:110px}
+/* Nochebuena: rótulo de color distinto */
+.yt-stage.noche .yt-badge{background:linear-gradient(90deg,#e5153a,#1f8a4c)}
