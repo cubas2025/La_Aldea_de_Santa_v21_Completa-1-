@@ -79,7 +79,7 @@ const titleOf=it=>it['title_'+lang]||it.title;
 const video2=$('#yt-video2');let act=video,idle=video2;
 function showVid(el){video.classList.toggle('off',el!==video);video2.classList.toggle('off',el!==video2);}
 function syncLista(){
-  if(mode!=='lista'||!items.length)return;
+  if((mode!=='lista'&&mode!=='quiz')||!items.length)return;   // en el quiz, Santa sigue de fondo
   const pos=channelAt(items);
   if(pos.index!==current){
     current=pos.index;
@@ -136,15 +136,110 @@ function captions(){
 }
 (function capLoop(){captions();requestAnimationFrame(capLoop);})();
 
+/* ---------- Quiz, cuentos y solo música ---------- */
+const QUIZ=window.SANTA_QUIZ||[],STORIES=window.SANTA_STORIES||[],CARDS=window.SANTA_CHRISTMAS_CARDS||[];
+const AUDIO_STORIES=(all.cuentosAudio||[]).filter(c=>c.src);
+const show=$('#yt-show');let showTimer=0,showAudio=null,actx=null;
+const SCENES={village:'aldea-luces.webp',cabin:'cabana-cuentos.webp',reindeer:'renos-establo.webp',correo:'santa-correo.webp',mirador:'santa-mirador.webp',bosque:'santa-bosque.webp'};
+const CAT={renos:'Renos',duendes:'Duendes',ciudades:'Ciudades',tradiciones:'Tradiciones',matematico:'Matemática',verbal:'Palabras',biblia:'Biblia',ciencias:'Ciencias',geografia:'Geografía',historia:'Historia',vida:'Vida diaria',cultura:'Cultura'};
+const Y={es:{quiz:'Quiz navideño',chat:'¡Escribe A, B o C en el chat!',ok:'¡Respuesta correcta!',story:'Cuento de la aldea',page:(a,b)=>`Página ${a} de ${b}`,music:'Música de la aldea',listen:'🔊 Escucha el cuento'},
+         en:{quiz:'Christmas quiz',chat:'Write A, B or C in the chat!',ok:'Correct answer!',story:'Village story',page:(a,b)=>`Page ${a} of ${b}`,music:'Village music',listen:'🔊 Listen to the story'},
+         pt:{quiz:'Quiz de Natal',chat:'Escreva A, B ou C no chat!',ok:'Resposta certa!',story:'Conto da vila',page:(a,b)=>`Página ${a} de ${b}`,music:'Música da vila',listen:'🔊 Ouça o conto'}};
+const rng=seed=>()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+const quizOrder=(()=>{const r=rng(20261127),a=QUIZ.map((_,i)=>i);for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;})();
+function chime(){if(!soundOn)return;try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const t=actx.currentTime;[1047,1319,1568].forEach((f,i)=>{const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=f;g.gain.setValueAtTime(.0001,t+i*.1);g.gain.exponentialRampToValueAtTime(.18,t+i*.1+.02);g.gain.exponentialRampToValueAtTime(.0001,t+i*.1+.8);o.connect(g).connect(actx.destination);o.start(t+i*.1);o.stop(t+i*.1+.9);});}catch{}}
+/* Quiz: una pregunta cada 20 s (14 s para responder y 6 s para ver la respuesta), igual para todos. */
+const QZ=20000,QSHOW=14000;let quizIdx=-1;
+function quizTick(){
+  if(!QUIZ.length)return;
+  const now=Date.now(),k=Math.floor(now/QZ),t=now%QZ,L=Y[lang];
+  if(k!==quizIdx){
+    quizIdx=k;const q=QUIZ[quizOrder[k%QUIZ.length]],r=rng(k*7919+13);
+    const opts=[q.answer,...q.wrong].map(o=>[r(),o]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+    show.innerHTML=`<div class="ys-quiz"><span class="ys-chip">🎯 ${esc(L.quiz)} · ${esc(CAT[q.category]||q.category)}</span><h2>${esc(q.question)}</h2><ol class="ys-opts">${opts.map((o,i)=>`<li data-ok="${o===q.answer}"><b>${'ABCD'[i]}</b><span>${esc(o)}</span></li>`).join('')}</ol><div class="ys-timer"><i></i><span></span></div><p class="ys-expl"><strong>${esc(L.ok)}</strong> ${esc(q.explanation||'')}</p><p class="ys-chat">${esc(L.chat)}</p></div>`;
+  }
+  const box=show.firstElementChild;if(!box)return;
+  box.querySelector('.ys-timer span').textContent=t<QSHOW?Math.ceil((QSHOW-t)/1000):'✓';
+  box.querySelector('.ys-timer i').style.width=Math.max(0,(QSHOW-t)/QSHOW*100)+'%';
+  if(t>=QSHOW&&!box.classList.contains('reveal')){box.classList.add('reveal');chime();}
+}
+/* Solo música: las 25 tarjetas pasan cada 12 s con movimiento suave, igual para todos. */
+let slideIdx=-1;
+function musicTick(){
+  if(!CARDS.length)return;
+  const k=Math.floor(Date.now()/12000);
+  if(k!==slideIdx){
+    slideIdx=k;const c=CARDS[k%CARDS.length],el=document.createElement('div');el.className='ys-slide';
+    el.innerHTML=`<div class="ys-bg" style="background-image:url('${esc(c.image)}')"></div><img class="ys-card" src="${esc(c.image)}" alt=""><div class="ys-text"><small>🎵 ${esc(Y[lang].music)}</small><h2>${esc(c.title)}</h2><p>${esc(c.phrase)}</p><span class="ys-song"></span></div>`;
+    show.append(el);requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('on')));
+    const old=[...show.children].slice(0,-1);setTimeout(()=>old.forEach(o=>o.remove()),1700);
+  }
+  const s=show.lastElementChild?.querySelector('.ys-song'),txt=bgLoaded>=0&&seq[bgI]?`${X[lang].playing} ${seq[bgI].title}`:'';
+  if(s&&s.textContent!==txt)s.textContent=txt;
+}
+/* Cuentos: página por página al ritmo de lectura (o con su audio, si es un cuento en audio). */
+let storyQueue=[];
+function storyPagesFor(s,name,g){
+  const who=name||'Nico',boy=g!=='girl',ch=s.id%2,nino=boy?'un niño':'una niña';
+  return [`Aquella tarde, ${who}, ${nino} de siete años, miró el cielo desde su casa. Una chispa dorada cruzó la ventana y dejó una invitación: «Te esperamos en La aldea de Santa». En un abrir y cerrar de ojos, un sendero nevado apareció entre faroles y tejados iluminados.`,
+    `${s.discovery} Santa saludó a ${who} con una sonrisa y le invitó a observar con atención. En aquella aldea, las mejores aventuras empezaban con una pregunta.`,
+    `${s.problem} ${who} pensó un momento. Había dos caminos posibles: «${s.choices[0]}» o «${s.choices[1]}». ¿Qué elegirías tú? ¡Escríbelo en el chat!`,
+    `${who} eligió: «${s.choices[ch]}». ${s.outcomes[ch]} Santa acompañó la decisión, dejando espacio para que todos aportaran una idea.`,
+    `${s.ending} ${who} comprendió que no hacía falta una varita para hacer algo bueno. A veces una decisión pequeña podía cambiar una tarde entera.`,
+    `Antes de regresar a casa, Santa abrió su bolsito rojo. Una pizca de polvo de estrellas escribió «${who}» en el cielo. «Lleva esta historia contigo —dijo— y mañana busca una nueva ocasión para ayudar».`];
+}
+function storyCard(img,title,kicker,text){
+  show.innerHTML=`<div class="ys-story"><div class="ys-bg" style="background-image:url('${esc(img)}')"></div><img class="ys-card" src="${esc(img)}" alt=""><div class="ys-text"><small>📖 ${esc(kicker)}</small><h2>${esc(title)}</h2><p class="ys-page">${text}</p></div></div>`;
+}
+function nextStory(){
+  clearTimeout(showTimer);showAudio?.pause();showAudio=null;
+  const item=storyQueue.shift();if(item===undefined){startLista();return;}
+  const name=($('#yt-story-name')?.value||params.get('nombre')||'').trim().slice(0,20),g=params.get('genero')||'boy';
+  if(typeof item==='string'&&item.startsWith('a')){   // cuento en audio
+    const a=AUDIO_STORIES[Number(item.slice(1))];if(!a){nextStory();return;}
+    storyCard(a.imagen||'assets/cabana-cuentos.webp',a.titulo,Y[lang].story,esc(Y[lang].listen));
+    const lines=a.palabras?.length?makeLines(a.palabras):[];
+    showAudio=new Audio(a.src);showAudio.volume=1;showAudio.play().catch(()=>{});
+    showAudio.addEventListener('timeupdate',()=>{if(!lines.length)return;const t=showAudio.currentTime,l=lines.find(x=>t>=x.a-.25&&t<=x.b+.7),p=show.querySelector('.ys-page');if(p&&l)p.innerHTML=l.ws.map(w=>`<span class="${t>=w.a?(t<w.b+.05?'on now':'on'):''}">${esc(w.w)}</span>`).join(' ');});
+    showAudio.addEventListener('ended',nextStory);base=.12;vol();return;
+  }
+  const s=STORIES[Number(item)]||STORIES[0],pages=storyPagesFor(s,name,g);let i=0;base=.32;vol();
+  const page=()=>{
+    const img='assets/'+SCENES[i===0?'village':i===5?'mirador':s.scene];
+    storyCard(img,s.title,`${Y[lang].story} · ${Y[lang].page(i+1,pages.length)}`,esc(pages[i]));
+    const words=pages[i].split(/\s+/).length;showTimer=setTimeout(()=>{i++;if(i<pages.length)page();else nextStory();},Math.max(10,words*.42+4)*1000);
+  };page();
+}
+function stopShow(){clearTimeout(showTimer);showAudio?.pause();showAudio=null;show.innerHTML='';show.hidden=true;quizIdx=-1;slideIdx=-1;stage.classList.remove('show','show-quiz','show-musica','show-cuento');}
+function startShow(kind,arg){
+  stopShow();if(isEp()){video.pause();}bgVideo.pause();bgVideo.removeAttribute('src');
+  mode=kind;stage.classList.remove('episode','vertical-src');stage.classList.add('show','show-'+(kind==='cuentos'?'cuento':kind));show.hidden=false;$('#yt-ep').hidden=true;
+  namer?.stop();
+  if(kind==='quiz'){current=-1;act=video;idle=video2;video.dataset.src='';base=.45;vol();syncLista();quizTick();}
+  else{video.pause();video2.pause();}
+  if(kind==='musica'){base=.85;vol();musicTick();}
+  if(kind==='cuento'||kind==='cuentos'){mode='cuento';storyQueue=kind==='cuentos'?[...AUDIO_STORIES.map((_,i)=>'a'+i),...STORIES.map(s=>s.id)]:[arg??'0'];nextStory();}
+  renderMode(kind);
+}
+setInterval(()=>{if(mode==='quiz')quizTick();else if(mode==='musica')musicTick();},250);
+function route(m,arg){
+  if(m==='lista')startLista();else if(/^episodio/.test(m))startEpisode(m);
+  else if(m==='quiz'||m==='musica')startShow(m);
+  else if(m==='cuento')startShow('cuento',arg??$('#yt-story').value);else if(m==='cuentos')startShow('cuentos');
+  else startLista();
+}
+
 /* ---------- Modos ---------- */
 let soundOn=false;
 function startLista(){
+  stopShow();
   mode='lista';current=-1;act=video;idle=video2;video.dataset.src='';stage.classList.remove('episode','vertical-src');bgVideo.pause();bgVideo.removeAttribute('src');
   $('#yt-ep').hidden=true;base=.5;vol();
   namer?.start();namer?.setSound(soundOn);syncLista();renderMode();
 }
 function loadEpisode(key){ep=cfg[key];epVideos=(ep.videos||[]).filter(v=>v.src);playEpisode(0);}
 function startEpisode(which='episodio1'){
+  stopShow();
   const keys=which==='episodios'?EPS.slice():EPS.includes(which)?[which]:[];
   if(!keys.length){$('#yt-note').textContent=X[lang].noEp;startLista();return;}
   epQueue=keys;ep=cfg[epQueue.shift()];epVideos=ep.videos.filter(v=>v.src);
@@ -181,6 +276,7 @@ function tick(){
   const date=now.toLocaleDateString(T.loc,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   $('#yt-date').textContent=date.charAt(0).toLocaleUpperCase(T.loc)+date.slice(1);
   $('#yt-read').textContent='✨ '+T.namesRead(fmtN(window.ALDEA_LIVE_NAMES?.namesToday?.()||0,T.loc));
+  $('#yt-mini').textContent=`🎄 ${d.xmas?T.xmas:T.days(d.days)} · ${p2(d.h)}:${p2(d.m)}:${p2(d.s)}   🕒 ${p2(now.getHours())}:${p2(now.getMinutes())}:${p2(now.getSeconds())}`;
 }
 const move=$('#yt-move');let pending=null;
 function tickerText(){const T=STR[lang],d=countdown(),list=T.ticker(d.xmas?-1:d.days);if(recent.length)list.splice(1,0,`${T.recent} ${recent.join(' · ')}`);return list.join('     ✦     ');}
@@ -213,20 +309,23 @@ addEventListener('message',e=>{
   const d=e.data;
   if(d.cmd==='sound')enableSound();else if(d.cmd==='mute')mute();
   else if(d.cmd==='lista')startLista();else if(d.cmd==='episodio')startEpisode(typeof d.which==='string'?d.which:'episodio1');
+  else if(['quiz','musica','cuentos'].includes(d.cmd))route(d.cmd);
   else if(d.cmd==='lang'&&STR[d.lang]){lang=d.lang;namer?.setLang(lang);texts();renderMode();}
 });
 for(const b of $$('[data-lang]'))b.addEventListener('click',()=>{lang=b.dataset.lang;namer?.setLang(lang);texts();renderMode();});
 $('#yt-eps').innerHTML=EPS.map(k=>`<button type="button" data-modo="${k}">🎬 ${esc(cfg[k].corto||('Episodio '+k.slice(8)))}</button>`).join('')+(EPS.length>1?`<button type="button" data-modo="episodios">🎬 ${esc(X[lang].all)}</button>`:'');
-for(const b of $$('[data-modo]'))b.addEventListener('click',()=>{if(b.dataset.modo==='lista')startLista();else startEpisode(b.dataset.modo);});
+$('#yt-story').innerHTML=[...AUDIO_STORIES.map((a,i)=>`<option value="a${i}">🔊 ${esc(a.titulo)}</option>`),...STORIES.map(s=>`<option value="${s.id}">${esc(s.title)}</option>`)].join('');
+if(params.get('nombre'))$('#yt-story-name').value=params.get('nombre');
+for(const b of $$('[data-modo]'))b.addEventListener('click',()=>route(b.dataset.modo));
 $('#yt-full').addEventListener('click',()=>{const el=document.documentElement;(el.requestFullscreen||el.webkitRequestFullscreen)?.call(el);});
-addEventListener('keydown',e=>{if(e.key==='f')$('#yt-full').click();if(e.key==='e')startEpisode('episodios');if(e.key==='l')startLista();});
+addEventListener('keydown',e=>{if(e.target.matches?.('input,select,textarea'))return;if(e.key==='f')$('#yt-full').click();if(e.key==='e')startEpisode('episodios');if(e.key==='l')startLista();if(e.key==='q')route('quiz');if(e.key==='m')route('musica');if(e.key==='c')route('cuentos');});
 
 /* ---------- Arranque ---------- */
 setInterval(tick,1000);setInterval(syncLista,250);
 setInterval(()=>refreshTicker(),60000);
 texts();
 checkFeatured().then(()=>{
-  const m=params.get('modo')||'';if(/^episodio/.test(m))startEpisode(m);else startLista();
+  route(params.get('modo')||'lista',params.get('cuento')||undefined);
   enableSound();   // en OBS suena solo; en el navegador, si lo bloquea, aparece el botón
 });
 })();

@@ -115,3 +115,60 @@ body:not(.obs):not(.embed) .yt-note{flex-basis:100%}
 body.embed .yt-controls{display:none}
 
 .yt-tap{position:fixed;inset:0;z-index:20;display:grid;place-items:center;width:100%;border:0;background:#0009;color:#fff;font:800 clamp(18px,3vw,34px) 'DM Sans',sans-serif;cursor:pointer}
+
+/* ===== Quiz, cuentos y solo música ===== */
+.yt-show{position:absolute;inset:0;z-index:2;overflow:hidden}
+.yt-mini{display:none;position:absolute;top:104px;left:50%;z-index:3;transform:translateX(-50%);padding:8px 20px;border-radius:999px;background:#7a0d1dee;border:1px solid #ffe7b066;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;white-space:pre}
+.yt-stage.show .yt-mini{display:block}
+.yt-stage.show .yt-panel,.yt-stage.show .yt-ep,.yt-stage.show .yt-captions{display:none!important}
+.yt-stage.show-cuento .yt-video,.yt-stage.show-musica .yt-video{visibility:hidden}
+.yt-stage.show-quiz .yt-show{background:#0007}
+.yt-stage.show .yt-music{top:30px;right:auto;left:50%;transform:translateX(-50%);max-width:640px}
+.yt-stage.show-musica .yt-music{display:none}
+/* Quiz */
+.ys-quiz{position:absolute;left:50%;top:170px;width:1240px;transform:translateX(-50%);padding:34px 44px;border-radius:28px;background:linear-gradient(160deg,#fffaf0f5,#fff1dcf2);color:#3a1a20;box-shadow:0 24px 60px #000a;border:3px solid #ffe7b0}
+.ys-chip{display:inline-block;padding:6px 16px;border-radius:999px;background:#b9142b;color:#fff;font-size:20px;font-weight:800;letter-spacing:.04em}
+.ys-quiz h2{margin:16px 0 22px;font:700 54px/1.15 'Cormorant Garamond',serif}
+.ys-opts{display:grid;gap:14px;margin:0;padding:0;list-style:none}
+.ys-opts li{display:flex;align-items:center;gap:18px;padding:14px 20px;border-radius:18px;background:#fff;border:2px solid #ecd9b8;font-size:36px;font-weight:700;transition:all .4s}
+.ys-opts b{display:grid;place-items:center;flex:none;width:58px;height:58px;border-radius:50%;background:#7a0d1d;color:#ffe7b0;font-size:30px}
+.ys-quiz.reveal li[data-ok=true]{background:#1f8a4c;border-color:#1f8a4c;color:#fff;transform:scale(1.02)}
+.ys-quiz.reveal li[data-ok=true] b{background:#fff;color:#1f8a4c}
+.ys-quiz.reveal li[data-ok=false]{opacity:.35}
+.ys-timer{position:relative;height:14px;margin:22px 70px 0 0;border-radius:999px;background:#ecd9b8}
+.ys-timer i{position:absolute;inset:0 auto 0 0;border-radius:999px;background:linear-gradient(90deg,#b9142b,#e5153a);transition:width .25s linear}
+.ys-timer span{position:absolute;right:-70px;top:50%;transform:translateY(-50%);width:56px;text-align:center;font-size:34px;font-weight:900;color:#b9142b}
+.ys-expl{display:none;margin:16px 0 0;font-size:28px;font-weight:600}
+.ys-quiz.reveal .ys-expl{display:block}.ys-quiz.reveal .ys-timer{visibility:hidden}
+.ys-chat{margin:14px 0 0;font-size:26px;font-weight:800;color:#b9142b;text-align:center}
+.ys-quiz.reveal .ys-chat{display:none}
+/* Cuentos y música: imagen borrosa de fondo + imagen completa + texto */
+.ys-story,.ys-slide{position:absolute;inset:0}
+.ys-slide{opacity:0;transition:opacity 1.5s}.ys-slide.on{opacity:1}
+.ys-bg{position:absolute;inset:-40px;background:center/cover no-repeat;filter:blur(34px) brightness(.5) saturate(1.2)}
+.ys-card{position:absolute;left:90px;top:170px;height:760px;max-width:900px;object-fit:contain;border-radius:22px;border:4px solid #ffe7b0;box-shadow:0 24px 60px #000b}
+.ys-slide .ys-card{animation:ys-zoom 12s ease-out both}
+@keyframes ys-zoom{from{transform:scale(1)}to{transform:scale(1.05)}}
+.ys-text{position:absolute;right:90px;top:200px;width:820px;padding:34px 40px;border-radius:26px;background:#fffaf0f2;color:#3a1a20;box-shadow:0 24px 60px #000a;border:3px solid #ffe7b0}
+.ys-text small{display:block;font-size:20px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b9142b}
+.ys-text h2{margin:8px 0 14px;font:700 56px/1.1 'Cormorant Garamond',serif}
+.ys-text p{margin:0;font-size:32px;line-height:1.45}
+.ys-page span{color:#3a1a2066}.ys-page span.on{color:#3a1a20}.ys-page span.now{color:#b9142b}
+.ys-song{display:block;margin-top:20px;font-size:24px;font-weight:800;color:#7a0d1d}
+.ys-song:empty{display:none}
+/* Vertical */
+.yt-stage.vertical .yt-mini{top:96px;font-size:20px}
+.yt-stage.vertical .ys-quiz{top:220px;width:980px;padding:30px 32px}
+.yt-stage.vertical .ys-quiz h2{font-size:52px}.yt-stage.vertical .ys-opts li{font-size:36px}
+.yt-stage.vertical .ys-card{left:50%;top:170px;height:900px;max-width:960px;transform:translateX(-50%)}
+.yt-stage.vertical .ys-slide .ys-card{animation:none}
+.yt-stage.vertical .ys-text{left:50%;right:auto;top:auto;bottom:110px;width:980px;transform:translateX(-50%);padding:28px 32px}
+.yt-stage.vertical .ys-text h2{font-size:50px}.yt-stage.vertical .ys-text p{font-size:31px}
+/* Ajustes: el rótulo de la canción no se estira y el marco abraza la imagen */
+.yt-stage.show .yt-music{bottom:auto}
+.yt-stage.vertical.show .yt-music{top:150px;left:50%;right:auto;transform:translateX(-50%)}
+.ys-card{width:auto;height:auto;max-height:760px;max-width:900px}
+.yt-stage:not(.vertical) .ys-slide .ys-card{left:230px;top:150px;max-height:820px;max-width:620px}
+.yt-stage:not(.vertical) .ys-slide .ys-text{left:820px;right:auto;top:330px;width:900px}
+.yt-stage.vertical .ys-card{height:auto;max-height:900px;max-width:960px}
+.yt-stage.vertical.show-cuento .ys-card{top:230px}

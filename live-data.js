@@ -56,6 +56,11 @@ window.ALDEA_LIVE = {
     { src: 'assets/en-vivo/musica/kingdom-of-frost.mp3', title: 'The Kingdom of Frost', gain: 0.75 },
     { src: 'assets/en-vivo/musica/carol-of-the-bells-epic.mp3', title: 'Carol of the Bells · Epic Version', gain: 0.38 }
   ],
+  /* Cuentos en audio para transmitir (se eligen en «Contar cuento», en vertical y horizontal).
+     Para agregar uno: guarda el audio en assets/cuentos-audio/ y añade una línea:
+     { titulo: 'Nombre del cuento', src: 'assets/cuentos-audio/archivo.mp3', imagen: 'assets/aldea-luces.webp' }
+     (palabras: [[inicio, fin, 'palabra'], …] opcional, para subtítulos palabra por palabra). */
+  cuentosAudio: [],
   /* Transmisión HORIZONTAL para YouTube (en-vivo-youtube.html, 1920 × 1080).
      Mismo contenido que el vertical (lista de los buenos con voz y polvo de estrellas, contador,
      hora y cintillo) con los videos de Santa con su bolsa lanzando polvo mágico, grabados en 16:9.
