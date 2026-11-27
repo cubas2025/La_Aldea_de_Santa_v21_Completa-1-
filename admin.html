@@ -75,6 +75,12 @@
         <ol id="ad-air-queue" class="ad-air-queue"></ol>
         <p class="fine">Si al enviar sale un error, ejecuta una vez <code>supabase/actualizacion-nombres-al-aire.sql</code> en el SQL Editor de Supabase.</p>
       </form>
+      <form id="ad-score-form" class="panel admin-card"><h2>🏆 Campeones de la partida</h2>
+        <p>Al terminar cada partida del quiz, escribe quiénes acertaron, uno por línea: <code>María López — 9</code> (también puedes añadir el lugar: <code>María López — 9 — Lima, Perú</code>). Sabelín los felicita en vivo al empezar su animación.</p>
+        <label>Campeones<textarea name="puntajes" rows="3" maxlength="2000" placeholder="María López — 9&#10;José Pérez — 10 — Bogotá"></textarea></label>
+        <button type="submit" class="button">Enviar puntajes</button><p id="ad-score-status" class="fine" role="status"></p>
+        <p class="fine">Si al enviar sale un error, ejecuta una vez <code>supabase/actualizacion-puntajes.sql</code> en el SQL Editor de Supabase.</p>
+      </form>
       <form id="ad-elf-form" class="panel admin-card"><h2>📜 Actualización de nombres · Estelvia</h2>
         <p>Nombre completo y lugar desde donde nos ven. Estelvia los lee en vivo durante la «Actualización de los nombres». Puedes pegar varios, uno por línea: <code>María Fernanda López — Lima, Perú</code></p>
         <label>Nombre completo<textarea name="nombres" rows="3" maxlength="2000" placeholder="María Fernanda López — Lima, Perú"></textarea></label>

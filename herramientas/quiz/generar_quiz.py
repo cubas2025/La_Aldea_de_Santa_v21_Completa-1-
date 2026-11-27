@@ -169,7 +169,7 @@ print('con tablas:', len(OUT))
 
 # 4) Razonamiento numérico y lógica (hasta completar 10 000)
 cosas = ['regalos', 'galletas', 'estrellas', 'cartas', 'renos', 'bastones de caramelo', 'juguetes', 'adornos', 'velas', 'campanas']
-quien = ['Santa', 'Sabelina', 'Tinkarel', 'Estelvia', 'Nivarel', 'Melodina', 'Zafiriel', 'Nortelius', 'Boreal', 'Luminara']
+quien = ['Santa', 'Sabelín', 'Tinkarel', 'Estelvia', 'Nivarel', 'Melodina', 'Zafiriel', 'Nortelius', 'Boreal', 'Luminara']
 def near(n, k=2):
     s = set()
     while len(s) < k:

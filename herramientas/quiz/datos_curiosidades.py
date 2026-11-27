@@ -4,7 +4,7 @@
 GUARDIANES = [
  # (nombre, título, objeto mágico, hogar, misión corta, personalidad, frase)
  ('Sanoma', 'la guardiana de los cuentos', 'el libro de las historias infinitas', 'la Gran Biblioteca Encantada', 'despertar la imaginación con cuentos', 'cariñosa, alegre e imaginativa', 'Cada cuento es una puerta hacia un mundo maravilloso'),
- ('Sabelina', 'la maestra del conocimiento', 'el libro del conocimiento infinito', 'la Academia Mágica de Santa', 'dirigir los quiz educativos', 'inteligente, paciente, divertida y curiosa', 'Cada nuevo aprendizaje enciende una estrella en tu corazón'),
+ ('Sabelín', 'la maestra del conocimiento', 'el libro del conocimiento infinito', 'la Academia Mágica de Santa', 'dirigir los quiz educativos', 'inteligente, paciente, divertida y curiosa', 'Cada nuevo aprendizaje enciende una estrella en tu corazón'),
  ('Elarina', 'la guardiana de la gran lista', 'el pergamino dorado de la bondad', 'el Gran Salón de la Lista', 'ayudar a Santa a preparar la gran revelación navideña', 'responsable, observadora, justa y misteriosa', 'Las pequeñas buenas acciones pueden iluminar el mundo entero'),
  ('Luminara', 'la maestra de la magia', 'el cristal de la luz eterna', 'el Santuario de los Portales Mágicos', 'crear experiencias mágicas y aventuras', 'aventurera, soñadora, alegre y sorprendente', 'La magia comienza donde despierta tu imaginación'),
  ('Estelvia', 'la guardiana de las cartas', 'el bolso de las cartas viajeras', 'la Gran Oficina Postal del Polo Norte', 'recibir las cartas y organizar los deseos', 'amable, emotiva, organizada y entusiasta', 'Una pequeña carta puede guardar un universo de sueños'),
