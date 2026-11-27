@@ -184,21 +184,33 @@ const SCHED=(()=>{const rounds=[];let t=0;const n=Math.floor(QUIZ.length/PER);
 function quizPos(now){
   const R=SCHED.rounds,c=Math.floor(now/SCHED.total),p=now%SCHED.total;let lo=0,hi=R.length-1;
   while(lo<hi){const m=(lo+hi+1)>>1;if(R[m].s<=p)lo=m;else hi=m-1;}
-  const r=R[lo],round=c*R.length+lo;
-  if(p-r.s<HOST)return {host:true,round,pos:p-r.s};
+  const r=R[lo],round=c*R.length+lo,startAbs=c*SCHED.total+r.s,prevAbs=lo>0?c*SCHED.total+R[lo-1].s:(c-1)*SCHED.total+R[R.length-1].s;
+  if(p-r.s<HOST)return {host:true,round,pos:p-r.s,startAbs,prevAbs};
   let qn=r.qs.findIndex(x=>p>=x.s&&p<x.s+x.d);if(qn<0)qn=PER-1;const x=r.qs[qn];
   return {host:false,round,qn,t:p-x.s,show:x.show,k:lo*PER+qn};
 }
 let quizIdx=-1,quizQ=null,quizOpts=[],hostKey='',hostSaid=-1;
 function partidaDelDia(now,round){const d=new Date(now),m=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();return round-quizPos(m).round+1;}
+function startElfWatch(){if(!elfWatch&&window.ALDEA_DB?.configured&&window.ALDEA_DB.watchElf){elfWatch=true;window.ALDEA_DB.watchElf(elfRow).catch(()=>{elfWatch=false;});}}
+function renderBand(){
+  let band=$('#yt-names');
+  if(!band){band=document.createElement('div');band.id='yt-names';band.className='ys-names';stage.append(band);}
+  band.hidden=mode!=='quiz'||!elfBand.length;if(band.hidden)return;
+  const key=elfBand.map(r=>r.id).join(',');if(key===bandKey)return;bandKey=key;
+  const fresh=r=>Date.now()-new Date(r.creado).getTime()<120000;
+  const items=elfBand.map(r=>`<span class="${fresh(r)?'new':''}">${fresh(r)?'✨ ':''}${esc(r.nombre)}${r.lugar?` <small>(${esc(r.lugar)})</small>`:''}</span>`).join('<i>✦</i>');
+  band.innerHTML=`<b>📜 Estelvia envió a Santa</b><div class="ys-names-track"><div class="ys-names-move">${items}<i>✦</i>${items}<i>✦</i></div></div>`;
+  const mv=band.querySelector('.ys-names-move');mv.style.animationDuration=Math.max(25,elfBand.length*7)+'s';
+}
 function quizTick(){
   if(!QUIZ.length||!SCHED.rounds.length)return;
+  startElfWatch();renderBand();
   const now=Date.now(),P=quizPos(now),L=Y[lang],num=partidaDelDia(now,P.round);
   if(P.host&&HOSTS){
-    const plan=HOSTS.build(P.round,num),key='h'+P.round,pos=P.pos;
+    const conHora=Math.floor(P.startAbs/3600000)!==Math.floor(P.prevAbs/3600000),plan=HOSTS.build(P.round,num,conHora),key='h'+P.round,pos=P.pos;
     if(hostKey!==key){
       hostKey=key;quizIdx=-1;hostSaid=-1;
-      show.innerHTML=`<div class="ys-quiz ys-host"><span class="ys-chip">🎅 Sabelina · ${esc(L.quiz)} · Partida ${num}</span><p class="ys-kind"></p><p class="ys-line"></p><div class="ys-score">🏆 ¿Cuántas acertaste? Escríbelo en los comentarios: <b>__ / 10</b></div><p class="ys-chat ys-start"></p></div>`;
+      show.innerHTML=`<div class="ys-quiz ys-host"><span class="ys-chip">🎅 Sabelín · ${esc(L.quiz)} · Partida ${num}</span><p class="ys-kind"></p><p class="ys-line"></p><div class="ys-score">🏆 ¿Cuántas acertaste? Escríbelo en los comentarios: <b>__ / 10</b></div><p class="ys-chat ys-start"></p></div>`;
     }
     let idx=-1;for(let i=0;i<plan.length;i++)if(pos>=plan[i].t)idx=i;
     const line=show.querySelector('.ys-line');
@@ -289,15 +301,15 @@ const ELF_RELLENO=['¿Quieres que tu nombre llegue hoy a Santa? Escribe tu nombr
   'Cada nombre que me escriben lo llevo con cuidado en mi bolso de cartas viajeras.','¡Qué lindo es ver tantos niños de toda Latinoamérica! Escriban su país en el chat.',
   'Santa me pidió que no se me escape ningún nombre. ¡Escríbanlos con su ciudad!','Ser amable es la magia más poderosa del mundo. ¡Nunca lo olviden!'];
 let elfQ=[],elfSeen=new Set(),elfWatch=false,elfT0=0,elfIdx=-1,elfLast=-1,elfN=Math.floor(Math.random()*8);
-function elfRow(r){if(!r||elfSeen.has(r.id))return;elfSeen.add(r.id);if(mode!=='duende'&&new Date(r.creado).getTime()<Date.now()-600000)return;elfQ.push(r);}
+let elfBand=[],bandKey='';
+function elfRow(r){if(!r||elfSeen.has(r.id))return;elfSeen.add(r.id);elfBand.unshift(r);elfBand.length=Math.min(elfBand.length,15);if(mode!=='duende'&&new Date(r.creado).getTime()<Date.now()-600000)return;elfQ.push(r);}
 function startElf(){
   stopShow();mode='duende';elfT0=Date.now();elfIdx=-1;elfLast=-1;
   stage.classList.remove('episode','vertical-src');stage.classList.add('show','show-duende');show.hidden=false;$('#yt-ep').hidden=true;namer?.stop();
   video.pause();video2.pause();base=.3;vol();
   if(ELF.video){video.loop=true;video.muted=true;video.src=ELF.video;video.classList.remove('off');video.play().catch(()=>{});}
   show.innerHTML=`<div class="ys-elf">${ELF.video?'':`<div class="ys-bg" style="background-image:url('${esc(ELF.imagen||'assets/santa-correo.webp')}')"></div>`}<div class="ys-elf-card"><span class="ys-chip">📜 Estelvia · Guardiana de las cartas</span><h2>Actualización de los nombres para Santa</h2><p class="ys-elf-name"></p><p class="ys-elf-place"></p><p class="ys-elf-line"></p><p class="ys-chat ys-elf-left"></p></div></div>`;
-  if(!elfWatch&&window.ALDEA_DB?.configured&&window.ALDEA_DB.watchElf){elfWatch=true;window.ALDEA_DB.watchElf(elfRow).catch(()=>{elfWatch=false;});}
-  renderMode('duende');elfTick();
+  startElfWatch();renderMode('duende');elfTick();
 }
 function elfTick(){
   if(mode!=='duende')return;
@@ -320,12 +332,12 @@ function startNoche(){
   bgVideo.pause();bgVideo.removeAttribute('src');$('#yt-ep').hidden=true;base=.5;vol();
   namer?.setLabel(X[lang].noche);namer?.start();namer?.setSound(soundOn);syncLista();renderMode('nochebuena');refreshTicker(true);
 }
-function stopShow(){if(mode==='duende'){video.pause();video.removeAttribute('src');video.loop=false;}hush();hostKey='';clearTimeout(showTimer);clearTimeout(phraseT);phrase?.pause();stage.classList.remove('noche');namer?.setLabel('');showAudio?.pause();showAudio=null;show.innerHTML='';show.hidden=true;quizIdx=-1;slideIdx=-1;stage.classList.remove('show','show-quiz','show-musica','show-tarjetas','show-cuento','show-duende');}
+function stopShow(){const nb=$('#yt-names');if(nb)nb.hidden=true;if(mode==='duende'){video.pause();video.removeAttribute('src');video.loop=false;}hush();hostKey='';clearTimeout(showTimer);clearTimeout(phraseT);phrase?.pause();stage.classList.remove('noche');namer?.setLabel('');showAudio?.pause();showAudio=null;show.innerHTML='';show.hidden=true;quizIdx=-1;slideIdx=-1;stage.classList.remove('show','show-quiz','show-musica','show-tarjetas','show-cuento','show-duende');}
 function startShow(kind,arg){
   stopShow();if(isEp()){video.pause();}bgVideo.pause();bgVideo.removeAttribute('src');
   mode=kind;stage.classList.remove('episode','vertical-src');stage.classList.add('show','show-'+(kind==='cuentos'?'cuento':kind));show.hidden=false;$('#yt-ep').hidden=true;
   namer?.stop();
-  if(kind==='quiz'){current=-1;act=video;idle=video2;video.dataset.src='';base=.45;vol();syncLista();quizTick();}
+  if(kind==='quiz'){refreshTicker(true);current=-1;act=video;idle=video2;video.dataset.src='';base=.45;vol();syncLista();quizTick();}
   else if(kind!=='musica'){video.pause();video2.pause();}
   if(kind==='tarjetas'){base=.85;vol();musicTick();}
   if(kind==='musica'){current=-1;act=video;idle=video2;video.dataset.src='';base=.85;vol();syncLista();laponiaTick();}
@@ -403,7 +415,7 @@ function tick(){
   $('#yt-mini').textContent=`🎄 ${d.xmas?T.xmas:T.days(d.days)} · ${p2(d.h)}:${p2(d.m)}:${p2(d.s)}   🕒 ${p2(now.getHours())}:${p2(now.getMinutes())}:${p2(now.getSeconds())}`;
 }
 const move=$('#yt-move');let pending=null;
-function tickerText(){const T=STR[lang],d=countdown(),list=T.ticker(d.xmas?-1:d.days);if(mode==='nochebuena')list.unshift(X[lang].nocheTk);if(recent.length)list.splice(1,0,`${T.recent} ${recent.join(' · ')}`);return list.join('     ✦     ');}
+function tickerText(){const T=STR[lang],d=countdown(),list=T.ticker(d.xmas?-1:d.days);if(mode==='nochebuena')list.unshift(X[lang].nocheTk);if(mode==='quiz'&&HOSTS?.cintillo)list.unshift(...HOSTS.cintillo);if(recent.length)list.splice(1,0,`${T.recent} ${recent.join(' · ')}`);return list.join('     ✦     ');}
 function applyTicker(t){move.innerHTML=`<span>${esc(t)}</span><span>${esc(t)}</span>`;move.style.animationDuration=Math.max(36,Math.round(t.length*.24))+'s';}
 move.addEventListener('animationiteration',()=>{if(pending){applyTicker(pending);pending=null;}});
 function refreshTicker(force){const t=tickerText();if(force||!move.childElementCount)applyTicker(t);else pending=t;}

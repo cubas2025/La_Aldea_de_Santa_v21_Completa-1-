@@ -216,3 +216,15 @@ body.embed .yt-controls{display:none}
 .ys-elf-card .ys-chat{color:#ffe7b0}
 .yt-stage.vertical .ys-elf-card{width:980px;top:230px;padding:30px 30px}
 .yt-stage.vertical .ys-elf-name{font-size:84px}
+
+/* Franja de nombres enviados a Santa, debajo del quiz */
+.ys-names{position:absolute;left:0;right:0;bottom:64px;z-index:4;height:58px;display:flex;align-items:center;background:linear-gradient(90deg,#0b1f17f2,#123a2bf2);border-top:2px solid #ffe7b0;overflow:hidden}
+.ys-names[hidden]{display:none}
+.ys-names b{flex:none;align-self:stretch;display:grid;place-items:center;padding:0 22px;background:#1f8a4c;color:#fff;font-size:21px;font-weight:900}
+.ys-names-track{flex:1;overflow:hidden;white-space:nowrap}
+.ys-names-move{display:inline-flex;align-items:center;gap:18px;padding-left:18px;animation:yt-scroll 40s linear infinite}
+.ys-names-move span{font-size:26px;font-weight:800;color:#fff}
+.ys-names-move span small{font-size:20px;font-weight:600;color:#bff3d1}
+.ys-names-move span.new{color:#ffd65c}
+.ys-names-move i{font-style:normal;color:#ffe7b0}
+.yt-stage.vertical .ys-names{height:64px}
