@@ -58,20 +58,21 @@ window.ALDEA_LIVE = {
   ],
   /* Transmisión HORIZONTAL para YouTube (en-vivo-youtube.html, 1920 × 1080).
      Mismo contenido que el vertical (lista de los buenos con voz y polvo de estrellas, contador,
-     hora y cintillo) con los videos de Santa con su bolsa lanzando polvo mágico, grabados en 16:9. */
+     hora y cintillo) con los videos de Santa con su bolsa lanzando polvo mágico, grabados en 16:9.
+     Cada video dura 10 s exactos (un nombre) y Santa lanza el polvo en el segundo 4,6: justo cuando se revela el nombre. */
   horizontal: {
     playlist: [
-      { src: 'assets/en-vivo/horizontal/polvo-luminoso.mp4', title: 'Santa lanza polvo luminoso en el sendero', title_en: 'Santa tosses glowing dust on the path', title_pt: 'Papai Noel lança pó luminoso no caminho', duration: 7.92, repeat: 2 },
-      { src: 'assets/en-vivo/horizontal/aurora-boreal.mp4', title: 'Santa libera magia bajo la aurora boreal', title_en: 'Santa releases magic under the northern lights', title_pt: 'Papai Noel libera magia sob a aurora boreal', duration: 7.92, repeat: 2 },
-      { src: 'assets/en-vivo/horizontal/fuegos-de-estrellas.mp4', title: 'Santa enciende el cielo con estrellas', title_en: 'Santa lights up the sky with stars', title_pt: 'Papai Noel ilumina o céu com estrelas', duration: 7.92, repeat: 2 },
-      { src: 'assets/en-vivo/horizontal/renos-y-cabana.mp4', title: 'Santa esparce magia junto a sus renos', title_en: 'Santa scatters magic beside his reindeer', title_pt: 'Papai Noel espalha magia junto às renas', duration: 7.92, repeat: 2 },
-      { src: 'assets/en-vivo/horizontal/aldea-al-atardecer.mp4', title: 'Santa reparte polvo mágico en la aldea', title_en: 'Santa sprinkles magic dust in the village', title_pt: 'Papai Noel espalha pó mágico na vila', duration: 7.92, repeat: 2 },
-      { src: 'assets/en-vivo/horizontal/polvo-dorado-lago.mp4', title: 'Santa lanza polvo dorado sobre el lago', title_en: 'Santa throws golden dust over the lake', title_pt: 'Papai Noel lança pó dourado sobre o lago', duration: 7.92, repeat: 2 },
-      { src: 'assets/en-vivo/horizontal/sol-de-invierno.mp4', title: 'Santa ilumina la aldea con su bolsa mágica', title_en: 'Santa lights the village with his magic bag', title_pt: 'Papai Noel ilumina a vila com sua bolsa mágica', duration: 7.92, repeat: 2 },
-      { src: 'assets/en-vivo/horizontal/cielo-nocturno.mp4', title: 'Santa lanza polvo de estrellas al cielo', title_en: 'Santa throws stardust into the night sky', title_pt: 'Papai Noel lança pó de estrelas ao céu', duration: 7.92, repeat: 2 },
-      { src: 'assets/en-vivo/horizontal/carrusel.mp4', title: 'Santa llena de estrellas el carrusel', title_en: 'Santa fills the carousel with stars', title_pt: 'Papai Noel enche o carrossel de estrelas', duration: 7.92, repeat: 2 },
-      { src: 'assets/en-vivo/horizontal/sendero-de-luces.mp4', title: 'Santa esparce polvo dorado en el sendero iluminado', title_en: 'Santa sprinkles golden dust on the glowing path', title_pt: 'Papai Noel espalha pó dourado no caminho iluminado', duration: 7.92, repeat: 2 },
-      { src: 'assets/en-vivo/horizontal/estrella-fugaz.mp4', title: 'Santa dibuja una estrella fugaz', title_en: 'Santa draws a shooting star', title_pt: 'Papai Noel desenha uma estrela cadente', duration: 10, repeat: 2 }
+      { src: 'assets/en-vivo/horizontal/polvo-luminoso.mp4', title: 'Santa lanza polvo luminoso en el sendero', title_en: 'Santa tosses glowing dust on the path', title_pt: 'Papai Noel lança pó luminoso no caminho', duration: 10, repeat: 1 },
+      { src: 'assets/en-vivo/horizontal/aurora-boreal.mp4', title: 'Santa libera magia bajo la aurora boreal', title_en: 'Santa releases magic under the northern lights', title_pt: 'Papai Noel libera magia sob a aurora boreal', duration: 10, repeat: 1 },
+      { src: 'assets/en-vivo/horizontal/fuegos-de-estrellas.mp4', title: 'Santa enciende el cielo con estrellas', title_en: 'Santa lights up the sky with stars', title_pt: 'Papai Noel ilumina o céu com estrelas', duration: 10, repeat: 1 },
+      { src: 'assets/en-vivo/horizontal/renos-y-cabana.mp4', title: 'Santa esparce magia junto a sus renos', title_en: 'Santa scatters magic beside his reindeer', title_pt: 'Papai Noel espalha magia junto às renas', duration: 10, repeat: 1 },
+      { src: 'assets/en-vivo/horizontal/aldea-al-atardecer.mp4', title: 'Santa reparte polvo mágico en la aldea', title_en: 'Santa sprinkles magic dust in the village', title_pt: 'Papai Noel espalha pó mágico na vila', duration: 10, repeat: 1 },
+      { src: 'assets/en-vivo/horizontal/polvo-dorado-lago.mp4', title: 'Santa lanza polvo dorado sobre el lago', title_en: 'Santa throws golden dust over the lake', title_pt: 'Papai Noel lança pó dourado sobre o lago', duration: 10, repeat: 1 },
+      { src: 'assets/en-vivo/horizontal/sol-de-invierno.mp4', title: 'Santa ilumina la aldea con su bolsa mágica', title_en: 'Santa lights the village with his magic bag', title_pt: 'Papai Noel ilumina a vila com sua bolsa mágica', duration: 10, repeat: 1 },
+      { src: 'assets/en-vivo/horizontal/cielo-nocturno.mp4', title: 'Santa lanza polvo de estrellas al cielo', title_en: 'Santa throws stardust into the night sky', title_pt: 'Papai Noel lança pó de estrelas ao céu', duration: 10, repeat: 1 },
+      { src: 'assets/en-vivo/horizontal/carrusel.mp4', title: 'Santa llena de estrellas el carrusel', title_en: 'Santa fills the carousel with stars', title_pt: 'Papai Noel enche o carrossel de estrelas', duration: 10, repeat: 1 },
+      { src: 'assets/en-vivo/horizontal/sendero-de-luces.mp4', title: 'Santa esparce polvo dorado en el sendero iluminado', title_en: 'Santa sprinkles golden dust on the glowing path', title_pt: 'Papai Noel espalha pó dourado no caminho iluminado', duration: 10, repeat: 1 },
+      { src: 'assets/en-vivo/horizontal/estrella-fugaz.mp4', title: 'Santa dibuja una estrella fugaz', title_en: 'Santa draws a shooting star', title_pt: 'Papai Noel desenha uma estrela cadente', duration: 10, repeat: 1 }
     ],
     /* Canción principal del horizontal: suena primero y vuelve entre cada canción de la lista «musica».
        Si el archivo todavía no está en la carpeta, se salta sola y sigue con las demás. */
