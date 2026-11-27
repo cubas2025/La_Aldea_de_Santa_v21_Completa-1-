@@ -1,0 +1,93 @@
+/* Transmisión horizontal 1920 × 1080 (YouTube). El escenario mide siempre 1920 × 1080 y se escala
+   a la ventana, así OBS y la pantalla completa ven exactamente lo mismo. Mismo estilo que el vertical. */
+:root{--red:#b9142b;--red-dark:#7a0d1d;--live:#e5153a;--gold:#ffe7b0;--ink:#0b0f1f}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;color:#fff;overflow:hidden;font-family:'DM Sans',system-ui,sans-serif}
+.yt-stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;overflow:hidden;background:#05070f;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center}
+.yt-video,.yt-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:transparent}
+.yt-bg{object-fit:cover;filter:blur(38px) brightness(.62) saturate(1.25);transform:scale(1.12);opacity:0;transition:opacity .4s}
+.yt-stage.vertical-src .yt-bg{opacity:1}
+.yt-sky{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
+
+/* Cabecera */
+.yt-top{position:absolute;top:34px;left:44px;right:44px;z-index:3;display:flex;align-items:center;gap:18px}
+.yt-badge{display:inline-flex;align-items:center;gap:10px;padding:9px 18px;border-radius:8px;background:var(--live);font-size:22px;font-weight:900;letter-spacing:.09em;box-shadow:0 4px 16px #0006}
+.yt-badge i{width:12px;height:12px;border-radius:50%;background:#fff;animation:yt-blink 1.2s infinite}
+.yt-brand{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:700;color:var(--gold);text-shadow:0 2px 10px #000}
+.yt-from{margin-left:auto;padding:8px 16px;border-radius:999px;background:#0009;border:1px solid #ffe7b055;font-size:18px;font-weight:700;letter-spacing:.12em;color:var(--gold)}
+@keyframes yt-blink{50%{opacity:.25}}
+
+/* Paneles laterales (fuera de la columna central donde está Santa) */
+.yt-panel{position:absolute;top:430px;z-index:3;width:500px;padding:24px 30px;border-radius:22px;background:linear-gradient(135deg,#7a0d1df0,#b9142be0);border:1.5px solid #ffe7b066;box-shadow:0 14px 40px #0009}
+.yt-left{left:64px;text-align:left}
+.yt-right{right:64px;text-align:right}
+.yt-panel>small{display:block;font-size:20px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.yt-days{display:block;margin:4px 0 10px;font-family:'Cormorant Garamond',serif;font-size:92px;line-height:1;font-weight:700}
+.yt-count{display:flex;gap:12px}
+.yt-count span{flex:1;display:grid;justify-items:center;padding:10px 0 8px;border-radius:14px;background:#0005;border:1px solid #ffe7b040}
+.yt-count b{font-size:56px;line-height:1;font-weight:900;font-variant-numeric:tabular-nums}
+.yt-count i{margin-top:4px;font-style:normal;font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.yt-now{margin:18px 0 0;padding-top:14px;border-top:1px solid #ffe7b040;font-size:22px;font-weight:600;line-height:1.25}
+.yt-now small{display:block;font-size:15px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.yt-clock{display:block;margin:2px 0 4px;font-size:96px;line-height:1;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:.02em;text-shadow:0 0 22px #ffe7b055}
+.yt-date{display:block;font-size:22px;font-weight:600}
+.yt-read{display:block;margin-top:10px;font-size:22px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums}
+.yt-recent{margin-top:14px;padding-top:12px;border-top:1px solid #ffe7b040}
+.yt-recent small{display:block;font-size:15px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.yt-recent ol{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin:8px 0 0;padding:0;list-style:none}
+.yt-recent li{padding:5px 14px;border-radius:999px;background:#0005;font-size:21px;font-weight:700}
+.yt-recent li:first-child{background:var(--gold);color:var(--red-dark);animation:yt-pop .5s ease-out}
+@keyframes yt-pop{from{transform:scale(.6);opacity:0}}
+
+/* Episodio: rótulo y subtítulos palabra por palabra */
+.yt-ep{position:absolute;top:118px;left:44px;z-index:3;padding:14px 26px;border-radius:14px;background:linear-gradient(90deg,#b9142bee,#7a0d1dcc);box-shadow:0 10px 30px #0008}
+.yt-ep small{display:block;font-size:17px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.yt-ep strong{font-family:'Cormorant Garamond',serif;font-size:44px}
+.yt-captions{position:absolute;left:50%;bottom:150px;z-index:4;max-width:1280px;margin:0;padding:14px 30px;border-radius:16px;background:#000b;transform:translateX(-50%);font-size:54px;font-weight:800;line-height:1.2;text-align:center;text-shadow:0 2px 6px #000}
+.yt-captions span{color:#ffffff66;transition:color .08s}
+.yt-captions span.on{color:#fff}
+.yt-captions span.now{color:var(--gold)}
+.yt-stage.episode .yt-panel{top:470px}
+.yt-stage.episode .yt-now{display:none}
+
+/* Música y cintillo */
+.yt-music{position:absolute;right:64px;bottom:84px;z-index:3;margin:0;padding:6px 16px;border-radius:999px;background:#0009;font-size:18px;font-weight:600;color:var(--gold);max-width:760px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.yt-music:empty{display:none}
+.yt-ticker{position:absolute;left:0;right:0;bottom:0;z-index:3;height:64px;display:flex;align-items:center;background:#0b0f1fe8;border-top:3px solid var(--live);overflow:hidden}
+.yt-tag{flex:none;align-self:stretch;display:grid;place-items:center;padding:0 26px;background:var(--live);font-size:22px;font-weight:900;letter-spacing:.09em}
+.yt-track{flex:1;overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent);mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent)}
+.yt-move{display:inline-flex;animation:yt-scroll 50s linear infinite;will-change:transform}
+.yt-move span{padding-right:4em;font-size:27px;font-weight:600;text-shadow:0 1px 2px #000}
+@keyframes yt-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Formato vertical (TikTok, 1080 × 1920): paneles compactos abajo, como en el vertical de la web */
+.yt-stage.vertical{width:1080px;height:1920px}
+.yt-stage.vertical .yt-top{top:30px;left:34px;right:34px}
+.yt-stage.vertical .yt-from{display:none}
+.yt-stage.vertical .yt-panel{top:auto;bottom:150px;width:486px;padding:18px 22px;border-radius:18px}
+.yt-stage.vertical .yt-left{left:36px}.yt-stage.vertical .yt-right{right:36px}
+.yt-stage.vertical .yt-panel>small{font-size:17px}
+.yt-stage.vertical .yt-days{font-size:64px;margin:2px 0 8px}
+.yt-stage.vertical .yt-count b{font-size:40px}.yt-stage.vertical .yt-count i{font-size:13px}
+.yt-stage.vertical .yt-clock{font-size:70px}
+.yt-stage.vertical .yt-date{font-size:19px}.yt-stage.vertical .yt-read{font-size:19px}
+.yt-stage.vertical .yt-now,.yt-stage.vertical .yt-recent{display:none}
+.yt-stage.vertical .yt-music{right:36px;bottom:80px;max-width:1000px;font-size:17px}
+.yt-stage.vertical .yt-captions{bottom:520px;max-width:1000px;font-size:46px}
+.yt-stage.vertical .yt-ep{top:110px;left:34px}
+.yt-stage.vertical.episode .yt-video{object-fit:cover}   /* el episodio es 16:9: llena el vertical centrado en Santa */
+
+/* Controles (fuera del escenario; se ocultan solos y no salen con ?obs=1) */
+.yt-controls{position:fixed;left:50%;top:16px;z-index:10;display:grid;gap:8px;justify-items:center;max-width:calc(100vw - 32px);padding:12px 16px;border-radius:16px;background:#fffffff2;color:#2a1a20;box-shadow:0 10px 30px #0008;transform:translateX(-50%);transition:opacity .3s}
+.yt-controls.hide{opacity:0;pointer-events:none}
+.yt-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:700}
+.yt-controls button{min-height:40px;padding:6px 14px;border:1px solid #d9c9cd;border-radius:999px;background:#fff;color:inherit;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.yt-controls button[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
+.yt-controls button.primary{padding:10px 22px;background:var(--red);border-color:var(--red);color:#fff;font-size:16px}
+.yt-note{margin:0;font-size:13px;text-align:center;max-width:620px}
+.yt-note:empty{display:none}
+body.obs .yt-controls{display:none}
+@media (prefers-reduced-motion:reduce){.yt-move{animation-duration:150s}}
+/* Durante un episodio: sin rótulo de música (el episodio trae la suya) y sin la caja vacía de nombres */
+.yt-stage.episode .yt-music{display:none}
+.yt-recent:has(ol:empty){display:none}

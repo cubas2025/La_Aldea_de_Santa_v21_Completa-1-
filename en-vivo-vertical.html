@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>Santa en vivo · TikTok 9:16</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="yt-live.css">
+</head><body data-formato="vertical">
+<!-- Transmisión vertical 1080 × 1920 para TikTok. En OBS: fuente «Navegador», 1080 × 1920,
+     «Controlar audio mediante OBS». Opciones en la dirección: ?lang=es|en|pt  ?modo=episodio1 a episodio6, ?modo=episodios (todos)  ?obs=1 (sin controles) -->
+<main class="yt-stage" id="yt-stage" aria-label="Santa en vivo">
+  <video class="yt-bg" id="yt-bg" muted playsinline preload="auto" aria-hidden="true"></video>
+  <video class="yt-video" id="yt-video" muted playsinline autoplay preload="auto"></video>
+  <canvas class="yt-sky" id="yt-sky" width="1080" height="1920" aria-hidden="true"></canvas>
+
+  <div class="yt-top"><span class="yt-badge"><i></i><b id="yt-live"></b></span><span class="yt-brand">La aldea de Santa</span><span class="yt-from" id="yt-from"></span></div>
+
+  <section class="yt-panel yt-left">
+    <small id="yt-faltan"></small>
+    <strong class="yt-days" id="yt-days"></strong>
+    <div class="yt-count"><span><b id="yt-h">00</b><i id="yt-lh"></i></span><span><b id="yt-m">00</b><i id="yt-lm"></i></span><span><b id="yt-s">00</b><i id="yt-ls"></i></span></div>
+    <p class="yt-now"><small id="yt-kicker"></small><span id="yt-title"></span></p>
+  </section>
+
+  <section class="yt-panel yt-right">
+    <small id="yt-hora-label"></small>
+    <strong class="yt-clock" id="yt-clock">00:00:00</strong>
+    <span class="yt-date" id="yt-date"></span>
+    <span class="yt-read" id="yt-read"></span>
+    <div class="yt-recent"><small id="yt-recent-label"></small><ol id="yt-recent"></ol></div>
+  </section>
+
+  <div class="yt-ep" id="yt-ep" hidden><small id="yt-ep-kicker"></small><strong id="yt-ep-title"></strong></div>
+  <p class="yt-captions" id="yt-captions" hidden></p>
+  <p class="yt-music" id="yt-music"></p>
+
+  <div class="yt-ticker"><span class="yt-tag" id="yt-tag"></span><div class="yt-track"><div class="yt-move" id="yt-move"></div></div></div>
+</main>
+
+<div class="yt-controls" id="yt-controls">
+  <button type="button" id="yt-start" class="primary">▶ Iniciar transmisión con sonido</button>
+  <div class="yt-row"><span>Idioma de la lista:</span><button type="button" data-lang="es">🇪🇸 Español</button><button type="button" data-lang="en">🇺🇸 English</button><button type="button" data-lang="pt">🇧🇷 Português</button></div>
+  <div class="yt-row"><button type="button" data-modo="lista">🔴 Lista de los buenos</button><button type="button" id="yt-full">⛶ Pantalla completa</button></div>
+  <div class="yt-row" id="yt-eps"></div>
+  <p class="yt-note" id="yt-note"></p>
+</div>
+
+<script defer src="name-audio-data.js"></script>
+<script defer src="list-speech.js"></script>
+<script defer src="stardust-reveal.js"></script>
+<script defer src="ninos-buenos-data.js"></script>
+<script defer src="live-data.js"></script>
+<script defer src="supabase-config.js"></script>
+<script defer src="aldea-db.js"></script>
+<script defer src="live-names.js"></script>
+<script defer src="live.js"></script>
+<script defer src="yt-live.js"></script>
+</body></html>

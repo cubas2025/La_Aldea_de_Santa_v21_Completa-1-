@@ -28,7 +28,7 @@ async function start(){
 async function enter(user){
   const {data,error}=await sb.from('admins').select('user_id').eq('user_id',user.id).maybeSingle();
   if(error||!data){await sb.auth.signOut();show('#ad-login');$('#ad-login-status').textContent='Esta cuenta no es administradora. Revisa el último paso de supabase/esquema.sql.';return;}
-  show('#ad-app');openTab('resumen');refreshUnread();
+  show('#ad-app');openTab(location.hash==='#transmision'?'transmision':'resumen');refreshUnread();
 }
 $('#ad-login-form').addEventListener('submit',async e=>{
   e.preventDefault();const f=e.target,st=$('#ad-login-status'),btn=f.querySelector('button');btn.disabled=true;st.textContent='Entrando…';
@@ -43,10 +43,26 @@ $('#ad-logout').addEventListener('click',async()=>{await sb.auth.signOut();show(
 function openTab(name){
   for(const b of $$('[data-tab]'))b.setAttribute('aria-selected',String(b.dataset.tab===name));
   for(const p of $$('[data-pane]'))p.hidden=p.dataset.pane!==name;
-  ({resumen:loadStats,cartas:()=>loadLetters(true),nombres:loadNames,codigos:()=>loadCodes(true)})[name]?.();
+  ({resumen:loadStats,cartas:()=>loadLetters(true),nombres:loadNames,codigos:()=>loadCodes(true),transmision:loadLive})[name]?.();
 }
 for(const b of $$('[data-tab]'))b.addEventListener('click',()=>openTab(b.dataset.tab));
 const chips=(attr,cb)=>{for(const b of $$(`[data-${attr}]`))b.addEventListener('click',()=>{for(const o of $$(`[data-${attr}]`))o.setAttribute('aria-pressed',String(o===b));cb(b.dataset[attr]);});};
+
+/* Transmisión: interruptor «Estoy en vivo» */
+async function loadLive(){
+  const f=$('#ad-live-form'),st=$('#ad-live-status');st.textContent='Cargando…';
+  const {data,error}=await sb.from('transmision').select('en_vivo,tiktok_usuario,youtube').eq('id',1).maybeSingle();
+  if(error||!data){st.textContent='Falta crear la tabla: ejecuta supabase/actualizacion-transmision.sql en Supabase.';return;}
+  f.en_vivo.checked=data.en_vivo;f.tiktok_usuario.value=data.tiktok_usuario;f.youtube.value=data.youtube;st.textContent='';
+}
+$('#ad-live-form').addEventListener('submit',async e=>{
+  e.preventDefault();const f=e.target,st=$('#ad-live-status');st.textContent='Guardando…';
+  const row={en_vivo:f.en_vivo.checked,tiktok_usuario:f.tiktok_usuario.value.trim().replace(/^@/,''),youtube:f.youtube.value.trim(),actualizado:new Date().toISOString()};
+  const {error}=await sb.from('transmision').update(row).eq('id',1);
+  if(error){st.textContent='No se pudo guardar. ¿Ejecutaste supabase/actualizacion-transmision.sql?';return;}
+  st.textContent=row.en_vivo?'✓ Listo: la web ya muestra «Santa está EN VIVO» (en máximo 2 minutos para quien ya la tenía abierta).':'✓ Guardado: el cartel «EN VIVO» está apagado.';
+  toast('Transmisión guardada.');
+});
 
 /* Resumen */
 async function count(table,filter){let q=sb.from(table).select('*',{count:'exact',head:true});if(filter)q=filter(q);const {count:n}=await q;return n??0;}

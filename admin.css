@@ -42,3 +42,6 @@
 .admin-empty{padding:24px;text-align:center;color:var(--muted)}
 .admin-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:50;padding:12px 18px;border-radius:12px;background:#2a1a20;color:#fff;box-shadow:0 10px 30px #0005}
 @media (max-width:760px){.admin-grid{grid-template-columns:1fr}}
+.admin-card .vc-check{display:flex;flex-direction:row;align-items:center;gap:10px;font-weight:700;cursor:pointer}
+.admin-card .vc-check input{width:22px;height:22px;accent-color:#b9142b;margin:0}
+#ad-live-form{max-width:640px}

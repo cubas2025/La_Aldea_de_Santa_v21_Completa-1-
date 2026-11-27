@@ -64,7 +64,15 @@ async function liveNames(){
   return (data||[]).map(r=>({nombre:String(r.nombre||''),grabado:!!r.grabado})).filter(r=>r.nombre);
 }
 
-window.ALDEA_DB={configured,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,liveNames,staticCodes:cfg.codigosEstaticos!==false};
+/* Interruptor «Estoy en vivo» (tabla transmision, se cambia desde /admin). */
+async function liveStatus(){
+  const sb=await client();
+  const {data,error}=await sb.from('transmision').select('en_vivo,tiktok_usuario,youtube').eq('id',1).maybeSingle();
+  if(error)throw error;
+  return data?{liveNow:!!data.en_vivo,tiktokUser:data.tiktok_usuario||'',youtube:data.youtube||''}:null;
+}
+
+window.ALDEA_DB={configured,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,liveNames,liveStatus,staticCodes:cfg.codigosEstaticos!==false};
 
 /* Cada video generado (lista de los buenos, escenas, tarjeta de Navidad, editor) suma 1. */
 const share=window.SANTA_VIDEO_SHARE;
