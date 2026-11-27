@@ -95,3 +95,21 @@ body.obs .yt-controls{display:none}
 /* Incrustada en la web (iframe pequeño): controles compactos */
 @media (max-width:1000px){.yt-controls{top:8px;gap:4px;padding:8px 10px}.yt-controls button{min-height:32px;padding:4px 10px;font-size:12px}.yt-controls button.primary{padding:8px 16px;font-size:14px}.yt-row{font-size:12px}}
 @media (max-width:620px){.yt-controls .yt-row:not(#yt-eps){display:none}}
+
+/* Paneles más abajo y compactos, para no tapar a Santa ni el polvo mágico */
+.yt-stage:not(.vertical) .yt-panel{top:auto;bottom:92px;width:460px;padding:18px 26px;border-radius:20px}
+.yt-stage:not(.vertical) .yt-days{font-size:72px;margin:2px 0 8px}
+.yt-stage:not(.vertical) .yt-count b{font-size:44px}
+.yt-stage:not(.vertical) .yt-clock{font-size:80px}
+.yt-stage:not(.vertical) .yt-now{margin-top:12px;padding-top:10px;font-size:20px}
+.yt-stage:not(.vertical) .yt-recent{margin-top:10px;padding-top:8px}
+.yt-stage:not(.vertical) .yt-music{top:104px;bottom:auto;right:44px}
+.yt-stage:not(.vertical).episode .yt-captions{max-width:760px;bottom:104px;font-size:44px;padding:12px 24px}
+.yt-video.off{visibility:hidden}
+
+/* Controles en una barra debajo de la pantalla (no encima del video) */
+body:not(.obs):not(.embed) .yt-controls{top:auto;bottom:0;left:0;right:0;transform:none;max-width:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 14px;padding:8px 12px;border-radius:0;box-shadow:0 -6px 20px #0006}
+body:not(.obs):not(.embed) .yt-controls.hide{opacity:1;pointer-events:auto}
+body:not(.obs):not(.embed) .yt-note{flex-basis:100%}
+.yt-stage{top:50%}
+body.embed .yt-controls{display:none}

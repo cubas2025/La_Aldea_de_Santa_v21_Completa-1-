@@ -24,10 +24,14 @@ const X={
 };
 let lang=STR[params.get('lang')]?params.get('lang'):'es';
 if(params.get('obs')==='1')document.body.classList.add('obs');
+const EMBED=params.get('embed')==='1';if(EMBED)document.body.classList.add('embed');   // dentro de la web: los botones están fuera
 
 /* ---------- Escenario a escala de la ventana ---------- */
-function fit(){stage.style.setProperty('--s',Math.min(innerWidth/W,innerHeight/H));}
+/* Sin OBS y fuera de la web, los controles van en una barra debajo de la pantalla de transmisión. */
+const bar=()=>document.body.classList.contains('obs')||EMBED?0:($('#yt-controls')?.offsetHeight||0);
+function fit(){const h=innerHeight-bar();stage.style.setProperty('--s',Math.min(innerWidth/W,h/H));stage.style.top=(h/2)+'px';}
 addEventListener('resize',fit);fit();
+if(window.ResizeObserver)new ResizeObserver(fit).observe($('#yt-controls'));
 
 /* ---------- Música: destacada, otra, destacada, otra… ---------- */
 const general=(all.musica||[]).filter(t=>t.src);
@@ -71,15 +75,25 @@ function renderRecent(){$('#yt-recent').innerHTML=recent.map(n=>`<li>${esc(n)}</
 const items=((V?all.playlist:cfg.playlist)||[]).filter(i=>i.src&&i.duration>0).map(i=>({...i,repeat:Math.max(1,i.repeat||1),span:i.duration*Math.max(1,i.repeat||1)}));
 let mode='lista',current=-1;
 const titleOf=it=>it['title_'+lang]||it.title;
+/* Dos videos: mientras uno se ve, el siguiente ya se carga, y el cambio cae justo al empezar cada nombre. */
+const video2=$('#yt-video2');let act=video,idle=video2;
+function showVid(el){video.classList.toggle('off',el!==video);video2.classList.toggle('off',el!==video2);}
 function syncLista(){
   if(mode!=='lista'||!items.length)return;
   const pos=channelAt(items);
   if(pos.index!==current){
-    current=pos.index;video.loop=true;video.muted=true;video.src=pos.item.src;
-    video.addEventListener('loadedmetadata',()=>{video.currentTime=channelAt(items).offset;video.play().catch(()=>{});},{once:true});
+    current=pos.index;
+    const ready=idle.dataset.src===pos.item.src&&idle.readyState>=2,el=ready?idle:act;
+    if(!ready){el.src=pos.item.src;el.dataset.src=pos.item.src;}
+    el.loop=pos.item.repeat>1;el.muted=true;
+    const go=()=>{el.currentTime=channelAt(items).offset;el.play().catch(()=>{});};
+    if(el.readyState>=1)go();else el.addEventListener('loadedmetadata',go,{once:true});
+    if(el!==act){idle=act;act=el;}
+    showVid(act);idle.pause();
     $('#yt-title').textContent=titleOf(pos.item);
-  }else if(video.readyState>=2&&Math.abs(video.currentTime-pos.offset)>1.5&&pos.offset>.5&&pos.offset<pos.item.duration-.5)video.currentTime=pos.offset;
-  if(video.paused&&video.readyState>=2)video.play().catch(()=>{});
+  }else if(act.readyState>=2&&Math.abs(act.currentTime-pos.offset)>.3&&pos.offset>.3&&pos.offset<pos.item.duration-.3)act.currentTime=pos.offset;
+  if(pos.left<3){const nx=items[(pos.index+1)%items.length];if(nx.src!==act.dataset.src&&idle.dataset.src!==nx.src){idle.src=nx.src;idle.dataset.src=nx.src;idle.muted=true;idle.load();}}
+  if(act.paused&&act.readyState>=2&&!act.ended)act.play().catch(()=>{});
 }
 
 /* ---------- Episodio 1: Santa habla, subtítulos palabra por palabra ---------- */
@@ -125,7 +139,7 @@ function captions(){
 /* ---------- Modos ---------- */
 let soundOn=false;
 function startLista(){
-  mode='lista';current=-1;stage.classList.remove('episode','vertical-src');bgVideo.pause();bgVideo.removeAttribute('src');
+  mode='lista';current=-1;act=video;idle=video2;video.dataset.src='';stage.classList.remove('episode','vertical-src');bgVideo.pause();bgVideo.removeAttribute('src');
   $('#yt-ep').hidden=true;base=.5;vol();
   namer?.start();namer?.setSound(soundOn);syncLista();renderMode();
 }
@@ -134,7 +148,7 @@ function startEpisode(which='episodio1'){
   const keys=which==='episodios'?EPS.slice():EPS.includes(which)?[which]:[];
   if(!keys.length){$('#yt-note').textContent=X[lang].noEp;startLista();return;}
   epQueue=keys;ep=cfg[epQueue.shift()];epVideos=ep.videos.filter(v=>v.src);
-  mode='episodio';stage.classList.add('episode');$('#yt-ep').hidden=false;
+  mode='episodio';act=video;idle=video2;showVid(video);video2.pause();video2.removeAttribute('src');video2.dataset.src='';stage.classList.add('episode');$('#yt-ep').hidden=false;
   namer?.stop();base=0;vol();   // el audio del episodio ya trae su propia música de fondo
   playEpisode(0);renderMode(which);
 }
@@ -180,11 +194,21 @@ function showControls(){controls.classList.remove('hide');clearTimeout(hideT);if
 addEventListener('mousemove',showControls);addEventListener('touchstart',showControls,{passive:true});
 function enableSound(){
   soundOn=true;
-  musicPlay().then(()=>{$('#yt-start').hidden=true;$('#yt-note').textContent='';showControls();}).catch(()=>{$('#yt-start').hidden=false;$('#yt-note').textContent=X[lang].blocked;});
+  musicPlay().then(()=>{$('#yt-start').hidden=true;$('#yt-note').textContent='';showControls();tell('sound-on');}).catch(()=>{$('#yt-start').hidden=false;$('#yt-note').textContent=X[lang].blocked;tell('sound-blocked');});
   if(mode==='lista')namer?.setSound(true);
   if(isEp()){video.muted=false;video.play().catch(()=>{});}
 }
 $('#yt-start').addEventListener('click',enableSound);
+function mute(){soundOn=false;wanted=false;bg.pause();namer?.setSound(false);video.muted=true;tell('sound-off');}
+/* Dentro de la web, los botones de fuera mandan órdenes a esta pantalla. */
+function tell(state){if(EMBED&&parent!==window)parent.postMessage({yt:state},location.origin);}
+addEventListener('message',e=>{
+  if(e.origin!==location.origin||!e.data||typeof e.data.cmd!=='string')return;
+  const d=e.data;
+  if(d.cmd==='sound')enableSound();else if(d.cmd==='mute')mute();
+  else if(d.cmd==='lista')startLista();else if(d.cmd==='episodio')startEpisode(typeof d.which==='string'?d.which:'episodio1');
+  else if(d.cmd==='lang'&&STR[d.lang]){lang=d.lang;namer?.setLang(lang);texts();renderMode();}
+});
 for(const b of $$('[data-lang]'))b.addEventListener('click',()=>{lang=b.dataset.lang;namer?.setLang(lang);texts();renderMode();});
 $('#yt-eps').innerHTML=EPS.map(k=>`<button type="button" data-modo="${k}">🎬 ${esc(cfg[k].corto||('Episodio '+k.slice(8)))}</button>`).join('')+(EPS.length>1?`<button type="button" data-modo="episodios">🎬 ${esc(X[lang].all)}</button>`:'');
 for(const b of $$('[data-modo]'))b.addEventListener('click',()=>{if(b.dataset.modo==='lista')startLista();else startEpisode(b.dataset.modo);});
@@ -192,7 +216,7 @@ $('#yt-full').addEventListener('click',()=>{const el=document.documentElement;(e
 addEventListener('keydown',e=>{if(e.key==='f')$('#yt-full').click();if(e.key==='e')startEpisode('episodios');if(e.key==='l')startLista();});
 
 /* ---------- Arranque ---------- */
-setInterval(()=>{tick();syncLista();},1000);
+setInterval(tick,1000);setInterval(syncLista,250);
 setInterval(()=>refreshTicker(),60000);
 texts();
 checkFeatured().then(()=>{
