@@ -80,7 +80,7 @@ window.ALDEA_LIVE = {
        sincronizados palabra por palabra: palabras = [[inicio, fin, 'palabra'], ...] en segundos.
        Al terminar la introducción, la transmisión sigue con la lista de los buenos. */
     episodio1: {
-      titulo: 'Episodio 1 · Introducción', titulo_en: 'Episode 1 · Introduction', titulo_pt: 'Episódio 1 · Introdução',
+      titulo: 'Episodio 1 · Bienvenidos a la aldea de Santa Claus', titulo_en: 'Episode 1 · Welcome to Santa Claus village', titulo_pt: 'Episódio 1 · Bem-vindos à vila do Papai Noel', corto: 'Episodio 1',
       /* Voz de Santa del «EPISODIO 1 — Bienvenidos a la aldea de Santa Claus» con los videos de Santa
          hablando solo mientras habla (en las pausas, escenas de la aldea). Subtítulos transcritos de su voz. */
       videos: [

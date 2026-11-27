@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="yt-live.css">
 </head><body>
 <!-- Transmisión horizontal 1920 × 1080 para YouTube. En OBS: fuente «Navegador», 1920 × 1080,
-     «Controlar audio mediante OBS». Opciones en la dirección: ?lang=es|en|pt  ?modo=episodio1  ?obs=1 (sin controles) -->
+     «Controlar audio mediante OBS». Opciones en la dirección: ?lang=es|en|pt  ?modo=episodio1 a episodio6, ?modo=episodios (todos)  ?obs=1 (sin controles) -->
 <main class="yt-stage" id="yt-stage" aria-label="Santa en vivo">
   <video class="yt-bg" id="yt-bg" muted playsinline preload="auto" aria-hidden="true"></video>
   <video class="yt-video" id="yt-video" muted playsinline autoplay preload="auto"></video>
@@ -39,7 +39,8 @@
 <div class="yt-controls" id="yt-controls">
   <button type="button" id="yt-start" class="primary">▶ Iniciar transmisión con sonido</button>
   <div class="yt-row"><span>Idioma de la lista:</span><button type="button" data-lang="es">🇪🇸 Español</button><button type="button" data-lang="en">🇺🇸 English</button><button type="button" data-lang="pt">🇧🇷 Português</button></div>
-  <div class="yt-row"><button type="button" data-modo="lista">🔴 Lista de los buenos</button><button type="button" data-modo="episodio1">🎬 Episodio 1 · Introducción</button><button type="button" id="yt-full">⛶ Pantalla completa</button></div>
+  <div class="yt-row"><button type="button" data-modo="lista">🔴 Lista de los buenos</button><button type="button" id="yt-full">⛶ Pantalla completa</button></div>
+  <div class="yt-row" id="yt-eps"></div>
   <p class="yt-note" id="yt-note"></p>
 </div>
 

@@ -18,9 +18,9 @@ const V=document.body.dataset.formato==='vertical',W=V?1080:1920,H=V?1920:1080;
 stage.classList.toggle('vertical',V);
 
 const X={
-  es:{from:'EN VIVO DESDE EL POLO NORTE',hora:'Hora en la aldea',h:'horas',m:'min',s:'seg',recent:'Santa acaba de nombrar',playing:'♪ Suena:',ep:'Estreno',noEp:'Los videos del episodio 1 todavía no están en la carpeta. Mientras tanto se transmite la lista de los buenos.',start:'▶ Iniciar transmisión con sonido',blocked:'El navegador pide un clic para activar el sonido. En OBS suena solo.'},
-  en:{from:'LIVE FROM THE NORTH POLE',hora:'Village time',h:'hours',m:'min',s:'sec',recent:'Santa just named',playing:'♪ Now playing:',ep:'Premiere',noEp:'The episode 1 videos are not in the folder yet. Meanwhile, the nice list is streaming.',start:'▶ Start stream with sound',blocked:'The browser needs a click to turn the sound on. In OBS it plays by itself.'},
-  pt:{from:'AO VIVO DO POLO NORTE',hora:'Hora na vila',h:'horas',m:'min',s:'seg',recent:'O Papai Noel acabou de dizer',playing:'♪ Tocando:',ep:'Estreia',noEp:'Os vídeos do episódio 1 ainda não estão na pasta. Enquanto isso, a lista dos bonzinhos está no ar.',start:'▶ Iniciar transmissão com som',blocked:'O navegador pede um clique para ativar o som. No OBS toca sozinho.'}
+  es:{from:'EN VIVO DESDE EL POLO NORTE',hora:'Hora en la aldea',h:'horas',m:'min',s:'seg',recent:'Santa acaba de nombrar',playing:'♪ Suena:',ep:'Estreno',noEp:'Ese episodio todavía no está listo. Mientras tanto se transmite la lista de los buenos.',all:'Todos los episodios',start:'▶ Iniciar transmisión con sonido',blocked:'El navegador pide un clic para activar el sonido. En OBS suena solo.'},
+  en:{from:'LIVE FROM THE NORTH POLE',hora:'Village time',h:'hours',m:'min',s:'sec',recent:'Santa just named',playing:'♪ Now playing:',ep:'Premiere',noEp:'That episode is not ready yet. Meanwhile, the nice list is streaming.',all:'All episodes',start:'▶ Start stream with sound',blocked:'The browser needs a click to turn the sound on. In OBS it plays by itself.'},
+  pt:{from:'AO VIVO DO POLO NORTE',hora:'Hora na vila',h:'horas',m:'min',s:'seg',recent:'O Papai Noel acabou de dizer',playing:'♪ Tocando:',ep:'Estreia',noEp:'Esse episódio ainda não está pronto. Enquanto isso, a lista dos bonzinhos está no ar.',all:'Todos os episódios',start:'▶ Iniciar transmissão com som',blocked:'O navegador pede um clique para ativar o som. No OBS toca sozinho.'}
 };
 let lang=STR[params.get('lang')]?params.get('lang'):'es';
 if(params.get('obs')==='1')document.body.classList.add('obs');
@@ -83,9 +83,10 @@ function syncLista(){
 }
 
 /* ---------- Episodio 1: Santa habla, subtítulos palabra por palabra ---------- */
-const ep=cfg.episodio1||{videos:[]};
-const epVideos=(ep.videos||[]).filter(v=>v.src);
-let epI=0,lines=[];
+/* Episodios: horizontal.episodio1, episodio2… · ?modo=episodio3 o ?modo=episodios (todos seguidos y luego la lista). */
+const EPS=Object.keys(cfg).filter(k=>/^episodio\d+$/.test(k)&&(cfg[k].videos||[]).some(v=>v.src)).sort((a,b)=>parseInt(a.slice(8))-parseInt(b.slice(8)));
+let ep={videos:[]},epVideos=[],epQueue=[],epI=0,lines=[];
+const isEp=()=>mode==='episodio';
 function makeLines(words){
   const out=[];let cur=[];
   for(let i=0;i<words.length;i++){
@@ -99,7 +100,7 @@ function makeLines(words){
 }
 function playEpisode(i){
   epI=i;const it=epVideos[i];
-  if(!it){startLista();return;}
+  if(!it){if(epQueue.length){loadEpisode(epQueue.shift());return;}startLista();return;}
   lines=makeLines(it.palabras||[]);
   video.loop=false;video.muted=false;video.volume=1;video.src=it.src;bgVideo.src=it.src;
   video.play().catch(()=>{video.muted=true;video.play().catch(()=>{});});bgVideo.play().catch(()=>{});
@@ -107,11 +108,11 @@ function playEpisode(i){
   $('#yt-title').textContent=it.titulo||'';
   const next=epVideos[i+1];if(next)fetch(next.src).catch(()=>{});   // precarga la parte siguiente
 }
-video.addEventListener('loadedmetadata',()=>{stage.classList.toggle('vertical-src',!V&&mode==='episodio1'&&video.videoWidth<video.videoHeight);});
-video.addEventListener('ended',()=>{if(mode==='episodio1')playEpisode(epI+1);});
+video.addEventListener('loadedmetadata',()=>{stage.classList.toggle('vertical-src',!V&&isEp()&&video.videoWidth<video.videoHeight);});
+video.addEventListener('ended',()=>{if(isEp())playEpisode(epI+1);});
 function captions(){
   const box=$('#yt-captions');
-  if(mode!=='episodio1'||!lines.length){box.hidden=true;return;}
+  if(!isEp()||!lines.length){box.hidden=true;return;}
   const t=video.currentTime,line=lines.find(l=>t>=l.a-.25&&t<=l.b+.7);
   if(!line){box.hidden=true;return;}
   box.hidden=false;
@@ -128,14 +129,19 @@ function startLista(){
   $('#yt-ep').hidden=true;base=.5;vol();
   namer?.start();namer?.setSound(soundOn);syncLista();renderMode();
 }
-function startEpisode(){
-  if(!epVideos.length){$('#yt-note').textContent=X[lang].noEp;startLista();return;}
-  mode='episodio1';stage.classList.add('episode');$('#yt-ep').hidden=false;
+function loadEpisode(key){ep=cfg[key];epVideos=(ep.videos||[]).filter(v=>v.src);playEpisode(0);}
+function startEpisode(which='episodio1'){
+  const keys=which==='episodios'?EPS.slice():EPS.includes(which)?[which]:[];
+  if(!keys.length){$('#yt-note').textContent=X[lang].noEp;startLista();return;}
+  epQueue=keys;ep=cfg[epQueue.shift()];epVideos=ep.videos.filter(v=>v.src);
+  mode='episodio';stage.classList.add('episode');$('#yt-ep').hidden=false;
   namer?.stop();base=0;vol();   // el audio del episodio ya trae su propia música de fondo
-  playEpisode(0);renderMode();
+  playEpisode(0);renderMode(which);
 }
-function renderMode(){
-  for(const b of $$('[data-modo]'))b.setAttribute('aria-pressed',String(b.dataset.modo===mode));
+let modeKey='lista';
+function renderMode(key){
+  modeKey=key||(isEp()?modeKey:'lista');
+  for(const b of $$('[data-modo]'))b.setAttribute('aria-pressed',String(b.dataset.modo===modeKey));
   for(const b of $$('[data-lang]'))b.setAttribute('aria-pressed',String(b.dataset.lang===lang));
 }
 
@@ -148,7 +154,7 @@ function texts(){
   $('#yt-hora-label').textContent=x.hora;$('#yt-recent-label').textContent=x.recent;
   $('#yt-kicker').textContent=T.kickerLista;$('#yt-ep-kicker').textContent=x.ep;$('#yt-start').textContent=x.start;
   if(mode==='lista'&&items.length)$('#yt-title').textContent=titleOf(channelAt(items).item);
-  if(mode==='episodio1')$('#yt-ep-title').textContent=ep['titulo_'+lang]||ep.titulo||'';
+  if(isEp())$('#yt-ep-title').textContent=ep['titulo_'+lang]||ep.titulo||'';
   if(bgLoaded>=0)$('#yt-music').textContent=`${x.playing} ${seq[bgI].title}`;
   refreshTicker(true);tick();
 }
@@ -176,20 +182,21 @@ function enableSound(){
   soundOn=true;
   musicPlay().then(()=>{$('#yt-start').hidden=true;$('#yt-note').textContent='';showControls();}).catch(()=>{$('#yt-start').hidden=false;$('#yt-note').textContent=X[lang].blocked;});
   if(mode==='lista')namer?.setSound(true);
-  if(mode==='episodio1'){video.muted=false;video.play().catch(()=>{});}
+  if(isEp()){video.muted=false;video.play().catch(()=>{});}
 }
 $('#yt-start').addEventListener('click',enableSound);
 for(const b of $$('[data-lang]'))b.addEventListener('click',()=>{lang=b.dataset.lang;namer?.setLang(lang);texts();renderMode();});
-for(const b of $$('[data-modo]'))b.addEventListener('click',()=>{if(b.dataset.modo==='episodio1')startEpisode();else startLista();});
+$('#yt-eps').innerHTML=EPS.map(k=>`<button type="button" data-modo="${k}">🎬 ${esc(cfg[k].corto||('Episodio '+k.slice(8)))}</button>`).join('')+(EPS.length>1?`<button type="button" data-modo="episodios">🎬 ${esc(X[lang].all)}</button>`:'');
+for(const b of $$('[data-modo]'))b.addEventListener('click',()=>{if(b.dataset.modo==='lista')startLista();else startEpisode(b.dataset.modo);});
 $('#yt-full').addEventListener('click',()=>{const el=document.documentElement;(el.requestFullscreen||el.webkitRequestFullscreen)?.call(el);});
-addEventListener('keydown',e=>{if(e.key==='f')$('#yt-full').click();if(e.key==='e')startEpisode();if(e.key==='l')startLista();});
+addEventListener('keydown',e=>{if(e.key==='f')$('#yt-full').click();if(e.key==='e')startEpisode('episodios');if(e.key==='l')startLista();});
 
 /* ---------- Arranque ---------- */
 setInterval(()=>{tick();syncLista();},1000);
 setInterval(()=>refreshTicker(),60000);
 texts();
 checkFeatured().then(()=>{
-  if(params.get('modo')==='episodio1')startEpisode();else startLista();
+  const m=params.get('modo')||'';if(/^episodio/.test(m))startEpisode(m);else startLista();
   enableSound();   // en OBS suena solo; en el navegador, si lo bloquea, aparece el botón
 });
 })();
