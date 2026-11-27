@@ -152,19 +152,58 @@ const rng=seed=>()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4
 const quizOrder=(()=>{const r=rng(20261127),a=QUIZ.map((_,i)=>i);for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;})();
 function chime(){if(!soundOn)return;try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const t=actx.currentTime;[1047,1319,1568].forEach((f,i)=>{const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=f;g.gain.setValueAtTime(.0001,t+i*.1);g.gain.exponentialRampToValueAtTime(.18,t+i*.1+.02);g.gain.exponentialRampToValueAtTime(.0001,t+i*.1+.8);o.connect(g).connect(actx.destination);o.start(t+i*.1);o.stop(t+i*.1+.9);});}catch{}}
 /* Quiz: una pregunta cada 20 s (14 s para responder y 6 s para ver la respuesta), igual para todos. */
-const QZ=20000,QSHOW=14000;let quizIdx=-1;
+/* Narrador del quiz: voz del navegador (la mejor en español que haya: en Edge, «Jorge»/«Dalia» naturales).
+   Dentro de la web, quien habla es la página (tiene el permiso del clic); aquí solo se le pide. */
+let narr=params.get('narrador')!=='0';
+function bestVoice(){
+  const vs=(window.speechSynthesis?.getVoices?.()||[]).filter(v=>/^es([-_]|$)/i.test(v.lang));
+  const score=v=>(/natural|online|neural/i.test(v.name)?6:0)+(/google/i.test(v.name)?3:0)+(/mx|us|419/i.test(v.lang)?2:/es[-_]es/i.test(v.lang)?1:0)+(/jorge|pablo|alvaro|álvaro|raul|raúl|diego|gerardo|male|hombre/i.test(v.name)?1:0);
+  return vs.sort((a,b)=>score(b)-score(a))[0]||null;
+}
+function say(text){
+  if(!soundOn||!narr||!text)return;
+  duckFor(Math.min(16,text.split(/\s+/).length*.42+1));
+  if(EMBED&&parent!==window){parent.postMessage({yt:'speak',text},'*');return;}
+  const s=window.speechSynthesis;if(!s)return;
+  s.cancel();const u=new SpeechSynthesisUtterance(text),v=bestVoice();if(v)u.voice=v;u.lang=v?.lang||'es-MX';u.rate=1;u.pitch=.95;s.speak(u);
+}
+function hush(){try{window.speechSynthesis?.cancel();}catch{}if(EMBED&&parent!==window)parent.postMessage({yt:'speak-stop'},'*');}
+window.speechSynthesis?.getVoices?.();
+/* Partidas: 60 s de presentador y luego 10 preguntas de 25 s (18 para responder y 7 para la respuesta).
+   Todo va con la hora: todos ven la misma partida, la misma frase y la misma pregunta. */
+const QZ=25000,QSHOW=18000,HOST=60000,PER=10,ROUND=HOST+PER*QZ,HOSTS=window.SANTA_QUIZ_HOST||[];
+let quizIdx=-1,quizQ=null,quizOpts=[],hostKey='',hostSaid=-1;
+function hostPlan(h){const w=h.frases.map(f=>f.split(/\s+/).length),tot=w.reduce((a,b)=>a+b,0);let t=2500;return h.frases.map((f,i)=>{const st=t;t+=w[i]/tot*54500;return {s:st,e:t,f};});}
+function partidaDelDia(now){const d=new Date(now),m=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();return Math.floor((now-m)/ROUND)+1;}
 function quizTick(){
   if(!QUIZ.length)return;
-  const now=Date.now(),k=Math.floor(now/QZ),t=now%QZ,L=Y[lang];
-  if(k!==quizIdx){
-    quizIdx=k;const q=QUIZ[quizOrder[k%QUIZ.length]],r=rng(k*7919+13);
-    const opts=[q.answer,...q.wrong].map(o=>[r(),o]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
-    show.innerHTML=`<div class="ys-quiz"><span class="ys-chip">🎯 ${esc(L.quiz)} · ${esc(CAT[q.category]||q.category)}</span><h2>${esc(q.question)}</h2><ol class="ys-opts">${opts.map((o,i)=>`<li data-ok="${o===q.answer}"><b>${'ABCD'[i]}</b><span>${esc(o)}</span></li>`).join('')}</ol><div class="ys-timer"><i></i><span></span></div><p class="ys-expl"><strong>${esc(L.ok)}</strong> ${esc(q.explanation||'')}</p><p class="ys-chat">${esc(L.chat)}</p></div>`;
+  const now=Date.now(),round=Math.floor(now/ROUND),pos=now%ROUND,L=Y[lang],num=partidaDelDia(now);
+  if(pos<HOST&&HOSTS.length){
+    const hi=round%HOSTS.length,h=HOSTS[hi],plan=hostPlan(h),key='h'+round;
+    if(hostKey!==key){
+      hostKey=key;quizIdx=-1;hostSaid=-1;
+      show.innerHTML=`<div class="ys-quiz ys-host"><span class="ys-chip">🎅 ${esc(L.quiz)} · Partida ${num}</span><h2>${esc(h.titulo)}</h2><p class="ys-line"></p><div class="ys-score">${hi===0?'🏆 Cuenta tus aciertos: al final escribe tu puntaje en los comentarios':'🏆 ¿Cuántas acertaste? Escríbelo en los comentarios: <b>__ / 10</b>'}</div><p class="ys-chat ys-start"></p></div>`;
+    }
+    const line=show.querySelector('.ys-line'),idx=plan.findIndex(x=>pos>=x.s&&pos<x.e);
+    if(line&&idx>=0&&line.dataset.i!==String(idx)){
+      line.dataset.i=idx;line.textContent=plan[idx].f;line.classList.remove('in');void line.offsetWidth;line.classList.add('in');
+      if(pos-plan[idx].s<1500&&hostSaid!==idx){hostSaid=idx;say(plan[idx].f);}
+    }
+    const st=show.querySelector('.ys-start');if(st)st.textContent=`⏱ La partida ${num} empieza en ${Math.ceil((HOST-pos)/1000)} s`;
+    return;
   }
-  const box=show.firstElementChild;if(!box)return;
+  const qn=Math.max(0,Math.floor((pos-HOST)/QZ)),t=(pos-HOST)%QZ,k=round*PER+qn;
+  if(k!==quizIdx){
+    quizIdx=k;hostKey='';const q=QUIZ[quizOrder[k%QUIZ.length]],r=rng(k*7919+13);
+    const opts=[q.answer,...q.wrong].map(o=>[r(),o]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);quizQ=q;quizOpts=opts;
+    if(t<4000)say(`Pregunta ${qn+1}. ${q.question} ${opts.map((o,i)=>`${'ABCD'[i]}: ${o}.`).join(' ')}`);
+    show.innerHTML=`<div class="ys-quiz"><span class="ys-chip">🎯 Partida ${num} · Pregunta ${qn+1} de ${PER} · ${esc(CAT[q.category]||q.category)}</span><h2>${esc(q.question)}</h2><ol class="ys-opts">${opts.map((o,i)=>`<li data-ok="${o===q.answer}"><b>${'ABCD'[i]}</b><span>${esc(o)}</span></li>`).join('')}</ol><div class="ys-timer"><i></i><span></span></div><p class="ys-expl"><strong>${esc(L.ok)}</strong> ${esc(q.explanation||'')}</p><p class="ys-chat">${esc(L.chat)}</p></div>`;
+  }
+  const box=show.firstElementChild;if(!box||box.classList.contains('ys-host'))return;
   box.querySelector('.ys-timer span').textContent=t<QSHOW?Math.ceil((QSHOW-t)/1000):'✓';
   box.querySelector('.ys-timer i').style.width=Math.max(0,(QSHOW-t)/QSHOW*100)+'%';
-  if(t>=QSHOW&&!box.classList.contains('reveal')){box.classList.add('reveal');chime();}
+  if(t>=QSHOW&&!box.classList.contains('reveal')){box.classList.add('reveal');chime();
+    if(quizQ&&t<QSHOW+2500){const i=quizOpts.indexOf(quizQ.answer);setTimeout(()=>say(`¡La respuesta correcta es la ${'ABCD'[i]}: ${quizQ.answer}! ${quizQ.explanation||''}`),700);}}
 }
 /* Solo música: las 25 tarjetas pasan cada 12 s con movimiento suave, igual para todos. */
 let slideIdx=-1;
@@ -218,7 +257,7 @@ function startNoche(){
   bgVideo.pause();bgVideo.removeAttribute('src');$('#yt-ep').hidden=true;base=.5;vol();
   namer?.setLabel(X[lang].noche);namer?.start();namer?.setSound(soundOn);syncLista();renderMode('nochebuena');refreshTicker(true);
 }
-function stopShow(){clearTimeout(showTimer);clearTimeout(phraseT);phrase?.pause();stage.classList.remove('noche');namer?.setLabel('');showAudio?.pause();showAudio=null;show.innerHTML='';show.hidden=true;quizIdx=-1;slideIdx=-1;stage.classList.remove('show','show-quiz','show-musica','show-tarjetas','show-cuento');}
+function stopShow(){hush();hostKey='';clearTimeout(showTimer);clearTimeout(phraseT);phrase?.pause();stage.classList.remove('noche');namer?.setLabel('');showAudio?.pause();showAudio=null;show.innerHTML='';show.hidden=true;quizIdx=-1;slideIdx=-1;stage.classList.remove('show','show-quiz','show-musica','show-tarjetas','show-cuento');}
 function startShow(kind,arg){
   stopShow();if(isEp()){video.pause();}bgVideo.pause();bgVideo.removeAttribute('src');
   mode=kind;stage.classList.remove('episode','vertical-src');stage.classList.add('show','show-'+(kind==='cuentos'?'cuento':kind));show.hidden=false;$('#yt-ep').hidden=true;
@@ -317,13 +356,14 @@ function enableSound(){
   if(isEp()){video.muted=false;video.play().catch(()=>{});}
 }
 $('#yt-start').addEventListener('click',enableSound);
+const narrBtn=$('#yt-narr');if(narrBtn){const paint=()=>{narrBtn.textContent=narr?'🗣 Narrador: sí':'🗣 Narrador: no';narrBtn.setAttribute('aria-pressed',String(narr));};paint();narrBtn.addEventListener('click',()=>{narr=!narr;if(!narr)hush();paint();});}
 /* Con ?obs=1 no hay controles: si el navegador bloquea el sonido, un aviso grande pide un toque (OBS no lo necesita). */
 function tapToStart(){
   if(!document.body.classList.contains('obs')||$('#yt-tap'))return;
   const b=document.createElement('button');b.id='yt-tap';b.type='button';b.className='yt-tap';b.textContent=X[lang].start;
   b.addEventListener('click',()=>{b.remove();enableSound();});document.body.append(b);
 }
-function mute(){soundOn=false;wanted=false;bg.pause();namer?.setSound(false);video.muted=true;tell('sound-off');}
+function mute(){hush();soundOn=false;wanted=false;bg.pause();namer?.setSound(false);video.muted=true;tell('sound-off');}
 /* Dentro de la web, los botones de fuera mandan órdenes a esta pantalla. */
 function tell(state){if(EMBED&&parent!==window)parent.postMessage({yt:state},'*');}
 addEventListener('message',e=>{
@@ -332,6 +372,7 @@ addEventListener('message',e=>{
   if(d.cmd==='sound')enableSound();else if(d.cmd==='mute')mute();
   else if(d.cmd==='lista')startLista();else if(d.cmd==='episodio')startEpisode(typeof d.which==='string'?d.which:'episodio1');
   else if(['quiz','musica','tarjetas','cuentos','nochebuena'].includes(d.cmd))route(d.cmd);
+  else if(d.cmd==='narrador'){narr=!!d.on;if(!narr)hush();}
   else if(d.cmd==='lang'&&STR[d.lang]){lang=d.lang;namer?.setLang(lang);texts();renderMode();}
 });
 for(const b of $$('[data-lang]'))b.addEventListener('click',()=>{lang=b.dataset.lang;namer?.setLang(lang);texts();renderMode();});

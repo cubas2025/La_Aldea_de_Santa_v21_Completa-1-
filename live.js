@@ -179,7 +179,11 @@ const hUrl=(ep,embed=true)=>`en-vivo-youtube.html?lang=${lang}${ep?'&modo=episod
 let hSound=false;
 const hSend=msg=>$('#live-h-frame')?.contentWindow?.postMessage(msg,'*');   // solo órdenes (quiz, sonido…), sin datos privados
 function hSoundBtn(){const b=$('#live-h-sound');if(b)b.textContent=STR[lang][hSound?'hMute':'hSound'];for(const x of $$('[data-hlang]'))x.setAttribute('aria-pressed',String(x.dataset.hlang===lang));}
-window.addEventListener('message',e=>{if(!e.data?.yt||(e.source!==$('#live-h-frame')?.contentWindow&&e.source!==$('#live-v-frame')?.contentWindow))return;hSound=e.data.yt==='sound-on';hSoundBtn();});
+function narrVoice(){const vs=(window.speechSynthesis?.getVoices?.()||[]).filter(v=>/^es([-_]|$)/i.test(v.lang));const sc=v=>(/natural|online|neural/i.test(v.name)?6:0)+(/google/i.test(v.name)?3:0)+(/mx|us|419/i.test(v.lang)?2:/es[-_]es/i.test(v.lang)?1:0)+(/jorge|pablo|alvaro|álvaro|raul|raúl|diego|gerardo|male|hombre/i.test(v.name)?1:0);return vs.sort((a,b)=>sc(b)-sc(a))[0]||null;}
+window.speechSynthesis?.getVoices?.();
+window.addEventListener('message',e=>{if(!e.data?.yt||(e.source!==$('#live-h-frame')?.contentWindow&&e.source!==$('#live-v-frame')?.contentWindow))return;
+  if(e.data.yt==='speak'&&typeof e.data.text==='string'){const s=window.speechSynthesis;if(!s)return;s.cancel();const u=new SpeechSynthesisUtterance(e.data.text.slice(0,600)),v=narrVoice();if(v)u.voice=v;u.lang=v?.lang||'es-MX';u.pitch=.95;s.speak(u);return;}
+  if(e.data.yt==='speak-stop'){window.speechSynthesis?.cancel();return;}hSound=e.data.yt==='sound-on';hSoundBtn();});
 let vShow=null,vSound=true;
 const vSend=msg=>$('#live-v-frame')?.contentWindow?.postMessage(msg,'*');
 function setShow(m){
