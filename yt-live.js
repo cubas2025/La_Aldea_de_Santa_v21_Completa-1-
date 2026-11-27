@@ -194,11 +194,17 @@ function showControls(){controls.classList.remove('hide');clearTimeout(hideT);if
 addEventListener('mousemove',showControls);addEventListener('touchstart',showControls,{passive:true});
 function enableSound(){
   soundOn=true;
-  musicPlay().then(()=>{$('#yt-start').hidden=true;$('#yt-note').textContent='';showControls();tell('sound-on');}).catch(()=>{$('#yt-start').hidden=false;$('#yt-note').textContent=X[lang].blocked;tell('sound-blocked');});
+  musicPlay().then(()=>{$('#yt-start').hidden=true;$('#yt-note').textContent='';showControls();tell('sound-on');}).catch(()=>{$('#yt-start').hidden=false;$('#yt-note').textContent=X[lang].blocked;tell('sound-blocked');tapToStart();});
   if(mode==='lista')namer?.setSound(true);
   if(isEp()){video.muted=false;video.play().catch(()=>{});}
 }
 $('#yt-start').addEventListener('click',enableSound);
+/* Con ?obs=1 no hay controles: si el navegador bloquea el sonido, un aviso grande pide un toque (OBS no lo necesita). */
+function tapToStart(){
+  if(!document.body.classList.contains('obs')||$('#yt-tap'))return;
+  const b=document.createElement('button');b.id='yt-tap';b.type='button';b.className='yt-tap';b.textContent=X[lang].start;
+  b.addEventListener('click',()=>{b.remove();enableSound();});document.body.append(b);
+}
 function mute(){soundOn=false;wanted=false;bg.pause();namer?.setSound(false);video.muted=true;tell('sound-off');}
 /* Dentro de la web, los botones de fuera mandan órdenes a esta pantalla. */
 function tell(state){if(EMBED&&parent!==window)parent.postMessage({yt:state},location.origin);}

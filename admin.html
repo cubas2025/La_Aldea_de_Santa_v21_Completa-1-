@@ -4,6 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="admin.css">
+<script defer src="name-audio-data.js"></script>
 <script defer src="supabase-config.js"></script><script defer src="admin.js"></script>
 </head>
 <body class="admin-body">
@@ -49,6 +50,14 @@
       <div id="ad-codes" class="admin-table-wrap"></div><button type="button" class="button outline" id="ad-codes-more" hidden>Ver más códigos</button>
     </div>
     <div class="admin-pane" data-pane="transmision" hidden>
+      <form id="ad-air-form" class="panel admin-card"><h2>📣 Nombres al aire</h2>
+        <p>Escribe un nombre (o varios separados por comas) y pulsa «Enviar al en vivo». En 10 a 20 segundos Santa lo dice en todas las transmisiones abiertas. Los que tienen ✓ los dice con su voz; los demás se escriben en el cielo.</p>
+        <div class="ad-air-row"><input name="nombre" list="ad-air-names" maxlength="200" autocomplete="off" placeholder="Ej. Valentina" aria-label="Nombre para el en vivo"><button type="submit" class="button">Enviar al en vivo</button></div>
+        <datalist id="ad-air-names"></datalist>
+        <p id="ad-air-status" class="fine" role="status"></p>
+        <ol id="ad-air-queue" class="ad-air-queue"></ol>
+        <p class="fine">Si al enviar sale un error, ejecuta una vez <code>supabase/actualizacion-nombres-al-aire.sql</code> en el SQL Editor de Supabase.</p>
+      </form>
       <form id="ad-live-form" class="panel admin-card"><h2>🔴 Estoy en vivo</h2>
         <p>Cuando empieces a transmitir, enciende el interruptor: en toda la web aparece el cartel «Santa está EN VIVO» y el botón para entrar a tu transmisión. Apágalo al terminar.</p>
         <label class="vc-check"><input type="checkbox" name="en_vivo">Santa está en vivo ahora</label>
