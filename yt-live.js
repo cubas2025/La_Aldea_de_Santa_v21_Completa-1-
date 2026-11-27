@@ -105,6 +105,7 @@ function playEpisode(i){
   video.play().catch(()=>{video.muted=true;video.play().catch(()=>{});});bgVideo.play().catch(()=>{});
   $('#yt-ep-title').textContent=ep['titulo_'+lang]||ep.titulo||'';
   $('#yt-title').textContent=it.titulo||'';
+  const next=epVideos[i+1];if(next)fetch(next.src).catch(()=>{});   // precarga la parte siguiente
 }
 video.addEventListener('loadedmetadata',()=>{stage.classList.toggle('vertical-src',!V&&mode==='episodio1'&&video.videoWidth<video.videoHeight);});
 video.addEventListener('ended',()=>{if(mode==='episodio1')playEpisode(epI+1);});
@@ -130,7 +131,7 @@ function startLista(){
 function startEpisode(){
   if(!epVideos.length){$('#yt-note').textContent=X[lang].noEp;startLista();return;}
   mode='episodio1';stage.classList.add('episode');$('#yt-ep').hidden=false;
-  namer?.stop();base=.14;vol();   // la música queda suave debajo de la voz de Santa
+  namer?.stop();base=0;vol();   // el audio del episodio ya trae su propia música de fondo
   playEpisode(0);renderMode();
 }
 function renderMode(){
