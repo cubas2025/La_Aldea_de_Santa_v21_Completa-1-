@@ -185,3 +185,14 @@ body.embed .yt-controls{display:none}
 .ys-now .ys-song{display:block;margin-top:4px;color:#fff;font:700 46px/1.1 "Cormorant Garamond",serif}
 .yt-stage.vertical .ys-now .ys-song{font-size:40px}
 #yt-narr[aria-pressed=false]{opacity:.6}
+
+/* Presentador del quiz */
+.ys-host h2{margin-bottom:10px}
+.ys-line{min-height:3.6em;margin:6px 0 18px;font:700 44px/1.25 'DM Sans',sans-serif;color:#3a1a20}
+.ys-line.in{animation:ys-in .6s ease-out}
+@keyframes ys-in{from{opacity:0;transform:translateY(12px)}}
+.ys-score{padding:14px 20px;border-radius:16px;background:#7a0d1d;color:#ffe7b0;font-size:28px;font-weight:800;text-align:center}
+.ys-score b{color:#fff}
+.ys-start{font-size:28px}
+.yt-stage.vertical .ys-line{font-size:42px}
+.yt-stage.vertical .ys-score{font-size:26px}

@@ -169,17 +169,37 @@ function say(text){
 }
 function hush(){try{window.speechSynthesis?.cancel();}catch{}if(EMBED&&parent!==window)parent.postMessage({yt:'speak-stop'},'*');}
 window.speechSynthesis?.getVoices?.();
-const QZ=25000,QSHOW=18000;let quizIdx=-1,quizQ=null,quizOpts=[];
+/* Partidas: 60 s de presentador y luego 10 preguntas de 25 s (18 para responder y 7 para la respuesta).
+   Todo va con la hora: todos ven la misma partida, la misma frase y la misma pregunta. */
+const QZ=25000,QSHOW=18000,HOST=60000,PER=10,ROUND=HOST+PER*QZ,HOSTS=window.SANTA_QUIZ_HOST||[];
+let quizIdx=-1,quizQ=null,quizOpts=[],hostKey='',hostSaid=-1;
+function hostPlan(h){const w=h.frases.map(f=>f.split(/\s+/).length),tot=w.reduce((a,b)=>a+b,0);let t=2500;return h.frases.map((f,i)=>{const st=t;t+=w[i]/tot*54500;return {s:st,e:t,f};});}
+function partidaDelDia(now){const d=new Date(now),m=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();return Math.floor((now-m)/ROUND)+1;}
 function quizTick(){
   if(!QUIZ.length)return;
-  const now=Date.now(),k=Math.floor(now/QZ),t=now%QZ,L=Y[lang];
-  if(k!==quizIdx){
-    quizIdx=k;const q=QUIZ[quizOrder[k%QUIZ.length]],r=rng(k*7919+13);
-    const opts=[q.answer,...q.wrong].map(o=>[r(),o]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);quizQ=q;quizOpts=opts;
-    if(t<4000)say(`${q.question} ${opts.map((o,i)=>`${'ABCD'[i]}: ${o}.`).join(' ')}`);
-    show.innerHTML=`<div class="ys-quiz"><span class="ys-chip">🎯 ${esc(L.quiz)} · ${esc(CAT[q.category]||q.category)}</span><h2>${esc(q.question)}</h2><ol class="ys-opts">${opts.map((o,i)=>`<li data-ok="${o===q.answer}"><b>${'ABCD'[i]}</b><span>${esc(o)}</span></li>`).join('')}</ol><div class="ys-timer"><i></i><span></span></div><p class="ys-expl"><strong>${esc(L.ok)}</strong> ${esc(q.explanation||'')}</p><p class="ys-chat">${esc(L.chat)}</p></div>`;
+  const now=Date.now(),round=Math.floor(now/ROUND),pos=now%ROUND,L=Y[lang],num=partidaDelDia(now);
+  if(pos<HOST&&HOSTS.length){
+    const hi=round%HOSTS.length,h=HOSTS[hi],plan=hostPlan(h),key='h'+round;
+    if(hostKey!==key){
+      hostKey=key;quizIdx=-1;hostSaid=-1;
+      show.innerHTML=`<div class="ys-quiz ys-host"><span class="ys-chip">🎅 ${esc(L.quiz)} · Partida ${num}</span><h2>${esc(h.titulo)}</h2><p class="ys-line"></p><div class="ys-score">${hi===0?'🏆 Cuenta tus aciertos: al final escribe tu puntaje en los comentarios':'🏆 ¿Cuántas acertaste? Escríbelo en los comentarios: <b>__ / 10</b>'}</div><p class="ys-chat ys-start"></p></div>`;
+    }
+    const line=show.querySelector('.ys-line'),idx=plan.findIndex(x=>pos>=x.s&&pos<x.e);
+    if(line&&idx>=0&&line.dataset.i!==String(idx)){
+      line.dataset.i=idx;line.textContent=plan[idx].f;line.classList.remove('in');void line.offsetWidth;line.classList.add('in');
+      if(pos-plan[idx].s<1500&&hostSaid!==idx){hostSaid=idx;say(plan[idx].f);}
+    }
+    const st=show.querySelector('.ys-start');if(st)st.textContent=`⏱ La partida ${num} empieza en ${Math.ceil((HOST-pos)/1000)} s`;
+    return;
   }
-  const box=show.firstElementChild;if(!box)return;
+  const qn=Math.max(0,Math.floor((pos-HOST)/QZ)),t=(pos-HOST)%QZ,k=round*PER+qn;
+  if(k!==quizIdx){
+    quizIdx=k;hostKey='';const q=QUIZ[quizOrder[k%QUIZ.length]],r=rng(k*7919+13);
+    const opts=[q.answer,...q.wrong].map(o=>[r(),o]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);quizQ=q;quizOpts=opts;
+    if(t<4000)say(`Pregunta ${qn+1}. ${q.question} ${opts.map((o,i)=>`${'ABCD'[i]}: ${o}.`).join(' ')}`);
+    show.innerHTML=`<div class="ys-quiz"><span class="ys-chip">🎯 Partida ${num} · Pregunta ${qn+1} de ${PER} · ${esc(CAT[q.category]||q.category)}</span><h2>${esc(q.question)}</h2><ol class="ys-opts">${opts.map((o,i)=>`<li data-ok="${o===q.answer}"><b>${'ABCD'[i]}</b><span>${esc(o)}</span></li>`).join('')}</ol><div class="ys-timer"><i></i><span></span></div><p class="ys-expl"><strong>${esc(L.ok)}</strong> ${esc(q.explanation||'')}</p><p class="ys-chat">${esc(L.chat)}</p></div>`;
+  }
+  const box=show.firstElementChild;if(!box||box.classList.contains('ys-host'))return;
   box.querySelector('.ys-timer span').textContent=t<QSHOW?Math.ceil((QSHOW-t)/1000):'✓';
   box.querySelector('.ys-timer i').style.width=Math.max(0,(QSHOW-t)/QSHOW*100)+'%';
   if(t>=QSHOW&&!box.classList.contains('reveal')){box.classList.add('reveal');chime();
@@ -237,7 +257,7 @@ function startNoche(){
   bgVideo.pause();bgVideo.removeAttribute('src');$('#yt-ep').hidden=true;base=.5;vol();
   namer?.setLabel(X[lang].noche);namer?.start();namer?.setSound(soundOn);syncLista();renderMode('nochebuena');refreshTicker(true);
 }
-function stopShow(){hush();clearTimeout(showTimer);clearTimeout(phraseT);phrase?.pause();stage.classList.remove('noche');namer?.setLabel('');showAudio?.pause();showAudio=null;show.innerHTML='';show.hidden=true;quizIdx=-1;slideIdx=-1;stage.classList.remove('show','show-quiz','show-musica','show-tarjetas','show-cuento');}
+function stopShow(){hush();hostKey='';clearTimeout(showTimer);clearTimeout(phraseT);phrase?.pause();stage.classList.remove('noche');namer?.setLabel('');showAudio?.pause();showAudio=null;show.innerHTML='';show.hidden=true;quizIdx=-1;slideIdx=-1;stage.classList.remove('show','show-quiz','show-musica','show-tarjetas','show-cuento');}
 function startShow(kind,arg){
   stopShow();if(isEp()){video.pause();}bgVideo.pause();bgVideo.removeAttribute('src');
   mode=kind;stage.classList.remove('episode','vertical-src');stage.classList.add('show','show-'+(kind==='cuentos'?'cuento':kind));show.hidden=false;$('#yt-ep').hidden=true;
