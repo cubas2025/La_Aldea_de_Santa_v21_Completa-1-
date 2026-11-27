@@ -76,6 +76,16 @@ async function watchOnAir(onRow){
     .subscribe();
 }
 
+/* Nombres para Estelvia (actualización de nombres): los de las últimas 2 horas y los nuevos al instante. */
+async function watchElf(onRow){
+  const sb=await client();
+  const desde=new Date(Date.now()-2*3600000).toISOString();
+  const {data,error}=await sb.from('nombres_duende').select('id,nombre,lugar,creado').gte('creado',desde).order('creado');
+  if(error)throw error;
+  for(const r of data||[])onRow(r);
+  sb.channel('nombres-duende').on('postgres_changes',{event:'INSERT',schema:'public',table:'nombres_duende'},p=>{if(p.new?.nombre)onRow(p.new);}).subscribe();
+}
+
 /* Interruptor «Estoy en vivo» (tabla transmision, se cambia desde /admin). */
 async function liveStatus(){
   const sb=await client();
@@ -100,7 +110,7 @@ if(configured&&Array.isArray(window.SANTA_NAME_AUDIO)){
   }).catch(()=>{});
 }
 
-window.ALDEA_DB={configured,extraNames,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,liveNames,liveStatus,watchOnAir,staticCodes:cfg.codigosEstaticos!==false};
+window.ALDEA_DB={configured,extraNames,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,liveNames,liveStatus,watchOnAir,watchElf,staticCodes:cfg.codigosEstaticos!==false};
 
 /* Cada video generado (lista de los buenos, escenas, tarjeta de Navidad, editor) suma 1. */
 const share=window.SANTA_VIDEO_SHARE;

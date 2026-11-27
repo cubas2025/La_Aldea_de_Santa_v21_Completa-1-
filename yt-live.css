@@ -196,3 +196,23 @@ body.embed .yt-controls{display:none}
 .ys-start{font-size:28px}
 .yt-stage.vertical .ys-line{font-size:42px}
 .yt-stage.vertical .ys-score{font-size:26px}
+
+.ys-kind{margin:14px 0 0;font-size:22px;font-weight:800;color:#b9142b;letter-spacing:.04em}
+.ys-host .ys-line{min-height:4.8em}
+.ys-banner{margin:0 0 14px;padding:10px 16px;border-radius:14px;background:#1f8a4c;color:#fff;font-size:24px;font-weight:800;text-align:center;animation:ys-in .6s ease-out}
+
+/* Actualización de los nombres con Estelvia */
+.yt-stage.show-duende .yt-video{visibility:visible}
+.ys-elf{position:absolute;inset:0}
+.ys-elf .ys-bg{filter:blur(6px) brightness(.55) saturate(1.1);animation:ys-zoom 30s ease-out both}
+.ys-elf-card{position:absolute;left:50%;top:160px;width:1300px;transform:translateX(-50%);padding:34px 44px;border-radius:28px;background:linear-gradient(160deg,#0b1f17ee,#123a2bee);border:3px solid #ffe7b0;box-shadow:0 24px 60px #000b;text-align:center;color:#fff}
+.ys-elf-card .ys-chip{background:#1f8a4c}
+.ys-elf-card h2{margin:14px 0 6px;font:700 50px/1.1 'Cormorant Garamond',serif;color:#ffe7b0}
+.ys-elf-name{margin:18px 0 4px;font:700 92px/1.05 'Cormorant Garamond',serif;color:#ffd65c;text-shadow:0 0 24px #ffdc7c99}
+.ys-elf-name.in{animation:ys-glow 1.4s ease-out}
+@keyframes ys-glow{from{opacity:0;transform:scale(.85);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+.ys-elf-place{min-height:1.3em;margin:0;font-size:38px;font-weight:800;color:#bff3d1}
+.ys-elf-line{margin:18px 0 6px;font-size:32px;line-height:1.35;font-weight:600}
+.ys-elf-card .ys-chat{color:#ffe7b0}
+.yt-stage.vertical .ys-elf-card{width:980px;top:230px;padding:30px 30px}
+.yt-stage.vertical .ys-elf-name{font-size:84px}

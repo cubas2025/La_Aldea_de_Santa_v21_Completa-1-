@@ -75,6 +75,13 @@
         <ol id="ad-air-queue" class="ad-air-queue"></ol>
         <p class="fine">Si al enviar sale un error, ejecuta una vez <code>supabase/actualizacion-nombres-al-aire.sql</code> en el SQL Editor de Supabase.</p>
       </form>
+      <form id="ad-elf-form" class="panel admin-card"><h2>📜 Actualización de nombres · Estelvia</h2>
+        <p>Nombre completo y lugar desde donde nos ven. Estelvia los lee en vivo durante la «Actualización de los nombres». Puedes pegar varios, uno por línea: <code>María Fernanda López — Lima, Perú</code></p>
+        <label>Nombre completo<textarea name="nombres" rows="3" maxlength="2000" placeholder="María Fernanda López — Lima, Perú"></textarea></label>
+        <label>Lugar (si no lo pusiste en la línea)<input name="lugar" maxlength="80" placeholder="Lima, Perú"></label>
+        <button type="submit" class="button green">Enviar a Estelvia</button><p id="ad-elf-status" class="fine" role="status"></p>
+        <p class="fine">Si al enviar sale un error, ejecuta una vez <code>supabase/actualizacion-duende.sql</code> en el SQL Editor de Supabase.</p>
+      </form>
       <form id="ad-live-form" class="panel admin-card"><h2>🔴 Estoy en vivo</h2>
         <p>Cuando empieces a transmitir, enciende el interruptor: en toda la web aparece el cartel «Santa está EN VIVO» y el botón para entrar a tu transmisión. Apágalo al terminar.</p>
         <label class="vc-check"><input type="checkbox" name="en_vivo">Santa está en vivo ahora</label>

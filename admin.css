@@ -61,3 +61,6 @@
 .ad-rec-actions{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
 .ad-rec audio{width:100%;margin:8px 0}
 .ad-rec-go{margin-left:6px;padding:3px 10px;border:1px solid #b9142b;border-radius:999px;background:#fff;color:#b9142b;font:inherit;font-weight:700;cursor:pointer}
+
+#ad-elf-form{max-width:640px;margin-bottom:18px}
+#ad-elf-form textarea{width:100%}

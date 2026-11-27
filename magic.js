@@ -34,7 +34,7 @@ let quizRunId=0,quizSettings=null,quizTimed=true,quizRunning=false,quizBlocks=0,
 const shuffle=a=>{let b=[...a];for(let i=b.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
 function stopQuizClock(){if(quizInterval!==null)window.clearInterval(quizInterval);quizInterval=null;quizDeadline=0;}
 function updateLevelInfo(){
-  if(!window.SANTA_QUIZ.length){$('#quiz-level-info').textContent='Preparando las 1500 preguntas…';return;}
+  if(!window.SANTA_QUIZ.length){$('#quiz-level-info').textContent='Preparando las 10 000 preguntas…';return;}
   const level=Number($('#quiz-level').value),category=$('#quiz-category').value;
   const count=window.SANTA_QUIZ.filter(q=>q.level===level&&(category==='all'||q.category===category)).length;
   $('#quiz-level-info').textContent=`${count} preguntas en este banco · ${window.SANTA_QUIZ_FLOW.remaining(level,category)} sin practicar · ${$('#quiz-mode').value==='continuous'?'continúa con variantes nuevas':'10 por partida'}`;
