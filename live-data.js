@@ -135,7 +135,7 @@ window.ALDEA_LIVE = {
     ],
     /* Canción principal del horizontal: suena primero y vuelve entre cada canción de la lista «musica».
        Si el archivo todavía no está en la carpeta, se salta sola y sigue con las demás. */
-    musicaDestacada: { src: 'assets/en-vivo/musica/christmas-new-year-2025.mp3', title: 'Christmas & New Year 2025 · Relaxing, Joyful, Enchanting', gain: 0.43 },
+    musicaDestacada: { src: 'assets/en-vivo/musica/christmas-new-year-2026.mp3', title: 'Christmas & New Year 2026 · Relaxing, Joyful, Enchanting', gain: 0.43 },
     /* Episodio 1 · Introducción: videos de Santa hablando (con su propio audio) y subtítulos
        sincronizados palabra por palabra: palabras = [[inicio, fin, 'palabra'], ...] en segundos.
        Al terminar la introducción, la transmisión sigue con la lista de los buenos. */
