@@ -101,4 +101,11 @@
 .live-presenter .lp-lower{bottom:76px;right:auto;max-width:55%}
 .lp-clock{position:absolute;top:62px;right:22px;z-index:2;padding:6px 12px;border-radius:8px;background:#0008;color:#fff;font-weight:800;font-size:1.1rem;font-variant-numeric:tabular-nums}
 .live-lang button{white-space:nowrap}
-@media (max-width:520px){.lo-hud{width:50%;padding:6px 8px}.lo-days{font-size:1.05rem}.lo-time{font-size:.88rem}.live-player .live-lower{right:52%}.live-player .live-lower strong{font-size:.82rem}.lt-move span{font-size:.78rem}}
+@media (max-width:520px){.lo-hud{width:50%;padding:6px 8px}.lo-days{font-size:1.05rem}.lo-time{font-size:.88rem}.live-player .live-lower{right:52%}.live-player .live-lower strong{font-size:.82rem}.lt-move span{font-size:.78rem}}/* Compartir la transmisión (panel del creador) */
+.cr-share h4{margin:16px 0 6px;font-size:1rem}
+.cr-share-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px 24px}
+.cr-links{display:grid;gap:8px}
+.cr-link{display:grid;grid-template-columns:minmax(150px,230px) 1fr auto auto;align-items:center;gap:8px}
+.cr-link span{font-weight:700;font-size:.9rem}
+.cr-link input{min-width:0;padding:8px 10px;border:1px solid #d9c9cd;border-radius:8px;font:inherit;font-size:.85rem;background:#fff8f5}
+@media (max-width:640px){.cr-link{grid-template-columns:1fr auto auto}.cr-link span{grid-column:1/-1}}

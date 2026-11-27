@@ -60,6 +60,22 @@ html,body{margin:0;height:100%;background:#000;color:#fff;overflow:hidden;font-f
 .yt-move span{padding-right:4em;font-size:27px;font-weight:600;text-shadow:0 1px 2px #000}
 @keyframes yt-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
+/* Formato vertical (TikTok, 1080 × 1920): paneles compactos abajo, como en el vertical de la web */
+.yt-stage.vertical{width:1080px;height:1920px}
+.yt-stage.vertical .yt-top{top:30px;left:34px;right:34px}
+.yt-stage.vertical .yt-from{display:none}
+.yt-stage.vertical .yt-panel{top:auto;bottom:150px;width:486px;padding:18px 22px;border-radius:18px}
+.yt-stage.vertical .yt-left{left:36px}.yt-stage.vertical .yt-right{right:36px}
+.yt-stage.vertical .yt-panel>small{font-size:17px}
+.yt-stage.vertical .yt-days{font-size:64px;margin:2px 0 8px}
+.yt-stage.vertical .yt-count b{font-size:40px}.yt-stage.vertical .yt-count i{font-size:13px}
+.yt-stage.vertical .yt-clock{font-size:70px}
+.yt-stage.vertical .yt-date{font-size:19px}.yt-stage.vertical .yt-read{font-size:19px}
+.yt-stage.vertical .yt-now,.yt-stage.vertical .yt-recent{display:none}
+.yt-stage.vertical .yt-music{right:36px;bottom:80px;max-width:1000px;font-size:17px}
+.yt-stage.vertical .yt-captions{bottom:520px;max-width:1000px;font-size:46px}
+.yt-stage.vertical .yt-ep{top:110px;left:34px}
+
 /* Controles (fuera del escenario; se ocultan solos y no salen con ?obs=1) */
 .yt-controls{position:fixed;left:50%;top:16px;z-index:10;display:grid;gap:8px;justify-items:center;max-width:calc(100vw - 32px);padding:12px 16px;border-radius:16px;background:#fffffff2;color:#2a1a20;box-shadow:0 10px 30px #0008;transform:translateX(-50%);transition:opacity .3s}
 .yt-controls.hide{opacity:0;pointer-events:none}

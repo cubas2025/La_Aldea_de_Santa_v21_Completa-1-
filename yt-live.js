@@ -1,6 +1,7 @@
 (() => {
 'use strict';
-/* Transmisión horizontal (YouTube, 1920 × 1080).
+/* Transmisión para OBS: horizontal (YouTube, 1920 × 1080, en-vivo-youtube.html) o vertical
+   (TikTok, 1080 × 1920, en-vivo-vertical.html: <body data-formato="vertical">).
    - Lista de los buenos: los mismos nombres, voz de Santa y polvo de estrellas que el vertical,
      con los videos de Santa con su bolsa en 16:9 (sin sonido, como en el vertical).
    - Música: la canción destacada suena primero y vuelve entre cada canción de la lista general.
@@ -13,6 +14,8 @@ const {STR,countdown,channelAt,p2,esc,fmtN}=kit;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const params=new URLSearchParams(location.search);
 const stage=$('#yt-stage'),video=$('#yt-video'),bgVideo=$('#yt-bg');
+const V=document.body.dataset.formato==='vertical',W=V?1080:1920,H=V?1920:1080;
+stage.classList.toggle('vertical',V);
 
 const X={
   es:{from:'EN VIVO DESDE EL POLO NORTE',hora:'Hora en la aldea',h:'horas',m:'min',s:'seg',recent:'Santa acaba de nombrar',playing:'♪ Suena:',ep:'Estreno',noEp:'Los videos del episodio 1 todavía no están en la carpeta. Mientras tanto se transmite la lista de los buenos.',start:'▶ Iniciar transmisión con sonido',blocked:'El navegador pide un clic para activar el sonido. En OBS suena solo.'},
@@ -23,12 +26,12 @@ let lang=STR[params.get('lang')]?params.get('lang'):'es';
 if(params.get('obs')==='1')document.body.classList.add('obs');
 
 /* ---------- Escenario a escala de la ventana ---------- */
-function fit(){stage.style.setProperty('--s',Math.min(innerWidth/1920,innerHeight/1080));}
+function fit(){stage.style.setProperty('--s',Math.min(innerWidth/W,innerHeight/H));}
 addEventListener('resize',fit);fit();
 
 /* ---------- Música: destacada, otra, destacada, otra… ---------- */
 const general=(all.musica||[]).filter(t=>t.src);
-const featured=cfg.musicaDestacada?.src?cfg.musicaDestacada:null;
+const featured=!V&&cfg.musicaDestacada?.src?cfg.musicaDestacada:null;   // la canción destacada es del horizontal
 let seq=general.slice();
 const bg=new Audio();bg.preload='auto';
 let bgI=0,bgLoaded=-1,base=.5,duck=1,fade=1,duckTimer=0,wanted=false,lastT=-1,stuck=0,featuredOk=false;
@@ -59,13 +62,13 @@ setInterval(()=>{   // vigilante: reanuda si se pausó y salta si se trabó
 /* ---------- Lista de los buenos (voz + polvo de estrellas en el cielo ancho) ---------- */
 const recent=[];
 const namer=window.ALDEA_LIVE_NAMES?.create({canvas:$('#yt-sky'),onSpeak:duckFor,
-  layout:{scale:1.4,x:204,y:-40,headerY:110,nameY:300,size:170,maxWidth:1000},
+  layout:V?null:{scale:1.4,x:204,y:-40,headerY:110,nameY:300,size:170,maxWidth:1000},
   onName:name=>{if(recent[0]===name)return;recent.unshift(name);recent.splice(5);renderRecent();refreshTicker();}});
 namer?.setLang(lang);
 function renderRecent(){$('#yt-recent').innerHTML=recent.map(n=>`<li>${esc(n)}</li>`).join('');}
 
 /* ---------- Videos de Santa sincronizados con la hora (todos ven lo mismo) ---------- */
-const items=(cfg.playlist||[]).filter(i=>i.src&&i.duration>0).map(i=>({...i,repeat:Math.max(1,i.repeat||1),span:i.duration*Math.max(1,i.repeat||1)}));
+const items=((V?all.playlist:cfg.playlist)||[]).filter(i=>i.src&&i.duration>0).map(i=>({...i,repeat:Math.max(1,i.repeat||1),span:i.duration*Math.max(1,i.repeat||1)}));
 let mode='lista',current=-1;
 const titleOf=it=>it['title_'+lang]||it.title;
 function syncLista(){
@@ -103,7 +106,7 @@ function playEpisode(i){
   $('#yt-ep-title').textContent=ep['titulo_'+lang]||ep.titulo||'';
   $('#yt-title').textContent=it.titulo||'';
 }
-video.addEventListener('loadedmetadata',()=>{stage.classList.toggle('vertical-src',mode==='episodio1'&&video.videoWidth<video.videoHeight);});
+video.addEventListener('loadedmetadata',()=>{stage.classList.toggle('vertical-src',!V&&mode==='episodio1'&&video.videoWidth<video.videoHeight);});
 video.addEventListener('ended',()=>{if(mode==='episodio1')playEpisode(epI+1);});
 function captions(){
   const box=$('#yt-captions');

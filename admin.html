@@ -25,6 +25,7 @@
       <button type="button" role="tab" data-tab="cartas" aria-selected="false">Cartas <span class="admin-badge" id="ad-unread" hidden></span></button>
       <button type="button" role="tab" data-tab="nombres" aria-selected="false">Nombres nuevos</button>
       <button type="button" role="tab" data-tab="codigos" aria-selected="false">Códigos</button>
+      <button type="button" role="tab" data-tab="transmision" aria-selected="false">Transmisión</button>
     </nav>
     <div class="admin-pane" data-pane="resumen">
       <div class="admin-stats" id="ad-stats"></div>
@@ -46,6 +47,16 @@
       </div>
       <div class="admin-tools"><input type="search" id="ad-code-search" placeholder="Buscar código o cliente" aria-label="Buscar códigos"><select id="ad-code-filter" aria-label="Filtrar códigos"><option value="all">Todos</option><option value="free">Sin entregar</option><option value="given">Entregados</option><option value="used">Usados</option><option value="off">Desactivados</option></select><button type="button" class="button outline small" id="ad-codes-refresh">Actualizar</button></div>
       <div id="ad-codes" class="admin-table-wrap"></div><button type="button" class="button outline" id="ad-codes-more" hidden>Ver más códigos</button>
+    </div>
+    <div class="admin-pane" data-pane="transmision" hidden>
+      <form id="ad-live-form" class="panel admin-card"><h2>🔴 Estoy en vivo</h2>
+        <p>Cuando empieces a transmitir, enciende el interruptor: en toda la web aparece el cartel «Santa está EN VIVO» y el botón para entrar a tu transmisión. Apágalo al terminar.</p>
+        <label class="vc-check"><input type="checkbox" name="en_vivo">Santa está en vivo ahora</label>
+        <label>Tu usuario de TikTok <span class="optional">sin @</span><input name="tiktok_usuario" maxlength="40" autocomplete="off" placeholder="la.aldea.de.santa"></label>
+        <label>Enlace de tu directo de YouTube <span class="optional">el de «Compartir»</span><input name="youtube" maxlength="200" autocomplete="off" placeholder="https://youtube.com/live/..."></label>
+        <button type="submit" class="button">Guardar</button><p id="ad-live-status" class="fine" role="status"></p>
+        <p class="fine">Si al guardar sale un error, ejecuta una vez <code>supabase/actualizacion-transmision.sql</code> en el SQL Editor de Supabase.</p>
+      </form>
     </div>
   </section>
   <p id="ad-toast" class="admin-toast" role="status" hidden></p>

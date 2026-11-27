@@ -10,6 +10,8 @@
 6. Haz push. Abre `https://tu-web/admin` y entra con tu correo y contraseña.
 7. En **Códigos → Importar** elige `codigos-privados/codigos-de-acceso.csv`. Luego cambia `codigosEstaticos` a `false` en `supabase-config.js` y vuelve a hacer push.
 
+8. **Interruptor «Estoy en vivo»:** ejecuta una vez `supabase/actualizacion-transmision.sql` en el SQL Editor. Luego, en `/admin` → **Transmisión**, enciendes o apagas el cartel «Santa está EN VIVO» con tu usuario de TikTok y el enlace de tu directo de YouTube.
+
 ## B. Llamadas reales (Cloudflare + Twilio)
 
 1. La web en Cloudflare ya incluye la API `/api/llamadas` (`worker/index.mjs`).
