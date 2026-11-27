@@ -160,19 +160,19 @@ function bestVoice(){
   const score=v=>(/natural|online|neural/i.test(v.name)?6:0)+(/google/i.test(v.name)?3:0)+(/mx|us|419/i.test(v.lang)?2:/es[-_]es/i.test(v.lang)?1:0)+(/jorge|pablo|alvaro|álvaro|raul|raúl|diego|gerardo|male|hombre/i.test(v.name)?1:0);
   return vs.sort((a,b)=>score(b)-score(a))[0]||null;
 }
-function say(text){
+function say(text,pitch=.95){
   if(!soundOn||!narr||!text)return;
   duckFor(Math.min(16,text.split(/\s+/).length*.42+1));
-  if(EMBED&&parent!==window){parent.postMessage({yt:'speak',text},'*');return;}
+  if(EMBED&&parent!==window){parent.postMessage({yt:'speak',text,pitch},'*');return;}
   const s=window.speechSynthesis;if(!s)return;
-  s.cancel();const u=new SpeechSynthesisUtterance(text),v=bestVoice();if(v)u.voice=v;u.lang=v?.lang||'es-MX';u.rate=1;u.pitch=.95;s.speak(u);
+  s.cancel();const u=new SpeechSynthesisUtterance(text),v=bestVoice();if(v)u.voice=v;u.lang=v?.lang||'es-MX';u.rate=1;u.pitch=pitch;s.speak(u);
 }
 function hush(){try{window.speechSynthesis?.cancel();}catch{}if(EMBED&&parent!==window)parent.postMessage({yt:'speak-stop'},'*');}
 window.speechSynthesis?.getVoices?.();
 /* Partidas: 60 s de presentador y luego 10 preguntas. Cada pregunta dura lo que necesita:
    lectura (según sus palabras) + 8 s para responder + respuesta y explicación (según sus palabras).
    El calendario es igual en todas las pantallas: todos ven la misma pregunta en el mismo segundo. */
-const PER=10,HOST=60000,THINK=8000,HOSTS=window.SANTA_QUIZ_HOST||[];
+const HOSTS=window.SANTA_QUIZ_HOST||null,PER=10,HOST=HOSTS?.duracion||60000,THINK=8000;
 const wc=x=>String(x||'').split(/\s+/).filter(Boolean).length;
 const READ=q=>Math.max(5,(wc(q.question)+wc([q.answer,...q.wrong].join(' '))+6)*.42+2.5)*1000;
 const ANS=q=>Math.max(7,(wc(q.answer)+wc(q.explanation)+7)*.42+4)*1000;
@@ -190,23 +190,26 @@ function quizPos(now){
   return {host:false,round,qn,t:p-x.s,show:x.show,k:lo*PER+qn};
 }
 let quizIdx=-1,quizQ=null,quizOpts=[],hostKey='',hostSaid=-1;
-function hostPlan(h){const w=h.frases.map(f=>f.split(/\s+/).length),tot=w.reduce((a,b)=>a+b,0);let t=2500;return h.frases.map((f,i)=>{const st=t;t+=w[i]/tot*54500;return {s:st,e:t,f};});}
 function partidaDelDia(now,round){const d=new Date(now),m=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();return round-quizPos(m).round+1;}
 function quizTick(){
   if(!QUIZ.length||!SCHED.rounds.length)return;
   const now=Date.now(),P=quizPos(now),L=Y[lang],num=partidaDelDia(now,P.round);
-  if(P.host&&HOSTS.length){
-    const hi=P.round%HOSTS.length,h=HOSTS[hi],plan=hostPlan(h),key='h'+P.round,pos=P.pos;
+  if(P.host&&HOSTS){
+    const plan=HOSTS.build(P.round,num),key='h'+P.round,pos=P.pos;
     if(hostKey!==key){
       hostKey=key;quizIdx=-1;hostSaid=-1;
-      show.innerHTML=`<div class="ys-quiz ys-host"><span class="ys-chip">🎅 ${esc(L.quiz)} · Partida ${num}</span><h2>${esc(h.titulo)}</h2><p class="ys-line"></p><div class="ys-score">${hi===0?'🏆 Cuenta tus aciertos: al final escribe tu puntaje en los comentarios':'🏆 ¿Cuántas acertaste? Escríbelo en los comentarios: <b>__ / 10</b>'}</div><p class="ys-chat ys-start"></p></div>`;
+      show.innerHTML=`<div class="ys-quiz ys-host"><span class="ys-chip">🎅 Sabelina · ${esc(L.quiz)} · Partida ${num}</span><p class="ys-kind"></p><p class="ys-line"></p><div class="ys-score">🏆 ¿Cuántas acertaste? Escríbelo en los comentarios: <b>__ / 10</b></div><p class="ys-chat ys-start"></p></div>`;
     }
-    const line=show.querySelector('.ys-line'),idx=plan.findIndex(x=>pos>=x.s&&pos<x.e);
+    let idx=-1;for(let i=0;i<plan.length;i++)if(pos>=plan[i].t)idx=i;
+    const line=show.querySelector('.ys-line');
     if(line&&idx>=0&&line.dataset.i!==String(idx)){
-      line.dataset.i=idx;line.textContent=plan[idx].f;line.classList.remove('in');void line.offsetWidth;line.classList.add('in');
-      if(pos-plan[idx].s<1500&&hostSaid!==idx){hostSaid=idx;say(plan[idx].f);}
+      const it=plan[idx],text=typeof it.texto==='function'?it.texto():it.texto;
+      line.dataset.i=idx;line.textContent=text;show.querySelector('.ys-kind').textContent=HOSTS.tipos[it.tipo]||'';
+      line.classList.remove('in');void line.offsetWidth;line.classList.add('in');
+      if(pos-it.t<1500&&hostSaid!==idx){hostSaid=idx;say(text);}
     }
-    const st=show.querySelector('.ys-start');if(st)st.textContent=`⏱ La partida ${num} empieza en ${Math.ceil((HOST-pos)/1000)} s`;
+    const left=Math.ceil((HOST-pos)/1000),st=show.querySelector('.ys-start');
+    if(st)st.textContent=`⏱ La partida ${num} empieza en ${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`;
     return;
   }
   if(P.host)return;
@@ -218,6 +221,9 @@ function quizTick(){
     show.innerHTML=`<div class="ys-quiz"><span class="ys-chip">🎯 Partida ${num} · Pregunta ${qn+1} de ${PER} · ${esc(CAT[q.category]||q.category)}</span><h2>${esc(q.question)}</h2><ol class="ys-opts">${opts.map((o,i)=>`<li data-ok="${o===q.answer}"><b>${'ABCD'[i]}</b><span>${esc(o)}</span></li>`).join('')}</ol><div class="ys-timer"><i></i><span></span></div><p class="ys-expl"><strong>${esc(L.ok)}</strong> ${esc(q.explanation||'')}</p><p class="ys-chat">${esc(L.chat)}</p></div>`;
   }
   const box=show.firstElementChild;if(!box||box.classList.contains('ys-host'))return;
+  let ban=box.querySelector('.ys-banner');const showBan=now%300000<15000;
+  if(showBan&&!ban){ban=document.createElement('p');ban.className='ys-banner';ban.textContent='📝 ¿Enviamos la actualización de los nombres a Santa? ¡Escribe tu nombre y tu país en los comentarios!';box.prepend(ban);}
+  else if(!showBan&&ban)ban.remove();
   box.querySelector('.ys-timer span').textContent=t<QSHOW?Math.ceil((QSHOW-t)/1000):'✓';
   box.querySelector('.ys-timer i').style.width=Math.max(0,(QSHOW-t)/QSHOW*100)+'%';
   if(t>=QSHOW&&!box.classList.contains('reveal')){box.classList.add('reveal');chime();
@@ -270,12 +276,51 @@ function nextStory(){
     const words=pages[i].split(/\s+/).length;showTimer=setTimeout(()=>{i++;if(i<pages.length)page();else nextStory();},Math.max(10,words*.42+4)*1000);
   };page();
 }
+/* Actualización de los nombres: Estelvia, la guardiana de las cartas, lee en vivo los nombres que llegan
+   desde el panel privado (nombre completo y lugar), durante 3 minutos, y luego vuelve el quiz. */
+const ELF=all.duende||{},ELF_MS=180000,ELF_SLOT=13000;
+const ELF_INTRO=['¡Hola, hola! Soy Estelvia, la guardiana de las cartas, y la duende encargada de enviar los nombres a Santa Claus. ¡Empieza la actualización de los nombres!',
+  '¡Atención, Polo Norte! Aquí Estelvia, desde la Gran Oficina Postal. Voy a leer los nombres que me escriben y los enviaré directo a Santa.'];
+const ELF_BONITO=['Tu nombre ya brilla en la gran lista de Santa.','Santa va a sonreír muchísimo cuando lo lea.','Que la magia de la Navidad llene tu casa de alegría.',
+  'Sigue siendo bondadoso, que Santa lo nota todo.','Tu nombre ya va volando hacia el Polo Norte en mi bolso de cartas viajeras.','Los renos ya conocen tu nombre.',
+  'Recuerda: las pequeñas buenas acciones iluminan el mundo entero.','Elarina lo guardará con cariño en el pergamino dorado.'];
+const ELF_RELLENO=['¿Quieres que tu nombre llegue hoy a Santa? Escribe tu nombre completo y desde dónde nos ves en los comentarios.',
+  'Una pequeña carta puede guardar un universo de sueños. ¡Escríbanme sus nombres!','Recuerden portarse bien, ayudar en casa y abrazar mucho a la familia.',
+  'Cada nombre que me escriben lo llevo con cuidado en mi bolso de cartas viajeras.','¡Qué lindo es ver tantos niños de toda Latinoamérica! Escriban su país en el chat.',
+  'Santa me pidió que no se me escape ningún nombre. ¡Escríbanlos con su ciudad!','Ser amable es la magia más poderosa del mundo. ¡Nunca lo olviden!'];
+let elfQ=[],elfSeen=new Set(),elfWatch=false,elfT0=0,elfIdx=-1,elfLast=-1,elfN=Math.floor(Math.random()*8);
+function elfRow(r){if(!r||elfSeen.has(r.id))return;elfSeen.add(r.id);if(mode!=='duende'&&new Date(r.creado).getTime()<Date.now()-600000)return;elfQ.push(r);}
+function startElf(){
+  stopShow();mode='duende';elfT0=Date.now();elfIdx=-1;elfLast=-1;
+  stage.classList.remove('episode','vertical-src');stage.classList.add('show','show-duende');show.hidden=false;$('#yt-ep').hidden=true;namer?.stop();
+  video.pause();video2.pause();base=.3;vol();
+  if(ELF.video){video.loop=true;video.muted=true;video.src=ELF.video;video.classList.remove('off');video.play().catch(()=>{});}
+  show.innerHTML=`<div class="ys-elf">${ELF.video?'':`<div class="ys-bg" style="background-image:url('${esc(ELF.imagen||'assets/santa-correo.webp')}')"></div>`}<div class="ys-elf-card"><span class="ys-chip">📜 Estelvia · Guardiana de las cartas</span><h2>Actualización de los nombres para Santa</h2><p class="ys-elf-name"></p><p class="ys-elf-place"></p><p class="ys-elf-line"></p><p class="ys-chat ys-elf-left"></p></div></div>`;
+  if(!elfWatch&&window.ALDEA_DB?.configured&&window.ALDEA_DB.watchElf){elfWatch=true;window.ALDEA_DB.watchElf(elfRow).catch(()=>{elfWatch=false;});}
+  renderMode('duende');elfTick();
+}
+function elfTick(){
+  if(mode!=='duende')return;
+  const t=Date.now()-elfT0,slot=Math.floor(t/ELF_SLOT);
+  if(t>=ELF_MS){route('quiz');return;}
+  const left=Math.ceil((ELF_MS-t)/1000),lf=show.querySelector('.ys-elf-left');if(lf)lf.textContent=`⏱ Volvemos al quiz en ${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`;
+  if(slot===elfLast)return;elfLast=slot;
+  const nm=show.querySelector('.ys-elf-name'),pl=show.querySelector('.ys-elf-place'),ln=show.querySelector('.ys-elf-line');if(!nm)return;
+  let text;
+  if(slot===0){nm.textContent='✨';pl.textContent='';text=ELF_INTRO[Math.floor(Math.random()*ELF_INTRO.length)];}
+  else if(elfQ.length){const r=elfQ.shift(),lugar=(r.lugar||'').trim(),bonito=ELF_BONITO[(elfN++)%ELF_BONITO.length];
+    nm.textContent=r.nombre;pl.textContent=lugar?`📍 ${lugar}`:'';
+    text=lugar?`¡Recibí el nombre de ${r.nombre}, que nos ve desde ${lugar}! ${bonito}`:`¡Recibí el nombre de ${r.nombre}! ${bonito}`;}
+  else{nm.textContent='📜';pl.textContent='';text=ELF_RELLENO[slot%ELF_RELLENO.length];}
+  ln.textContent=text;nm.classList.remove('in');void nm.offsetWidth;nm.classList.add('in');
+  say(text,1.3);
+}
 function startNoche(){
   stopShow();mode='nochebuena';current=-1;act=video;idle=video2;video.dataset.src='';stage.classList.remove('episode','vertical-src');stage.classList.add('noche');
   bgVideo.pause();bgVideo.removeAttribute('src');$('#yt-ep').hidden=true;base=.5;vol();
   namer?.setLabel(X[lang].noche);namer?.start();namer?.setSound(soundOn);syncLista();renderMode('nochebuena');refreshTicker(true);
 }
-function stopShow(){hush();hostKey='';clearTimeout(showTimer);clearTimeout(phraseT);phrase?.pause();stage.classList.remove('noche');namer?.setLabel('');showAudio?.pause();showAudio=null;show.innerHTML='';show.hidden=true;quizIdx=-1;slideIdx=-1;stage.classList.remove('show','show-quiz','show-musica','show-tarjetas','show-cuento');}
+function stopShow(){if(mode==='duende'){video.pause();video.removeAttribute('src');video.loop=false;}hush();hostKey='';clearTimeout(showTimer);clearTimeout(phraseT);phrase?.pause();stage.classList.remove('noche');namer?.setLabel('');showAudio?.pause();showAudio=null;show.innerHTML='';show.hidden=true;quizIdx=-1;slideIdx=-1;stage.classList.remove('show','show-quiz','show-musica','show-tarjetas','show-cuento','show-duende');}
 function startShow(kind,arg){
   stopShow();if(isEp()){video.pause();}bgVideo.pause();bgVideo.removeAttribute('src');
   mode=kind;stage.classList.remove('episode','vertical-src');stage.classList.add('show','show-'+(kind==='cuentos'?'cuento':kind));show.hidden=false;$('#yt-ep').hidden=true;
@@ -287,7 +332,7 @@ function startShow(kind,arg){
   if(kind==='cuento'||kind==='cuentos'){mode='cuento';storyQueue=kind==='cuentos'?[...AUDIO_STORIES.map((_,i)=>'a'+i),...STORIES.map(s=>s.id)]:[arg??'0'];nextStory();}
   renderMode(kind);
 }
-setInterval(()=>{if(mode==='quiz')quizTick();else if(mode==='tarjetas')musicTick();else if(mode==='musica')laponiaTick();else if(mode==='nochebuena')nocheTick();},250);
+setInterval(()=>{if(mode==='duende')elfTick();else if(mode==='quiz')quizTick();else if(mode==='tarjetas')musicTick();else if(mode==='musica')laponiaTick();else if(mode==='nochebuena')nocheTick();},250);
 /* Música · Laponia: paisajes de Laponia con la canción que suena. */
 function laponiaTick(){
   if(!show.firstElementChild)show.innerHTML=`<div class="ys-now"><small>🎵 ${esc(Y[lang].music)}</small><strong class="ys-song"></strong></div>`;
@@ -303,7 +348,7 @@ function nocheTick(){
 }
 function route(m,arg){
   if(m==='lista')startLista();else if(/^episodio/.test(m))startEpisode(m);
-  else if(m==='quiz'||m==='musica'||m==='tarjetas')startShow(m);else if(m==='nochebuena')startNoche();
+  else if(m==='quiz'||m==='musica'||m==='tarjetas')startShow(m);else if(m==='nochebuena')startNoche();else if(m==='duende')startElf();
   else if(m==='cuento')startShow('cuento',arg??$('#yt-story').value);else if(m==='cuentos')startShow('cuentos');
   else startLista();
 }
@@ -385,11 +430,12 @@ function mute(){hush();soundOn=false;wanted=false;bg.pause();namer?.setSound(fal
 /* Dentro de la web, los botones de fuera mandan órdenes a esta pantalla. */
 function tell(state){if(EMBED&&parent!==window)parent.postMessage({yt:state},'*');}
 addEventListener('message',e=>{
-  if(parent===window||e.source!==parent||!e.data||typeof e.data.cmd!=='string')return;   // solo obedece a la página que la contiene
+  const desde=(parent!==window&&e.source===parent)||(window.opener&&e.source===window.opener);
+  if(!desde||!e.data||typeof e.data.cmd!=='string')return;   // solo obedece a la página que la contiene o al panel que la abrió
   const d=e.data;
   if(d.cmd==='sound')enableSound();else if(d.cmd==='mute')mute();
   else if(d.cmd==='lista')startLista();else if(d.cmd==='episodio')startEpisode(typeof d.which==='string'?d.which:'episodio1');
-  else if(['quiz','musica','tarjetas','cuentos','nochebuena'].includes(d.cmd))route(d.cmd);
+  else if(['quiz','musica','tarjetas','cuentos','nochebuena','duende'].includes(d.cmd))route(d.cmd);
   else if(d.cmd==='narrador'){narr=!!d.on;if(!narr)hush();}
   else if(d.cmd==='lang'&&STR[d.lang]){lang=d.lang;namer?.setLang(lang);texts();renderMode();}
 });
@@ -399,7 +445,7 @@ $('#yt-story').innerHTML=[...AUDIO_STORIES.map((a,i)=>`<option value="a${i}">�
 if(params.get('nombre'))$('#yt-story-name').value=params.get('nombre');
 for(const b of $$('[data-modo]'))b.addEventListener('click',()=>route(b.dataset.modo));
 $('#yt-full').addEventListener('click',()=>{const el=document.documentElement;(el.requestFullscreen||el.webkitRequestFullscreen)?.call(el);});
-addEventListener('keydown',e=>{if(e.target.matches?.('input,select,textarea'))return;if(e.key==='f')$('#yt-full').click();if(e.key==='e')startEpisode('episodios');if(e.key==='l')startLista();if(e.key==='q')route('quiz');if(e.key==='m')route('musica');if(e.key==='t')route('tarjetas');if(e.key==='n')route('nochebuena');if(e.key==='c')route('cuentos');});
+addEventListener('keydown',e=>{if(e.target.matches?.('input,select,textarea'))return;if(e.key==='f')$('#yt-full').click();if(e.key==='e')startEpisode('episodios');if(e.key==='l')startLista();if(e.key==='q')route('quiz');if(e.key==='m')route('musica');if(e.key==='t')route('tarjetas');if(e.key==='n')route('nochebuena');if(e.key==='a')route('duende');if(e.key==='c')route('cuentos');});
 
 /* ---------- Arranque ---------- */
 setInterval(tick,1000);setInterval(syncLista,250);

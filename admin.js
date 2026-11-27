@@ -154,6 +154,16 @@ $('#ad-air-form').addEventListener('submit',async e=>{
   f.nombre.value='';st.textContent=`✓ Enviado${rows.length>1?`s ${rows.length} nombres`:''}. Santa lo dirá en el en vivo.`;loadAir();f.nombre.focus();
 });
 
+/* Actualización de nombres con Estelvia: una línea por persona, «Nombre — Lugar». */
+$('#ad-elf-form').addEventListener('submit',async e=>{
+  e.preventDefault();const f=e.target,st=$('#ad-elf-status'),def=f.lugar.value.trim().slice(0,80);
+  const rows=f.nombres.value.split(/\n+/).map(l=>l.trim()).filter(Boolean).slice(0,30).map(l=>{const m=l.split(/\s+[—–-]\s+/);const nombre=(m.length>1?m.slice(0,-1).join(', '):l).trim().slice(0,80);const lugar=(m.length>1?m.at(-1):def).trim().slice(0,80);return {nombre,lugar};}).filter(r=>r.nombre);
+  if(!rows.length)return;st.textContent='Enviando…';
+  const {error}=await sb.from('nombres_duende').insert(rows);
+  if(error){st.textContent='No se pudo enviar. ¿Ejecutaste supabase/actualizacion-duende.sql?';return;}
+  f.nombres.value='';st.textContent=`✓ ${rows.length===1?'Enviado':`Enviados ${rows.length} nombres`}. Estelvia los leerá en la actualización de los nombres.`;toast('Nombres enviados a Estelvia.');
+});
+
 /* Transmisión: interruptor «Estoy en vivo» */
 async function loadLive(){
   const f=$('#ad-live-form'),st=$('#ad-live-status');st.textContent='Cargando…';
