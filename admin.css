@@ -45,3 +45,19 @@
 .admin-card .vc-check{display:flex;flex-direction:row;align-items:center;gap:10px;font-weight:700;cursor:pointer}
 .admin-card .vc-check input{width:22px;height:22px;accent-color:#b9142b;margin:0}
 #ad-live-form{max-width:640px}
+
+#ad-air-form{max-width:640px;margin-bottom:18px}
+.ad-air-row{display:flex;gap:8px}.ad-air-row input{flex:1;min-width:0}
+.ad-air-queue{margin:8px 0 0;padding-left:22px;display:grid;gap:4px}
+.ad-air-queue span{color:#b9142b;font-weight:700}
+
+.ad-cat-letters{flex-wrap:wrap;margin:8px 0 14px}
+.ad-cat-letters button{min-width:38px}
+.ad-cat-list{display:flex;flex-wrap:wrap;gap:6px}
+.ad-cat-name{padding:6px 12px;border:1px solid #e3d3d6;border-radius:999px;background:#fff;font:inherit;font-weight:700;cursor:pointer}
+.ad-cat-name small{font-weight:500;color:#8a6f75}
+.ad-cat-name:hover{border-color:#b9142b}
+.ad-rec{max-width:720px;margin:0 0 16px;border:2px dashed #b9142b}
+.ad-rec-actions{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.ad-rec audio{width:100%;margin:8px 0}
+.ad-rec-go{margin-left:6px;padding:3px 10px;border:1px solid #b9142b;border-radius:999px;background:#fff;color:#b9142b;font:inherit;font-weight:700;cursor:pointer}

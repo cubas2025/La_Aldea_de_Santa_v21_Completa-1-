@@ -64,6 +64,18 @@ async function liveNames(){
   return (data||[]).map(r=>({nombre:String(r.nombre||''),grabado:!!r.grabado})).filter(r=>r.nombre);
 }
 
+/* Nombres al aire: los que el creador envía desde /admin. onRow({nombre,turno}) por cada uno (los ya enviados y los nuevos). */
+async function watchOnAir(onRow){
+  const sb=await client();
+  const desde=Math.floor(Date.now()/10000)-1;
+  const {data,error}=await sb.from('nombres_al_aire').select('nombre,turno').gte('turno',desde).order('turno');
+  if(error)throw error;
+  for(const r of data||[])onRow(r);
+  sb.channel('nombres-al-aire')
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'nombres_al_aire'},p=>{if(p.new?.nombre)onRow(p.new);})
+    .subscribe();
+}
+
 /* Interruptor «Estoy en vivo» (tabla transmision, se cambia desde /admin). */
 async function liveStatus(){
   const sb=await client();
@@ -72,7 +84,23 @@ async function liveStatus(){
   return data?{liveNow:!!data.en_vivo,tiktokUser:data.tiktok_usuario||'',youtube:data.youtube||''}:null;
 }
 
-window.ALDEA_DB={configured,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,liveNames,liveStatus,staticCodes:cfg.codigosEstaticos!==false};
+/* Nombres grabados desde el panel privado: se suman a la lista de Santa (window.SANTA_NAME_AUDIO),
+   que comparten el en vivo, las tarjetas, los videos y las llamadas. */
+async function extraNames(){
+  const sb=await client();
+  const {data,error}=await sb.from('nombres_grabados').select('nombre,genero,url,duracion').order('nombre');
+  if(error)throw error;
+  return (data||[]).map(r=>({name:r.nombre,gender:r.genero==='girl'?'girl':'boy',src:r.url,duration:Number(r.duracion)||1,lead:0.025,uploaded:true}));
+}
+if(configured&&Array.isArray(window.SANTA_NAME_AUDIO)){
+  extraNames().then(rows=>{
+    const cat=window.SANTA_NAME_AUDIO,have=new Set(cat.map(r=>r.name.toLocaleLowerCase('es')));
+    let n=0;for(const r of rows)if(!have.has(r.name.toLocaleLowerCase('es'))){cat.push(r);have.add(r.name.toLocaleLowerCase('es'));n++;}
+    if(n)window.dispatchEvent(new CustomEvent('aldea:live-names',{detail:{extra:n}}));
+  }).catch(()=>{});
+}
+
+window.ALDEA_DB={configured,extraNames,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,liveNames,liveStatus,watchOnAir,staticCodes:cfg.codigosEstaticos!==false};
 
 /* Cada video generado (lista de los buenos, escenas, tarjeta de Navidad, editor) suma 1. */
 const share=window.SANTA_VIDEO_SHARE;

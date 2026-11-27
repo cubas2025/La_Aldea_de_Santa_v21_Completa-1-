@@ -113,3 +113,5 @@ body:not(.obs):not(.embed) .yt-controls.hide{opacity:1;pointer-events:auto}
 body:not(.obs):not(.embed) .yt-note{flex-basis:100%}
 .yt-stage{top:50%}
 body.embed .yt-controls{display:none}
+
+.yt-tap{position:fixed;inset:0;z-index:20;display:grid;place-items:center;width:100%;border:0;background:#0009;color:#fff;font:800 clamp(18px,3vw,34px) 'DM Sans',sans-serif;cursor:pointer}

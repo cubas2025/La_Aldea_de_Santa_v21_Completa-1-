@@ -43,10 +43,116 @@ $('#ad-logout').addEventListener('click',async()=>{await sb.auth.signOut();show(
 function openTab(name){
   for(const b of $$('[data-tab]'))b.setAttribute('aria-selected',String(b.dataset.tab===name));
   for(const p of $$('[data-pane]'))p.hidden=p.dataset.pane!==name;
-  ({resumen:loadStats,cartas:()=>loadLetters(true),nombres:loadNames,codigos:()=>loadCodes(true),transmision:loadLive})[name]?.();
+  ({resumen:loadStats,cartas:()=>loadLetters(true),nombres:loadNames,lista:loadCatalog,codigos:()=>loadCodes(true),transmision:()=>{loadLive();loadAir();}})[name]?.();
 }
 for(const b of $$('[data-tab]'))b.addEventListener('click',()=>openTab(b.dataset.tab));
 const chips=(attr,cb)=>{for(const b of $$(`[data-${attr}]`))b.addEventListener('click',()=>{for(const o of $$(`[data-${attr}]`))o.setAttribute('aria-pressed',String(o===b));cb(b.dataset[attr]);});};
+
+/* Lista de Santa: los nombres que Santa dice con su voz (los de la web + los grabados desde aquí). */
+const CAT=window.SANTA_NAME_AUDIO||[];
+const fold=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLocaleLowerCase('es').trim();
+const catHas=n=>CAT.some(r=>fold(r.name)===fold(n));
+let catLetter='',catPlayer=null,extrasLoaded=false;
+async function loadCatalog(){
+  if(!extrasLoaded){extrasLoaded=true;try{const {data}=await sb.from('nombres_grabados').select('nombre,genero,url,duracion');for(const r of data||[])if(!catHas(r.nombre))CAT.push({name:r.nombre,gender:r.genero,src:r.url,duration:r.duracion,lead:.025,uploaded:true});}catch{}}
+  const box=$('#ad-cat-letters');
+  if(!box.childElementCount){const L=[...new Set(CAT.map(r=>fold(r.name)[0]?.toUpperCase()).filter(Boolean))].sort();box.innerHTML=['Todos',...L].map(l=>`<button type="button" data-letter="${l==='Todos'?'':l}" aria-pressed="${l==='Todos'}">${l}</button>`).join('');
+    box.addEventListener('click',e=>{const b=e.target.closest('[data-letter]');if(!b)return;catLetter=b.dataset.letter;for(const x of box.children)x.setAttribute('aria-pressed',String(x===b));renderCatalog();});}
+  renderCatalog();
+}
+function renderCatalog(){
+  const q=fold($('#ad-cat-search').value),all=[...CAT].sort((a,b)=>a.name.localeCompare(b.name,'es'));
+  const list=all.filter(r=>(!q||fold(r.name).includes(q))&&(!catLetter||fold(r.name)[0]?.toUpperCase()===catLetter));
+  const up=CAT.filter(r=>r.uploaded).length;
+  $('#ad-cat-count').textContent=`${CAT.length.toLocaleString('es-PE')} nombres grabados${up?` (${up} subidos desde aquí)`:''} · mostrando ${list.length.toLocaleString('es-PE')}`;
+  $('#ad-cat-list').innerHTML=list.slice(0,600).map(r=>`<button type="button" class="ad-cat-name" data-play="${esc(r.src)}" title="Escuchar a Santa">▶ ${esc(r.name)} <small>${r.gender==='girl'?'niña':'niño'}${r.uploaded?' · subido':''}</small></button>`).join('')+(list.length>600?`<p class="fine">Escribe más letras para ver el resto (${list.length-600} más).</p>`:'');
+  const raw=$('#ad-cat-search').value.trim(),exact=raw&&CAT.some(r=>fold(r.name)===q);
+  const card=$('#ad-rec');card.hidden=!raw||exact;
+  if(!card.hidden){$('#ad-rec-title').textContent=`«${raw}» no está grabado`;if(!recBlob)card.nombre.value=raw.charAt(0).toLocaleUpperCase('es')+raw.slice(1);}
+}
+$('#ad-cat-search').addEventListener('input',renderCatalog);
+$('#ad-cat-list').addEventListener('click',e=>{const b=e.target.closest('[data-play]');if(!b)return;catPlayer?.pause();catPlayer=new Audio(b.dataset.play);catPlayer.play().catch(()=>toast('No se pudo reproducir.'));});
+
+/* Grabar o subir: se convierte a WAV 44,1 kHz mono, se quitan los silencios del inicio y del final y se iguala el volumen. */
+let recBlob=null,recDur=0,recorder=null;
+async function toWav(input){
+  const ac=new (window.AudioContext||window.webkitAudioContext)();
+  const src=await ac.decodeAudioData(await input.arrayBuffer());ac.close?.();
+  const RATE=44100,off=new OfflineAudioContext(1,Math.ceil(src.duration*RATE),RATE),node=off.createBufferSource();
+  node.buffer=src;node.connect(off.destination);node.start();
+  const d=(await off.startRendering()).getChannelData(0),win=441,rms=[];
+  for(let i=0;i<d.length;i+=win){let s=0;for(let j=i;j<Math.min(i+win,d.length);j++)s+=d[j]*d[j];rms.push(Math.sqrt(s/win));}
+  const top=Math.max(...rms),thr=top*.06;let a=rms.findIndex(v=>v>thr),b=rms.length-1-[...rms].reverse().findIndex(v=>v>thr);
+  if(a<0)throw new Error('No se escucha ninguna voz en el audio.');
+  const s0=Math.max(0,a*win-Math.round(.025*RATE)),s1=Math.min(d.length,(b+1)*win+Math.round(.08*RATE));
+  const clip=d.slice(s0,s1);let peak=0;for(const v of clip)peak=Math.max(peak,Math.abs(v));
+  const g=peak>0?.9/peak:1,fade=Math.round(.008*RATE);
+  for(let i=0;i<clip.length;i++){let v=clip[i]*g;if(i<fade)v*=i/fade;if(i>clip.length-fade)v*=(clip.length-i)/fade;clip[i]=v;}
+  const buf=new ArrayBuffer(44+clip.length*2),v=new DataView(buf),w=(o,t)=>{for(let i=0;i<t.length;i++)v.setUint8(o+i,t.charCodeAt(i));};
+  w(0,'RIFF');v.setUint32(4,36+clip.length*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
+  v.setUint32(24,RATE,true);v.setUint32(28,RATE*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,clip.length*2,true);
+  for(let i=0;i<clip.length;i++)v.setInt16(44+i*2,Math.max(-1,Math.min(1,clip[i]))*32767,true);
+  if(clip.length/RATE>4)throw new Error('El audio dura más de 4 segundos: graba solo el nombre.');
+  return {blob:new Blob([buf],{type:'audio/wav'}),duration:+(clip.length/RATE).toFixed(3)};
+}
+async function useAudio(input){
+  const st=$('#ad-rec-status');st.textContent='Preparando el audio…';
+  try{const r=await toWav(input);recBlob=r.blob;recDur=r.duration;const p=$('#ad-rec-preview');p.src=URL.createObjectURL(recBlob);p.hidden=false;$('#ad-rec-save').disabled=false;st.textContent=`✓ Listo (${recDur} s). Escúchalo y pulsa «Guardar».`;}
+  catch(e){recBlob=null;$('#ad-rec-save').disabled=true;st.textContent=e.message||'No se pudo leer ese audio.';}
+}
+$('#ad-rec-file').addEventListener('change',e=>{const f=e.target.files[0];if(f)useAudio(f);e.target.value='';});
+$('#ad-rec-mic').addEventListener('click',async e=>{
+  const btn=e.currentTarget;
+  if(recorder?.state==='recording'){recorder.stop();return;}
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:true}});
+    const chunks=[];recorder=new MediaRecorder(stream);
+    recorder.ondataavailable=ev=>chunks.push(ev.data);
+    recorder.onstop=()=>{stream.getTracks().forEach(t=>t.stop());btn.textContent='🎙 Grabar con el micrófono';useAudio(new Blob(chunks,{type:recorder.mimeType}));};
+    recorder.start();btn.textContent='⏹ Detener grabación';$('#ad-rec-status').textContent='Grabando… di solo el nombre y pulsa «Detener».';
+  }catch{$('#ad-rec-status').textContent='No se pudo usar el micrófono. Revisa el permiso del navegador.';}
+});
+$('#ad-rec').addEventListener('submit',async e=>{
+  e.preventDefault();const f=e.target,st=$('#ad-rec-status'),name=f.nombre.value.trim().replace(/\s+/g,' ');
+  if(!recBlob||!name)return;if(catHas(name)){st.textContent=`«${name}» ya está en la lista.`;return;}
+  const btn=$('#ad-rec-save');btn.disabled=true;st.textContent='Subiendo…';
+  const path=`santa/${fold(name).replace(/[^a-z0-9]+/g,'-')}-${Date.now()}.wav`;
+  const up=await sb.storage.from('nombres-santa').upload(path,recBlob,{contentType:'audio/wav',upsert:false});
+  if(up.error){btn.disabled=false;st.textContent='No se pudo subir. ¿Ejecutaste supabase/actualizacion-grabar-nombres.sql?';return;}
+  const url=sb.storage.from('nombres-santa').getPublicUrl(path).data.publicUrl;
+  const {error}=await sb.from('nombres_grabados').insert({nombre:name,genero:f.genero.value,url,duracion:recDur});
+  if(error){btn.disabled=false;st.textContent='Se subió el audio, pero no se pudo guardar el nombre. ¿Ejecutaste supabase/actualizacion-grabar-nombres.sql?';return;}
+  await sb.from('nombres_registrados').update({grabado:true}).ilike('nombre',name);
+  CAT.push({name,gender:f.genero.value,src:url,duration:recDur,lead:.025,uploaded:true});
+  recBlob=null;$('#ad-rec-preview').hidden=true;btn.disabled=true;
+  toast(`✓ «${name}» ya está en la lista de Santa.`);st.textContent='';$('#ad-cat-search').value=name;renderCatalog();
+});
+
+/* Nombres al aire: cada uno sale en su propio turno de 10 s, dejando 2 turnos de margen para que lleguen a todos. */
+const recorded={has:k=>CAT.some(r=>r.name.toLocaleLowerCase('es')===k),get:k=>CAT.find(r=>r.name.toLocaleLowerCase('es')===k)?.name,values:()=>CAT.map(r=>r.name)};
+const turnoAhora=()=>Math.floor(Date.now()/10000);
+let airTimer=0;
+async function loadAir(){
+  const dl=$('#ad-air-names');if(dl&&!dl.childElementCount)dl.innerHTML=[...new Set(recorded.values())].sort((a,b)=>a.localeCompare(b,'es')).map(n=>`<option value="${esc(n)}">`).join('');
+  const {data,error}=await sb.from('nombres_al_aire').select('id,nombre,turno').gte('turno',turnoAhora()).order('turno');
+  if(error){$('#ad-air-status').textContent='Falta crear la tabla: ejecuta supabase/actualizacion-nombres-al-aire.sql en Supabase.';return [];}
+  const q=$('#ad-air-queue');
+  const paint=()=>{const now=Date.now()/10000;q.innerHTML=(data||[]).filter(r=>r.turno>=Math.floor(now)).map(r=>{const s=Math.max(0,Math.round((r.turno-now)*10+4.6));return `<li><strong>${esc(r.nombre)}</strong> ${recorded.has(r.nombre.toLocaleLowerCase('es'))?'✓ voz de Santa':'✦ escrito en el cielo'} · <span>${s>0?`sale en ${s} s`:'¡al aire!'}</span></li>`;}).join('')||'<li class="fine">No hay nombres en cola.</li>';};
+  paint();clearInterval(airTimer);airTimer=setInterval(()=>{if($('#ad-air-form').closest('[data-pane]').hidden){clearInterval(airTimer);return;}paint();},1000);
+  return data||[];
+}
+$('#ad-air-form').addEventListener('submit',async e=>{
+  e.preventDefault();const f=e.target,st=$('#ad-air-status'),btn=f.querySelector('button');
+  const names=f.nombre.value.split(/[,\n]+/).map(n=>n.trim().replace(/\s+/g,' ')).filter(Boolean).slice(0,20).map(n=>recorded.get(n.toLocaleLowerCase('es'))||n.charAt(0).toLocaleUpperCase('es')+n.slice(1));
+  if(!names.length)return;btn.disabled=true;st.textContent='Enviando…';
+  const queued=await loadAir();
+  let t=Math.max(turnoAhora()+2,...queued.map(r=>r.turno+1));
+  const rows=names.map(n=>({nombre:n.slice(0,40),turno:t++}));
+  const {error}=await sb.from('nombres_al_aire').insert(rows);
+  btn.disabled=false;
+  if(error){st.textContent='No se pudo enviar. ¿Ejecutaste supabase/actualizacion-nombres-al-aire.sql?';return;}
+  f.nombre.value='';st.textContent=`✓ Enviado${rows.length>1?`s ${rows.length} nombres`:''}. Santa lo dirá en el en vivo.`;loadAir();f.nombre.focus();
+});
 
 /* Transmisión: interruptor «Estoy en vivo» */
 async function loadLive(){
@@ -121,8 +227,9 @@ async function loadNames(){
   const body=box.querySelector('tbody');
   for(const n of data){
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${esc(n.nombre)}</td><td>${n.grabado?'✓ Sí (Santa lo dice)':'✍️ No (solo escrito)'}</td><td>${esc(n.veces)}</td><td>${esc(date(n.ultima_vez))}</td><td class="admin-row-actions"><button type="button" data-live>${n.aprobado_en_vivo?'✓ Aprobado · Quitar':'Aprobar para el en vivo'}</button><button type="button" data-del>Borrar</button></td>`;
+    tr.innerHTML=`<td>${esc(n.nombre)}</td><td>${n.grabado||catHas(n.nombre)?'✓ Sí (Santa lo dice)':`✍️ No (solo escrito) <button type="button" class="ad-rec-go" data-rec="${esc(n.nombre)}">🎙 Grabar</button>`}</td><td>${esc(n.veces)}</td><td>${esc(date(n.ultima_vez))}</td><td class="admin-row-actions"><button type="button" data-live>${n.aprobado_en_vivo?'✓ Aprobado · Quitar':'Aprobar para el en vivo'}</button><button type="button" data-del>Borrar</button></td>`;
     tr.querySelector('[data-live]').addEventListener('click',async()=>{const v=!n.aprobado_en_vivo;const {error:e}=await sb.from('nombres_registrados').update({aprobado_en_vivo:v}).eq('clave',n.clave);if(e)return toast('No se pudo actualizar.');n.aprobado_en_vivo=v;toast(v?`«${n.nombre}» saldrá en el en vivo.`:`«${n.nombre}» ya no saldrá en el en vivo.`);loadNames();});
+    tr.querySelector('[data-rec]')?.addEventListener('click',e=>{openTab('lista');const i=$('#ad-cat-search');i.value=e.target.dataset.rec;i.dispatchEvent(new Event('input'));});
     tr.querySelector('[data-del]').addEventListener('click',async()=>{if(!confirm(`¿Borrar el nombre «${n.nombre}» de la lista? No se puede deshacer.`))return;const {error:e}=await sb.from('nombres_registrados').delete().eq('clave',n.clave);if(e)return toast('No se pudo borrar.');toast('Nombre borrado.');loadNames();});
     body?.append(tr);
   }

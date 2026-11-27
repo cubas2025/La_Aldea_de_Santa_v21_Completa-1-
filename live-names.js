@@ -38,7 +38,15 @@ async function loadList(force=false){
   return loading;
 }
 const slotOf=ms=>Math.floor(ms/1000/SLOT);
-const itemFor=slot=>list.length?list[((slot%list.length)+list.length)%list.length]:null;
+/* Nombres al aire (enviados en vivo desde /admin): reemplazan al nombre de su turno, igual para todos. */
+const onAir=new Map();let onAirStarted=false;
+function startOnAir(){
+  if(onAirStarted||!window.ALDEA_DB?.configured||!window.ALDEA_DB.watchOnAir)return;onAirStarted=true;
+  window.ALDEA_DB.watchOnAir(r=>{const t=Number(r.turno),n=String(r.nombre||'').trim();if(!n||!Number.isFinite(t))return;onAir.set(t,n);
+    for(const k of onAir.keys())if(k<slotOf(Date.now())-2)onAir.delete(k);
+    window.dispatchEvent(new CustomEvent('aldea:on-air',{detail:{slot:t,name:n}}));}).catch(()=>{onAirStarted=false;});
+}
+const itemFor=slot=>{const o=onAir.get(slot);if(o)return {name:o,rec:speech.find(catalog,o)||null};return list.length?list[((slot%list.length)+list.length)%list.length]:null;};
 function namesToday(){const now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate());return Math.floor((now-start)/1000/SLOT);}
 
 /* ---------- Audio (WebAudio, solo si el sonido está activado) ---------- */
@@ -148,6 +156,7 @@ function create({canvas,label='Lista de los buenos',onName,onSpeak,layout=null}=
   let meta=new Map();
   /* Si la lista cambia (por ejemplo, apruebas nombres nuevos), se descarta lo preparado. */
   window.addEventListener('aldea:live-names',()=>{prepared.clear();meta.clear();current=-1;});
+  window.addEventListener('aldea:on-air',e=>{const s=e.detail.slot;if(s>current){prepared.delete(s);meta.delete(s);}else if(s===current&&lastAnnounced!==s){prepared.delete(s);meta.delete(s);current=-1;}});
   let lastNamed=-1;
   function frame(){
     if(!running)return;
@@ -190,7 +199,7 @@ function create({canvas,label='Lista de los buenos',onName,onSpeak,layout=null}=
     ctx.restore();
   }
   return {
-    async start(){if(running)return;running=true;await loadList();current=-1;lastAnnounced=-1;lastNamed=-1;raf=requestAnimationFrame(frame);},
+    async start(){if(running)return;running=true;startOnAir();await loadList();current=-1;lastAnnounced=-1;lastNamed=-1;raf=requestAnimationFrame(frame);},
     stop(){running=false;cancelAnimationFrame(raf);stopVoice();ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);},
     setSound(on){sound=!!on;prepared.clear();lastAnnounced=-1;if(on){ensureAudio();}else stopVoice();},
     /* 'es' = solo los audios grabados en español · 'en' inglés · 'pt' portugués (opciones aparte). */
