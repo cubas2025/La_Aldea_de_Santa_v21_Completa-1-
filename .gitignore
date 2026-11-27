@@ -5,3 +5,5 @@ music/
 lista de los buenos/
 videos/Santa_casting_star_dust_bbe6761f.mp4
 herramientas/nombres-nuevos/fuentes/
+__pycache__/
+*.pyc
