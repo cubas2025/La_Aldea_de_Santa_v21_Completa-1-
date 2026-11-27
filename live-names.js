@@ -205,6 +205,7 @@ function create({canvas,label='Lista de los buenos',onName,onSpeak,layout=null}=
     /* 'es' = solo los audios grabados en español · 'en' inglés · 'pt' portugués (opciones aparte). */
     setLang(l){const next=LANGS[l]?l:'es';if(next===lang)return;stopVoice();lang=next;prepared.clear();meta.clear();current=-1;lastAnnounced=-1;lastNamed=-1;},
     get lang(){return lang;},
+    setLabel(l){label=l||'Lista de los buenos';},
     get count(){return list.length;},get source(){return source;},
     refresh:()=>loadList(true)
   };

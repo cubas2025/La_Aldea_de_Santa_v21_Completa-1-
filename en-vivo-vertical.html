@@ -6,11 +6,13 @@
 <link rel="stylesheet" href="yt-live.css">
 </head><body data-formato="vertical">
 <!-- Transmisión vertical 1080 × 1920 para TikTok. En OBS: fuente «Navegador», 1080 × 1920,
-     «Controlar audio mediante OBS». Opciones en la dirección: ?lang=es|en|pt  ?modo=episodio1 a episodio6, ?modo=episodios (todos)  ?obs=1 (sin controles) -->
+     «Controlar audio mediante OBS». Opciones en la dirección: ?lang=es|en|pt  ?modo=episodio1 a episodio6, ?modo=episodios (todos), ?modo=nochebuena, ?modo=quiz, ?modo=musica (Laponia), ?modo=tarjetas, ?modo=cuentos, ?modo=cuento&cuento=3&nombre=Ana  ?obs=1 (sin controles) -->
 <main class="yt-stage" id="yt-stage" aria-label="Santa en vivo">
   <video class="yt-bg" id="yt-bg" muted playsinline preload="auto" aria-hidden="true"></video>
   <video class="yt-video" id="yt-video" muted playsinline autoplay preload="auto"></video>
   <video class="yt-video off" id="yt-video2" muted playsinline preload="auto" aria-hidden="true"></video>
+  <div class="yt-show" id="yt-show" hidden></div>
+  <div class="yt-mini" id="yt-mini"></div>
   <canvas class="yt-sky" id="yt-sky" width="1080" height="1920" aria-hidden="true"></canvas>
 
   <div class="yt-top"><span class="yt-badge"><i></i><b id="yt-live"></b></span><span class="yt-brand">La aldea de Santa</span><span class="yt-from" id="yt-from"></span></div>
@@ -42,6 +44,7 @@
   <div class="yt-row"><span>Idioma de la lista:</span><button type="button" data-lang="es">🇪🇸 Español</button><button type="button" data-lang="en">🇺🇸 English</button><button type="button" data-lang="pt">🇧🇷 Português</button></div>
   <div class="yt-row"><button type="button" data-modo="lista">🔴 Lista de los buenos</button><button type="button" id="yt-full">⛶ Pantalla completa</button></div>
   <div class="yt-row" id="yt-eps"></div>
+  <div class="yt-row"><button type="button" data-modo="nochebuena">🎄 Nochebuena</button><button type="button" data-modo="quiz">🎯 Quiz</button><button type="button" data-modo="musica">🎵 Música · Laponia</button><button type="button" data-modo="tarjetas">🖼 Música · Tarjetas</button><select id="yt-story" aria-label="Cuento"></select><input id="yt-story-name" maxlength="20" placeholder="Protagonista (opcional)" aria-label="Nombre del protagonista"><button type="button" data-modo="cuento">📖 Contar cuento</button><button type="button" data-modo="cuentos">📚 Todos los cuentos</button></div>
   <p class="yt-note" id="yt-note"></p>
 </div>
 
@@ -50,6 +53,9 @@
 <script defer src="stardust-reveal.js"></script>
 <script defer src="ninos-buenos-data.js"></script>
 <script defer src="live-data.js"></script>
+<script defer src="quiz-data.js"></script>
+<script defer src="content.js"></script>
+<script defer src="christmas-card-data.js"></script>
 <script defer src="supabase-config.js"></script>
 <script defer src="aldea-db.js"></script>
 <script defer src="live-names.js"></script>
