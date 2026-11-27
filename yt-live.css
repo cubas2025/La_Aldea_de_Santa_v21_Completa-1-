@@ -182,3 +182,5 @@ body.embed .yt-controls{display:none}
 .yt-stage.vertical .ys-now{left:36px;right:36px;bottom:110px}
 /* Nochebuena: rótulo de color distinto */
 .yt-stage.noche .yt-badge{background:linear-gradient(90deg,#e5153a,#1f8a4c)}
+.ys-now .ys-song{display:block;margin-top:4px;color:#fff;font:700 46px/1.1 "Cormorant Garamond",serif}
+.yt-stage.vertical .ys-now .ys-song{font-size:40px}
