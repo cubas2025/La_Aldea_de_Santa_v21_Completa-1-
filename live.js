@@ -144,7 +144,7 @@ function buildChannel(){
   if(!root)return;
   root.innerHTML=`<div class="wrap"><div class="section-heading"><div><p class="eyebrow" data-s="eyebrow"></p><h2 id="live-heading" data-h="h2"></h2></div><p data-s="intro"></p></div>
 <div class="live-format" role="group" aria-label="Formato"><button type="button" data-fmt="v" data-s="fmtV"></button><button type="button" data-fmt="h" data-s="fmtH"></button></div>
-<div class="live-h" id="live-h" hidden><div class="live-h-frame"><iframe id="live-h-frame" title="Santa en vivo · horizontal" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe></div><div class="live-h-bar"><button type="button" class="button small" id="live-h-sound" data-s="hSound"></button><button type="button" class="button outline small" data-hcmd="lista" data-s="hList"></button><button type="button" class="button outline small" data-hcmd="episodio" data-s="hEp"></button><button type="button" class="button outline small" data-hcmd="nochebuena">🎄 Nochebuena</button><button type="button" class="button outline small" data-hcmd="quiz">🎯 Quiz</button><button type="button" class="button outline small" data-hcmd="cuentos">📖 Cuentos</button><button type="button" class="button outline small" data-hcmd="musica">🎵 Música</button><span class="live-h-lang" role="group" aria-label="Idioma"><button type="button" data-hlang="es">ES</button><button type="button" data-hlang="en">EN</button><button type="button" data-hlang="pt">PT</button></span><button type="button" class="button outline small" id="live-h-full" data-s="hFull"></button><a class="button outline small" id="live-h-open" target="_blank" rel="noopener" data-s="hOpen"></a></div></div>
+<div class="live-h" id="live-h" hidden><div class="live-modes" role="tablist" aria-label="Qué ver"><button type="button" role="tab" data-hcmd="lista" aria-selected="true" data-s="hList"></button><button type="button" role="tab" data-hcmd="nochebuena">🎄 Nochebuena</button><button type="button" role="tab" data-hcmd="quiz">🎯 Quiz</button><button type="button" role="tab" data-hcmd="cuentos">📖 Cuentos</button><button type="button" role="tab" data-hcmd="musica">🎵 Música</button><button type="button" role="tab" data-hcmd="episodio" data-s="hEp"></button></div><div class="live-h-frame"><iframe id="live-h-frame" title="Santa en vivo · horizontal" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe></div><div class="live-h-bar"><button type="button" class="button small" id="live-h-sound" data-s="hSound"></button><span class="live-h-lang" role="group" aria-label="Idioma"><button type="button" data-hlang="es">ES</button><button type="button" data-hlang="en">EN</button><button type="button" data-hlang="pt">PT</button></span><button type="button" class="button outline small" id="live-h-full" data-s="hFull"></button><a class="button outline small" id="live-h-open" target="_blank" rel="noopener" data-s="hOpen"></a></div></div>
 <div class="live-v" id="live-v"><div class="live-modes" role="tablist" aria-label="Canal"><button type="button" role="tab" data-mode="lista" data-s="tabLista"></button><button type="button" role="tab" data-mode="retrans" data-s="tabRetrans"></button><button type="button" role="tab" data-show="nochebuena">🎄 Nochebuena</button><button type="button" role="tab" data-show="quiz">🎯 Quiz</button><button type="button" role="tab" data-show="cuentos">📖 Cuentos</button><button type="button" role="tab" data-show="musica">🎵 Música</button></div>
 <div class="live-vshow" id="live-vshow" hidden><div class="live-v-frame"><iframe id="live-v-frame" title="Santa en vivo · vertical" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe></div><div class="live-h-bar"><button type="button" class="button small" id="live-v-sound">🔇 Silenciar</button><button type="button" class="button outline small" id="live-v-full">⛶ Pantalla completa</button></div></div>
 <div class="live-layout"><div class="live-player" id="live-player"><video id="live-video" muted playsinline autoplay loop preload="auto" aria-label="Canal en vivo de Santa"></video><canvas id="live-sky" class="live-sky" width="1080" height="1920" aria-hidden="true"></canvas><p class="sr-only" id="live-name-said" aria-live="polite"></p><span class="live-badge" id="live-badge"><i></i><b></b></span><span class="live-clock" id="live-clock"></span><div class="live-lower"><small id="live-kicker"></small><strong id="live-now"></strong></div></div>
@@ -168,7 +168,7 @@ function buildChannel(){
   $('#live-v-full').addEventListener('click',()=>{const el=$('.live-v-frame');(el.requestFullscreen||el.webkitRequestFullscreen)?.call(el);});
   for(const b of $$('[data-fmt]'))b.addEventListener('click',()=>setFmt(b.dataset.fmt));
   $('#live-h-sound').addEventListener('click',()=>hSend({cmd:hSound?'mute':'sound'}));
-  for(const b of $$('[data-hcmd]'))b.addEventListener('click',()=>hSend({cmd:b.dataset.hcmd}));
+  for(const b of $$('[data-hcmd]'))b.addEventListener('click',()=>{hSend({cmd:b.dataset.hcmd});for(const x of $$('[data-hcmd]'))x.setAttribute('aria-selected',String(x===b));});
   for(const b of $$('[data-hlang]'))b.addEventListener('click',()=>{setLang(b.dataset.hlang);hSoundBtn();});
   $('#live-h-full').addEventListener('click',()=>{const el=$('.live-h-frame');(el.requestFullscreen||el.webkitRequestFullscreen)?.call(el);});
   setFmt(fmt);
@@ -177,11 +177,11 @@ function buildChannel(){
 let fmt=pref.get('aldea-live-fmt','')||(matchMedia('(min-width:900px)').matches?'h':'v'),pageOn=false;
 const hUrl=(ep,embed=true)=>`en-vivo-youtube.html?lang=${lang}${ep?'&modo=episodio1':''}${embed?'&embed=1':''}`;
 let hSound=false;
-const hSend=msg=>$('#live-h-frame')?.contentWindow?.postMessage(msg,location.origin);
+const hSend=msg=>$('#live-h-frame')?.contentWindow?.postMessage(msg,'*');   // solo órdenes (quiz, sonido…), sin datos privados
 function hSoundBtn(){const b=$('#live-h-sound');if(b)b.textContent=STR[lang][hSound?'hMute':'hSound'];for(const x of $$('[data-hlang]'))x.setAttribute('aria-pressed',String(x.dataset.hlang===lang));}
-window.addEventListener('message',e=>{if(e.origin!==location.origin||!e.data?.yt)return;hSound=e.data.yt==='sound-on';hSoundBtn();});
+window.addEventListener('message',e=>{if(!e.data?.yt||(e.source!==$('#live-h-frame')?.contentWindow&&e.source!==$('#live-v-frame')?.contentWindow))return;hSound=e.data.yt==='sound-on';hSoundBtn();});
 let vShow=null,vSound=true;
-const vSend=msg=>$('#live-v-frame')?.contentWindow?.postMessage(msg,location.origin);
+const vSend=msg=>$('#live-v-frame')?.contentWindow?.postMessage(msg,'*');
 function setShow(m){
   const frame=$('#live-v-frame');
   for(const b of $$('[data-show]'))b.setAttribute('aria-selected',String(b.dataset.show===m));
@@ -198,6 +198,7 @@ function setFmt(next,ep){
   const h=fmt==='h',frame=$('#live-h-frame');
   $('#live-h').hidden=!h;$('#live-v').hidden=h;
   $('#live-h-open').href=hUrl(false,false);hSound=false;hSoundBtn();
+  for(const x of $$('[data-hcmd]'))x.setAttribute('aria-selected',String(x.dataset.hcmd===(ep?'episodio':'lista')));
   if(h&&pageOn){stopChannel();const url=hUrl(ep);const cur=frame.getAttribute('src')||'';if(ep||!cur||cur==='about:blank')frame.src=url;}
   else{frame.removeAttribute('src');frame.src='about:blank';if(pageOn)startChannel();}
 }

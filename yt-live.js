@@ -325,9 +325,9 @@ function tapToStart(){
 }
 function mute(){soundOn=false;wanted=false;bg.pause();namer?.setSound(false);video.muted=true;tell('sound-off');}
 /* Dentro de la web, los botones de fuera mandan órdenes a esta pantalla. */
-function tell(state){if(EMBED&&parent!==window)parent.postMessage({yt:state},location.origin);}
+function tell(state){if(EMBED&&parent!==window)parent.postMessage({yt:state},'*');}
 addEventListener('message',e=>{
-  if(e.origin!==location.origin||!e.data||typeof e.data.cmd!=='string')return;
+  if(parent===window||e.source!==parent||!e.data||typeof e.data.cmd!=='string')return;   // solo obedece a la página que la contiene
   const d=e.data;
   if(d.cmd==='sound')enableSound();else if(d.cmd==='mute')mute();
   else if(d.cmd==='lista')startLista();else if(d.cmd==='episodio')startEpisode(typeof d.which==='string'?d.which:'episodio1');
