@@ -4,6 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="yt-live.css">
+<link rel="stylesheet" href="saved-live-panel.css">
 </head><body data-formato="vertical">
 <!-- Transmisión vertical 1080 × 1920 para TikTok. En OBS: fuente «Navegador», 1080 × 1920,
      «Controlar audio mediante OBS». Opciones en la dirección: ?lang=es|en|pt  ?modo=episodio1 a episodio6, ?modo=episodios (todos), ?modo=nochebuena, ?modo=quiz, ?modo=musica (Laponia), ?modo=tarjetas, ?modo=cuentos, ?modo=cuento&cuento=3&nombre=Ana  ?obs=1 (sin controles) -->
@@ -42,7 +43,7 @@
 <div class="yt-controls" id="yt-controls">
   <button type="button" id="yt-start" class="primary">▶ Iniciar transmisión con sonido</button>
   <div class="yt-row"><span>Idioma de la lista:</span><button type="button" data-lang="es">🇪🇸 Español</button><button type="button" data-lang="en">🇺🇸 English</button><button type="button" data-lang="pt">🇧🇷 Português</button></div>
-  <div class="yt-row"><button type="button" data-modo="lista">🔴 Lista de los buenos</button><button type="button" id="yt-full">⛶ Pantalla completa</button></div>
+  <div class="yt-row"><button type="button" data-modo="lista">🔴 Nombres guardados en vivo</button><button type="button" id="yt-full">⛶ Pantalla completa</button></div>
   <div class="yt-row" id="yt-eps"></div>
   <div class="yt-row"><button type="button" data-modo="nochebuena">🎄 Nochebuena</button><button type="button" data-modo="quiz">🎯 Quiz</button><button type="button" data-modo="duende">📜 Actualización de nombres</button><button type="button" id="yt-narr" aria-pressed="true">🗣 Narrador: sí</button><button type="button" data-modo="musica">🎵 Música · Laponia</button><button type="button" data-modo="tarjetas">🖼 Música · Tarjetas</button><select id="yt-story" aria-label="Cuento"></select><input id="yt-story-name" maxlength="20" placeholder="Protagonista (opcional)" aria-label="Nombre del protagonista"><button type="button" data-modo="cuento">📖 Contar cuento</button><button type="button" data-modo="cuentos">📚 Todos los cuentos</button></div>
   <p class="yt-note" id="yt-note"></p>
@@ -59,6 +60,7 @@
 <script defer src="christmas-card-data.js"></script>
 <script defer src="supabase-config.js"></script>
 <script defer src="aldea-db.js"></script>
+<script defer src="saved-live-panel.js"></script>
 <script defer src="live-names.js"></script>
 <script defer src="live.js"></script>
 <script defer src="yt-live.js"></script>

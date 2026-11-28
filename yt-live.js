@@ -33,14 +33,14 @@ function fit(){const h=innerHeight-bar();stage.style.setProperty('--s',Math.min(
 addEventListener('resize',fit);fit();
 if(window.ResizeObserver)new ResizeObserver(fit).observe($('#yt-controls'));
 
-/* ---------- Música: destacada, otra, destacada, otra… ---------- */
-const general=(all.musica||[]).filter(t=>t.src);
+/* ---------- Música: todas las canciones barajadas (cada vez en otro orden); la destacada suena 1 de cada 6 ---------- */
+const general=(()=>{const a=(all.musica||[]).filter(t=>t.src);for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;})();
 const featured=!V&&cfg.musicaDestacada?.src?cfg.musicaDestacada:null;   // la canción destacada es del horizontal
 let seq=general.slice();
 const bg=new Audio();bg.preload='auto';
 let bgI=0,bgLoaded=-1,base=.5,duck=1,fade=1,duckTimer=0,wanted=false,lastT=-1,stuck=0,featuredOk=false;
 function buildSeq(){
-  seq=featuredOk?general.flatMap(t=>[featured,t]):general.slice();
+  seq=featuredOk?general.flatMap((t,i)=>i%5===0?[featured,t]:[t]):general.slice();
   if(!seq.length&&featuredOk)seq=[featured];
 }
 async function checkFeatured(){
@@ -67,7 +67,7 @@ setInterval(()=>{   // vigilante: reanuda si se pausó y salta si se trabó
 const recent=[];
 const namer=window.ALDEA_LIVE_NAMES?.create({canvas:$('#yt-sky'),onSpeak:duckFor,
   layout:V?null:{scale:1.4,x:204,y:-40,headerY:110,nameY:300,size:170,maxWidth:1000},
-  onName:name=>{if(recent[0]===name)return;recent.unshift(name);recent.splice(5);renderRecent();refreshTicker();}});
+  onName:name=>{showPhoto(name);if(recent[0]===name)return;recent.unshift(name);recent.splice(5);renderRecent();refreshTicker();}});
 namer?.setLang(lang);
 function renderRecent(){$('#yt-recent').innerHTML=recent.map(n=>`<li>${esc(n)}</li>`).join('');}
 
@@ -233,8 +233,10 @@ function renderBand(){
     track.innerHTML=`<div class="ys-names-move once">${items}</div>`;const mv=track.querySelector('.ys-names-move');
     const dist=mv.scrollWidth+track.clientWidth;mv.style.setProperty('--from',track.clientWidth+'px');mv.style.animationDuration=Math.max(8,dist/170)+'s';
     mv.addEventListener('animationend',()=>{bandPass=false;bandKey='';renderBand();},{once:true});return;}
-  const ph=BAND_EMPTY[Math.floor(Date.now()/9000)%BAND_EMPTY.length],k='empty'+ph;if(bandKey===k)return;bandKey=k;
-  lab.textContent='🎁 Lista de los buenos';track.innerHTML=`<p class="ys-names-empty">${esc(ph)}</p>`;
+  if(bandKey==='gift')return;bandKey='gift';
+  lab.textContent='🎁 Lista de los buenos';const one=BAND_EMPTY.map(t=>`<span class="ys-gift">${esc(t)}</span>`).join('<i>✦</i>')+'<i>✦</i>';
+  track.innerHTML=`<div class="ys-names-move ys-gifts">${one}${one}</div>`;const mv=track.querySelector('.ys-gifts');
+  requestAnimationFrame(()=>{mv.style.animationDuration=Math.max(40,mv.scrollWidth/2/70)+'s';});
 }
 function quizTick(){
   if(!QUIZ.length||!SCHED.rounds.length)return;
@@ -363,7 +365,7 @@ const ELF_RELLENO=['¿Quieres que tu nombre llegue hoy a Santa? Escribe tu nombr
 let elfQ=[],elfSeen=new Set(),elfWatch=false,elfT0=0,elfIdx=-1,elfLast=-1,elfN=Math.floor(Math.random()*8);
 let elfBand=[],bandKey='',letterQ=[],letterBusy=false,bandT0=Date.now(),archived=0;
 const BAND_EMPTY=['🎁 Apóyame con tu regalito y forma parte de la Lista de los buenos','✨ Cada regalito suma tu nombre a la Lista de los buenos de Santa',
-  '💛 Con tu regalito, tu nombre pasará por aquí en letras doradas','🎅 Envía un regalito y Estelvia llevará tu nombre a Santa Claus'];
+  '🤗 Abraza mi cuenta y juntos seamos más','🎅 Envía un regalito y Estelvia llevará tu nombre a Santa Claus','💝 Gracias a cada donador por mantener viva la magia de la aldea'];
 let bandQ=[],bandPass=false;
 function playLetter(r){
   if(mode!=='quiz')return;letterQ.push(r);if(letterBusy)return;
@@ -448,6 +450,60 @@ function route(m,arg){
 
 /* ---------- Modos ---------- */
 let soundOn=false;
+/* ---------- Nombres guardados en vivo: franja grande, foto junto al nombre y panel para agregar ---------- */
+const SAVED_DEFAULT=['🎁 Apóyame con tu regalito y forma parte de la Lista de los buenos','🤗 Abraza mi cuenta y juntos seamos más',
+  '💝 Gracias de corazón a cada donador: con su regalito la magia de la aldea sigue encendida','✨ Cada nombre guardado en vivo queda en el gran libro de Santa',
+  '🎅 Santa lee con cariño cada nombre que llega a la aldea','💛 Gracias por cada regalito, cada corazón y cada comentario',
+  '🌎 Saludos a todas las familias que nos acompañan desde cualquier rincón del mundo','🦌 Los renos ya están practicando para la gran noche de Navidad',
+  '📜 Estelvia sella cada carta con lacre dorado y la guarda en el Archivo mágico','🤗 Abraza mi cuenta y juntos llevemos la Navidad a más hogares',
+  '💝 Gracias a nuestros donadores: ustedes hacen posible este en vivo día y noche','🎄 Comparte el en vivo con tu familia: ¡entre más seamos, más brilla la aldea!',
+  '⭐ Un regalito, un nombre y una sonrisa más en la Lista de los buenos','🍪 Santa agradece cada apoyo con una galletita mágica del Polo Norte',
+  '💛 Gracias, familias donadoras: su cariño llega hasta el Polo Norte','🤗 Abraza mi cuenta: juntos seamos más y que nadie se quede sin su nombre en la lista',
+  '🔔 Toca la pantalla y llenemos el en vivo de corazones','🎁 Tu apoyo ayuda a preparar más cuentos, episodios y sorpresas para los niños',
+  '✨ Los duendes trabajan día y noche para que tu nombre brille en el cielo','💝 Mil gracias a quienes apoyan la aldea: ¡Santa los tiene en su corazón!'];
+let savedRows=[],savedWatch=false,savedKey='',savedDirty=true;
+const savedPhotos=new Map();
+function startSavedWatch(){if(!savedWatch&&window.ALDEA_DB?.configured&&window.ALDEA_DB.watchStrip){savedWatch=true;window.ALDEA_DB.watchStrip(r=>{if(savedRows.some(x=>x.id===r.id))return;savedRows.unshift(r);savedRows.length=Math.min(savedRows.length,30);savedDirty=true;}).catch(()=>{savedWatch=false;});}}
+addEventListener('aldea:on-air',e=>{const d=e.detail||{};if(d.foto)savedPhotos.set(String(d.name).toLocaleLowerCase('es'),{foto:d.foto,lugar:d.lugar,slot:d.slot});});
+function savedItems(){
+  const def=SAVED_DEFAULT.map(t=>({tipo:'def',texto:t})),out=[];let k=Math.floor(Date.now()/60000)%def.length;
+  if(!savedRows.length)return def;
+  for(const r of savedRows){out.push(r);if(out.length%2===0)out.push(def[k++%def.length]);}
+  out.push(def[k++%def.length],def[k%def.length]);return out;
+}
+function renderSaved(){
+  let strip=$('#yt-saved');
+  if(!strip){strip=document.createElement('div');strip.id='yt-saved';strip.className='ys-saved';strip.innerHTML='<b>📜 Nombres guardados en vivo</b><div class="ys-saved-track"><div class="ys-saved-move"></div></div>';stage.append(strip);
+    strip.querySelector('.ys-saved-move').addEventListener('animationiteration',()=>{if(savedDirty)paintSaved(true);});}
+  const on=mode==='lista';strip.hidden=!on;stage.classList.toggle('saved-on',on);if(!on)return;
+  startSavedWatch();const mv=strip.querySelector('.ys-saved-move');if(!mv.childElementCount)paintSaved(true);
+}
+function paintSaved(){
+  const mv=$('#yt-saved .ys-saved-move');if(!mv)return;savedDirty=false;
+  const one=it=>it.tipo==='nombre'?`<span class="sv-name">✨ ${esc(it.texto)}${it.lugar?` <small>📍 ${esc(it.lugar)}</small>`:''}</span>`
+    :it.tipo==='gracias'?`<span class="sv-thanks">💝 ${esc(it.texto)}</span>`:it.tipo==='frase'?`<span class="sv-phrase">💬 ${esc(it.texto)}</span>`:`<span class="sv-def">${esc(it.texto)}</span>`;
+  const html=savedItems().map(one).join('<i>✦</i>')+'<i>✦</i>';
+  mv.innerHTML=html+html;
+  requestAnimationFrame(()=>{mv.style.animationDuration=Math.max(40,mv.scrollWidth/2/80)+'s';});
+}
+let photoT=0;
+function showPhoto(name){
+  const p=savedPhotos.get(String(name).toLocaleLowerCase('es'));if(!p||mode!=='lista')return;
+  savedPhotos.delete(String(name).toLocaleLowerCase('es'));
+  let el=$('#yt-photo');if(!el){el=document.createElement('div');el.id='yt-photo';el.className='ys-photo';stage.append(el);}
+  el.innerHTML=`<div class="ys-photo-frame"><img src="${esc(p.foto)}" alt=""><i class="ys-photo-shine"></i></div><p class="ys-photo-name">${esc(name)}</p>${p.lugar?`<p class="ys-photo-place">📍 ${esc(p.lugar)}</p>`:''}`;
+  el.classList.remove('on');void el.offsetWidth;el.classList.add('on');clearTimeout(photoT);photoT=setTimeout(()=>el.classList.remove('on'),8000);
+}
+setInterval(renderSaved,500);
+/* Botón y panel para agregar nombres desde esta misma pantalla (con la sesión de /admin) */
+if(params.get('obs')!=='1'&&!EMBED&&window.SAVED_LIVE_PANEL&&window.ALDEA_DB?.configured){
+  const row=document.createElement('div');row.className='yt-row';row.innerHTML='<button type="button" id="yt-saved-open">📜 Agregar nombres guardados en vivo</button>';
+  $('#yt-controls').insertBefore(row,$('#yt-note'));
+  const drawer=document.createElement('aside');drawer.className='yt-saved-drawer';drawer.hidden=true;drawer.innerHTML='<button type="button" class="yt-saved-close" aria-label="Cerrar">✕</button><div></div>';document.body.append(drawer);
+  let mounted=false;
+  $('#yt-saved-open').addEventListener('click',()=>{drawer.hidden=!drawer.hidden;if(!mounted){mounted=true;window.SAVED_LIVE_PANEL.mount(drawer.lastElementChild,{getSb:()=>window.ALDEA_DB.adminClient(),login:true});}});
+  drawer.querySelector('.yt-saved-close').addEventListener('click',()=>{drawer.hidden=true;});
+}
 function startLista(){
   stopShow();
   mode='lista';current=-1;act=video;idle=video2;video.dataset.src='';stage.classList.remove('episode','vertical-src');bgVideo.pause();bgVideo.removeAttribute('src');
@@ -532,6 +588,7 @@ addEventListener('message',e=>{
   if(d.cmd==='sound')enableSound();else if(d.cmd==='mute')mute();
   else if(d.cmd==='lista')startLista();else if(d.cmd==='episodio')startEpisode(typeof d.which==='string'?d.which:'episodio1');
   else if(['quiz','musica','tarjetas','cuentos','nochebuena','duende'].includes(d.cmd))route(d.cmd);
+  else if(d.cmd==='cuento')route('cuento',typeof d.arg==='string'&&/^a?\d+$/.test(d.arg)?d.arg:undefined);
   else if(d.cmd==='narrador'){narr=!!d.on;if(!narr)hush();}
   else if(d.cmd==='lang'&&STR[d.lang]){lang=d.lang;namer?.setLang(lang);texts();renderMode();}
 });

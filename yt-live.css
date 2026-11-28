@@ -372,3 +372,43 @@ body.embed .yt-controls{display:none}
 .yt-stage.vertical .ys-astory .ys-text p{font-size:33px}
 .yt-stage.vertical .ys-astory.film .ys-text h2{font-size:40px}
 .yt-stage.vertical .ys-av.mini{width:160px;height:160px}
+
+/* ===== Nombres guardados en vivo: franja grande (solo en esa transmisión) ===== */
+.ys-saved{position:absolute;left:0;right:0;bottom:64px;z-index:4;height:132px;display:flex;align-items:center;background:linear-gradient(90deg,#140a05f5,#2b1707f5 50%,#140a05f5);border-top:3px solid #ffd65c;box-shadow:0 -10px 34px #ffd65c40;overflow:hidden}
+.ys-saved[hidden]{display:none}
+.ys-saved>b{flex:none;align-self:stretch;display:grid;place-items:center;width:210px;padding:0 16px;background:linear-gradient(180deg,#1f8a4c,#145c33);color:#fff;font-size:24px;font-weight:900;line-height:1.1;text-align:center;box-shadow:6px 0 18px #0008;z-index:1}
+.ys-saved-track{flex:1;overflow:hidden;white-space:nowrap}
+.ys-saved-move{display:inline-flex;align-items:center;gap:26px;padding-left:26px;animation:yt-scroll 60s linear infinite}
+.ys-saved-move i{font-style:normal;color:#ffd65c;font-size:28px}
+.ys-saved-move .sv-name{font:700 64px/1 'Cormorant Garamond',serif;background:linear-gradient(180deg,#fff6c9,#ffd65c 45%,#c9902b);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 10px #ffd65c88)}
+.ys-saved-move .sv-name small{font:700 30px/1 'DM Sans',sans-serif;color:#ffe7b0;-webkit-text-fill-color:#ffe7b0}
+.ys-saved-move .sv-phrase{font-size:42px;font-weight:800;color:#fff}
+.ys-saved-move .sv-thanks{font-size:42px;font-weight:900;color:#ffc2d6;text-shadow:0 0 14px #ff7aa880}
+.ys-saved-move .sv-def{font-size:38px;font-weight:700;color:#ffe7b0}
+.yt-stage.saved-on .yt-panel{top:auto;bottom:212px}
+.yt-stage.vertical .ys-saved{height:150px}
+.yt-stage.vertical .ys-saved>b{width:170px;font-size:20px}
+.yt-stage.vertical .ys-saved-move .sv-name{font-size:60px}
+.yt-stage.vertical.saved-on .yt-panel{bottom:230px}
+/* Foto que sale junto al nombre cuando Santa lo nombra */
+.ys-photo{position:absolute;left:150px;top:250px;z-index:5;width:340px;display:grid;justify-items:center;opacity:0;transform:scale(.6) rotate(-6deg);pointer-events:none;transition:opacity .6s,transform .8s cubic-bezier(.2,1.4,.4,1)}
+.ys-photo.on{opacity:1;transform:none}
+.ys-photo-frame{position:relative;width:300px;height:300px;border-radius:50%;padding:8px;background:conic-gradient(#fff6c9,#ffd65c,#c9902b,#ffd65c,#fff6c9);box-shadow:0 0 50px #ffd65caa,0 20px 50px #000a;overflow:hidden}
+.ys-photo-frame img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.ys-photo-shine{position:absolute;inset:0;border-radius:50%;background:linear-gradient(115deg,transparent 35%,#fff8 50%,transparent 65%);background-size:250% 100%;animation:ys-shine 2.4s linear infinite}
+.ys-photo-name{margin:14px 0 0;font:700 52px/1 'Cormorant Garamond',serif;color:#fff6c9;text-shadow:0 0 18px #ffd65c,0 3px 8px #000}
+.ys-photo-place{margin:6px 0 0;padding:4px 14px;border-radius:999px;background:#0008;font-size:24px;font-weight:800;color:#fff}
+.yt-stage.vertical .ys-photo{left:50%;top:auto;bottom:640px;margin-left:-170px}
+/* Panel para agregar nombres desde la pantalla del en vivo */
+.yt-saved-drawer{position:fixed;right:16px;bottom:16px;z-index:30;width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;border-radius:18px;box-shadow:0 20px 60px #000a}
+.yt-saved-drawer[hidden]{display:none}
+.yt-saved-drawer .sl-panel{margin:0}
+.yt-saved-close{position:absolute;right:12px;top:10px;z-index:1;width:34px;height:34px;border:0;border-radius:50%;background:#7a0d1d;color:#fff;font-size:16px;cursor:pointer}
+
+/* Frases de regalito del quiz: circulan lento, sin quedarse quietas */
+.ys-names-move.ys-gifts{animation:yt-scroll 60s linear infinite}
+.ys-names-move .ys-gift{font:700 46px/1 'Cormorant Garamond',serif;background:linear-gradient(180deg,#fff6c9,#ffd65c 45%,#c9902b);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 8px #ffd65c88)}
+.yt-stage.vertical .ys-names-move .ys-gift{font-size:42px}
+.yt-stage:not(.vertical) .ys-photo{top:120px;left:120px}
+.yt-stage:not(.vertical) .ys-photo-frame{width:250px;height:250px}
+.yt-stage:not(.vertical) .ys-photo-name{font-size:44px;margin-top:10px}

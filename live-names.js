@@ -44,7 +44,7 @@ function startOnAir(){
   if(onAirStarted||!window.ALDEA_DB?.configured||!window.ALDEA_DB.watchOnAir)return;onAirStarted=true;
   window.ALDEA_DB.watchOnAir(r=>{const t=Number(r.turno),n=String(r.nombre||'').trim();if(!n||!Number.isFinite(t))return;onAir.set(t,n);
     for(const k of onAir.keys())if(k<slotOf(Date.now())-2)onAir.delete(k);
-    window.dispatchEvent(new CustomEvent('aldea:on-air',{detail:{slot:t,name:n}}));}).catch(()=>{onAirStarted=false;});
+    window.dispatchEvent(new CustomEvent('aldea:on-air',{detail:{slot:t,name:n,foto:String(r.foto||''),lugar:String(r.lugar||'')}}));}).catch(()=>{onAirStarted=false;});
 }
 const itemFor=slot=>{const o=onAir.get(slot);if(o)return {name:o,rec:speech.find(catalog,o)||null};return list.length?list[((slot%list.length)+list.length)%list.length]:null;};
 function namesToday(){const now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate());return Math.floor((now-start)/1000/SLOT);}
