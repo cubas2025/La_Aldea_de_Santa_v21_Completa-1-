@@ -319,3 +319,6 @@ body.embed .yt-controls{display:none}
 .yt-stage.vertical .yt-big-time{margin:0;font-size:40px}
 .yt-stage.vertical .yt-big em{display:none}
 .yt-stage.vertical.show-quiz .ys-quiz{top:290px}
+
+/* Episodios: pantalla limpia. Arriba solo «EN VIVO»; abajo los cuadros del contador y la hora */
+.yt-stage.episode .yt-ep,.yt-stage.episode .yt-brand,.yt-stage.episode .yt-from{display:none!important}
