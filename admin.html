@@ -5,7 +5,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="admin.css">
 <script defer src="name-audio-data.js"></script>
-<script defer src="supabase-config.js"></script><script defer src="admin.js"></script>
+<script defer src="supabase-config.js"></script><script defer src="saved-live-panel.js"></script><script defer src="admin.js"></script>
+<link rel="stylesheet" href="saved-live-panel.css">
 </head>
 <body class="admin-body">
 <header class="admin-header"><a class="brand" href="./"><span class="brand-icon" aria-hidden="true">✧</span><span>La aldea <i>de Santa</i></span></a><span class="admin-tag">Panel privado</span><button type="button" class="button outline small" id="ad-logout" hidden>Cerrar sesión</button></header>
@@ -67,14 +68,7 @@
       <div id="ad-codes" class="admin-table-wrap"></div><button type="button" class="button outline" id="ad-codes-more" hidden>Ver más códigos</button>
     </div>
     <div class="admin-pane" data-pane="transmision" hidden>
-      <form id="ad-air-form" class="panel admin-card"><h2>📣 Nombres al aire</h2>
-        <p>Escribe un nombre (o varios separados por comas) y pulsa «Enviar al en vivo». En 10 a 20 segundos Santa lo dice en todas las transmisiones abiertas. Los que tienen ✓ los dice con su voz; los demás se escriben en el cielo.</p>
-        <div class="ad-air-row"><input name="nombre" list="ad-air-names" maxlength="200" autocomplete="off" placeholder="Ej. Valentina" aria-label="Nombre para el en vivo"><button type="submit" class="button">Enviar al en vivo</button></div>
-        <datalist id="ad-air-names"></datalist>
-        <p id="ad-air-status" class="fine" role="status"></p>
-        <ol id="ad-air-queue" class="ad-air-queue"></ol>
-        <p class="fine">Si al enviar sale un error, ejecuta una vez <code>supabase/actualizacion-nombres-al-aire.sql</code> en el SQL Editor de Supabase.</p>
-      </form>
+      <section id="ad-saved" class="panel admin-card"></section>
       <form id="ad-msg-form" class="panel admin-card"><h2>💬 Frases y preguntas para el público</h2>
         <p>Escribe una frase o una pregunta completa. Sale al instante en la transmisión (en cualquier modo), en grande, y el narrador la lee en voz alta.</p>
         <label>Mensaje<textarea name="texto" rows="3" maxlength="300" placeholder="¡Gracias a todos los que nos acompañan desde México! ¿Qué le pedirían a Santa este año?"></textarea></label>

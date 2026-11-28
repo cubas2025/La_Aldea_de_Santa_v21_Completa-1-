@@ -68,12 +68,30 @@ async function liveNames(){
 async function watchOnAir(onRow){
   const sb=await client();
   const desde=Math.floor(Date.now()/10000)-1;
-  const {data,error}=await sb.from('nombres_al_aire').select('nombre,turno').gte('turno',desde).order('turno');
+  let {data,error}=await sb.from('nombres_al_aire').select('nombre,turno,lugar,foto').gte('turno',desde).order('turno');
+  if(error)({data,error}=await sb.from('nombres_al_aire').select('nombre,turno').gte('turno',desde).order('turno'));   // aún sin lugar/foto
   if(error)throw error;
   for(const r of data||[])onRow(r);
   sb.channel('nombres-al-aire')
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'nombres_al_aire'},p=>{if(p.new?.nombre)onRow(p.new);})
     .subscribe();
+}
+
+/* Franja de «Nombres guardados en vivo»: nombres con lugar, frases y agradecimientos (últimas 6 horas y los nuevos al instante). */
+async function watchStrip(onRow){
+  const sb=await client();
+  const desde=new Date(Date.now()-6*3600000).toISOString();
+  const {data,error}=await sb.from('franja_en_vivo').select('id,tipo,texto,lugar,creado').gte('creado',desde).order('creado');
+  if(error)throw error;
+  for(const r of data||[])onRow(r,true);
+  sb.channel('franja-en-vivo').on('postgres_changes',{event:'INSERT',schema:'public',table:'franja_en_vivo'},p=>{if(p.new?.texto)onRow(p.new,false);}).subscribe();
+}
+/* Cliente con la sesión del panel privado (misma sesión que /admin en este navegador), para agregar nombres desde la pantalla del en vivo. */
+let adminPromise=null;
+function adminClient(){
+  if(!configured)return Promise.reject(new Error('Supabase aún no está conectado.'));
+  if(!adminPromise)adminPromise=client().then(()=>window.supabase.createClient(cfg.url.replace(/\/$/,''),cfg.anonKey,{auth:{persistSession:true,storageKey:'aldea-admin',autoRefreshToken:true}}));
+  return adminPromise;
 }
 
 /* Nombres para Estelvia (actualización de nombres): los de las últimas 2 horas y los nuevos al instante. */
@@ -126,7 +144,7 @@ if(configured&&Array.isArray(window.SANTA_NAME_AUDIO)){
   }).catch(()=>{});
 }
 
-window.ALDEA_DB={configured,extraNames,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,liveNames,liveStatus,watchOnAir,watchElf,watchScores,watchMessages,staticCodes:cfg.codigosEstaticos!==false};
+window.ALDEA_DB={configured,extraNames,client,saveLetter,countVideo,registerName,redeemCode,watchCounters,liveNames,liveStatus,watchOnAir,watchElf,watchScores,watchMessages,watchStrip,adminClient,staticCodes:cfg.codigosEstaticos!==false};
 
 /* Cada video generado (lista de los buenos, escenas, tarjeta de Navidad, editor) suma 1. */
 const share=window.SANTA_VIDEO_SHARE;
