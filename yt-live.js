@@ -192,7 +192,23 @@ function quizPos(now){
 let quizIdx=-1,quizQ=null,quizOpts=[],hostKey='',hostSaid=-1;
 function partidaDelDia(now,round){const d=new Date(now),m=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();return round-quizPos(m).round+1;}
 let champs=[],champSeen=new Set(),champPending=[],scoreWatch=false;
-function scoreRow(r,old){if(!r||champSeen.has(r.id))return;champSeen.add(r.id);champs.unshift(r);champs.length=Math.min(champs.length,8);if(!old)champPending.push(r);}
+let champT=null;
+function scoreRow(r,old){if(!r||champSeen.has(r.id))return;champSeen.add(r.id);champs.unshift(r);champs.length=Math.min(champs.length,8);if(old)return;
+  champPending.push(r);clearTimeout(champT);champT=setTimeout(()=>{const list=champPending.splice(0);if(!list.length)return;
+    popShow({cls:'champ',title:'🏆 Campeones de la partida',html:`<div class="ys-pop-champs">${list.map(x=>`<span>${esc(x.nombre)} <b>${x.puntaje}/10</b>${x.lugar?` <small>📍 ${esc(x.lugar)}</small>`:''}</span>`).join('')}</div>`,speech:champText(list,8)});},1500);}
+/* Avisos al aire (campeones, frases y preguntas de /admin): uno tras otro, se ven y se leen en voz alta */
+let popQ=[],popBusy=false,msgWatch=false;
+const speakMs=t=>HOSTS?.dur?HOSTS.dur(t):Math.round((String(t).split(/\s+/).length*.43+2.2)*1000);
+function popShow(it){popQ.push(it);if(!popBusy)popNext();}
+function popNext(){const it=popQ.shift();if(!it){popBusy=false;return;}popBusy=true;
+  const el=document.createElement('div');el.className='ys-pop ys-pop-'+it.cls;
+  el.innerHTML=`<div class="ys-pop-card"><span class="ys-chip">${esc(it.title)}</span>${it.html}${it.foot?`<p class="ys-pop-foot">${esc(it.foot)}</p>`:''}</div>`;
+  stage.append(el);say(it.speech);const ms=Math.max(9000,speakMs(it.speech)+(it.extra||3000));
+  setTimeout(()=>{el.classList.add('out');setTimeout(()=>{el.remove();popNext();},600);},ms);}
+function msgRow(r){const preg=r.tipo==='pregunta',t=String(r.texto||'').trim();if(!t)return;
+  popShow(preg?{cls:'preg',title:'❓ Pregunta para el público',html:`<p class="ys-pop-text">${esc(t)}</p>`,foot:'¡Respondan en los comentarios!',speech:`Pregunta para el público: ${t} ¡Respondan en los comentarios!`,extra:12000}
+    :{cls:'frase',title:'💬 Mensaje de la aldea',html:`<p class="ys-pop-text">${esc(t)}</p>`,speech:t});}
+function startMsgWatch(){if(!msgWatch&&window.ALDEA_DB?.configured&&window.ALDEA_DB.watchMessages){msgWatch=true;window.ALDEA_DB.watchMessages(msgRow).catch(()=>{msgWatch=false;});}}
 function startScoreWatch(){if(!scoreWatch&&window.ALDEA_DB?.configured&&window.ALDEA_DB.watchScores){scoreWatch=true;window.ALDEA_DB.watchScores(scoreRow).catch(()=>{scoreWatch=false;});}}
 function champText(list,max=6){const t=list.slice(0,max).map(r=>`${r.nombre}${r.lugar?`, desde ${r.lugar},`:''} con ${r.puntaje} de 10`);
   const mas=list.length-t.length,y=mas?`; y a ${mas===1?'1 campeón más':mas+' campeones más'}: ¡miren sus nombres en pantalla!`:'.';
@@ -226,7 +242,7 @@ function quizTick(){
     let idx=-1;for(let i=0;i<plan.length;i++)if(pos>=plan[i].t)idx=i;
     const line=show.querySelector('.ys-line');
     if(line&&idx>=0&&line.dataset.i!==String(idx)){
-      const it=plan[idx],slot=(plan[idx+1]?.t??HOST)-it.t,champNow=champPending.length&&it.tipo!=='final'&&it.tipo!=='apertura'&&slot>=12000,text=champNow?champText(champPending.splice(0),Math.max(1,Math.floor((slot/1000-7)/4.5))):typeof it.texto==='function'?it.texto():it.texto;
+      const it=plan[idx],slot=(plan[idx+1]?.t??HOST)-it.t,champNow=false&&slot,text=champNow?champText(champPending.splice(0),Math.max(1,Math.floor((slot/1000-7)/4.5))):typeof it.texto==='function'?it.texto():it.texto;
       line.dataset.i=idx;line.textContent=text;show.querySelector('.ys-kind').textContent=champNow?'🏆 Campeones de la partida':HOSTS.tipos[it.tipo]||'';
       line.classList.remove('in');void line.offsetWidth;line.classList.add('in');
       if(pos-it.t<1500&&hostSaid!==idx){hostSaid=idx;say(text);}
@@ -332,8 +348,10 @@ function playLetter(r){
     setTimeout(()=>{el.remove();band?.classList.remove('busy');next();},6900);};
   next();
 }
-function elfRow(r){if(!r||elfSeen.has(r.id))return;elfSeen.add(r.id);elfBand.unshift(r);elfBand.length=Math.min(elfBand.length,15);
-  if(Date.now()-new Date(r.creado).getTime()<60000&&Date.now()-bandT0>3000)playLetter(r);else archived++;if(mode!=='duende'&&new Date(r.creado).getTime()<Date.now()-600000)return;elfQ.push(r);}
+const elfRead=(()=>{try{return new Set(JSON.parse(localStorage.getItem('aldea-elf-leidos')||'[]'));}catch{return new Set();}})();
+function markRead(id){elfRead.add(id);try{localStorage.setItem('aldea-elf-leidos',JSON.stringify([...elfRead].slice(-400)));}catch{}}
+function elfRow(r,old){if(!r||elfSeen.has(r.id))return;elfSeen.add(r.id);elfBand.unshift(r);elfBand.length=Math.min(elfBand.length,15);
+  if(Date.now()-new Date(r.creado).getTime()<60000&&Date.now()-bandT0>3000)playLetter(r);else archived++;if(old&&(elfRead.has(r.id)||new Date(r.creado).getTime()<Date.now()-600000))return;elfQ.push(r);}
 function startElf(){
   stopShow();mode='duende';elfT0=Date.now();elfIdx=-1;elfLast=-1;
   stage.classList.remove('episode','vertical-src');stage.classList.add('show','show-duende');show.hidden=false;$('#yt-ep').hidden=true;namer?.stop();
@@ -351,7 +369,7 @@ function elfTick(){
   const nm=show.querySelector('.ys-elf-name'),pl=show.querySelector('.ys-elf-place'),ln=show.querySelector('.ys-elf-line');if(!nm)return;
   let text;
   if(slot===0){nm.textContent='✨';pl.textContent='';text=ELF_INTRO[Math.floor(Math.random()*ELF_INTRO.length)];}
-  else if(elfQ.length){const r=elfQ.shift(),lugar=(r.lugar||'').trim(),bonito=ELF_BONITO[(elfN++)%ELF_BONITO.length];
+  else if(elfQ.length){const r=elfQ.shift();markRead(r.id);const lugar=(r.lugar||'').trim(),bonito=ELF_BONITO[(elfN++)%ELF_BONITO.length];
     nm.textContent=r.nombre;pl.textContent=lugar?`📍 ${lugar}`:'';
     text=lugar?`¡Recibí el nombre de ${r.nombre}, que nos ve desde ${lugar}! ${bonito}`:`¡Recibí el nombre de ${r.nombre}! ${bonito}`;}
   else{nm.textContent='📜';pl.textContent='';text=ELF_RELLENO[slot%ELF_RELLENO.length];}
@@ -500,6 +518,7 @@ texts();
 checkFeatured().then(()=>{
   const hoy=new Date(),navidad=hoy.getMonth()===11&&(hoy.getDate()===24||hoy.getDate()===25);
   route(params.get('modo')||(navidad?'nochebuena':'lista'),params.get('cuento')||undefined);
+  const watchAll=()=>{startScoreWatch();startMsgWatch();};watchAll();setTimeout(watchAll,3000);
   enableSound();   // en OBS suena solo; en el navegador, si lo bloquea, aparece el botón
 });
 })();
