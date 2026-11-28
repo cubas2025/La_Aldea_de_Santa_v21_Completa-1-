@@ -75,8 +75,15 @@
         <ol id="ad-air-queue" class="ad-air-queue"></ol>
         <p class="fine">Si al enviar sale un error, ejecuta una vez <code>supabase/actualizacion-nombres-al-aire.sql</code> en el SQL Editor de Supabase.</p>
       </form>
+      <form id="ad-msg-form" class="panel admin-card"><h2>💬 Frases y preguntas para el público</h2>
+        <p>Escribe una frase o una pregunta completa. Sale al instante en la transmisión (en cualquier modo), en grande, y el narrador la lee en voz alta.</p>
+        <label>Mensaje<textarea name="texto" rows="3" maxlength="300" placeholder="¡Gracias a todos los que nos acompañan desde México! ¿Qué le pedirían a Santa este año?"></textarea></label>
+        <div class="ad-msg-tipo"><label><input type="radio" name="tipo" value="frase" checked> 💬 Frase</label><label><input type="radio" name="tipo" value="pregunta"> ❓ Pregunta (pide responder en los comentarios)</label></div>
+        <button type="submit" class="button">Enviar al aire</button><p id="ad-msg-status" class="fine" role="status"></p>
+        <p class="fine">Si al enviar sale un error, ejecuta una vez <code>supabase/actualizacion-mensajes.sql</code> en el SQL Editor de Supabase.</p>
+      </form>
       <form id="ad-score-form" class="panel admin-card"><h2>🏆 Campeones de la partida</h2>
-        <p>Al terminar cada partida del quiz, escribe quiénes acertaron, uno por línea: <code>María López — 9</code> (también puedes añadir el lugar: <code>María López — 9 — Lima, Perú</code>). Sabelín los felicita en vivo al empezar su animación.</p>
+        <p>Al terminar cada partida del quiz, escribe quiénes acertaron, uno por línea: <code>María López — 9</code> (también puedes añadir el lugar: <code>María López — 9 — Lima, Perú</code>). Salen al instante en la transmisión y el narrador los felicita en voz alta.</p>
         <label>Campeones<textarea name="puntajes" rows="3" maxlength="2000" placeholder="María López — 9&#10;José Pérez — 10 — Bogotá"></textarea></label>
         <button type="submit" class="button">Enviar puntajes</button><p id="ad-score-status" class="fine" role="status"></p>
         <p class="fine">Si al enviar sale un error, ejecuta una vez <code>supabase/actualizacion-puntajes.sql</code> en el SQL Editor de Supabase.</p>

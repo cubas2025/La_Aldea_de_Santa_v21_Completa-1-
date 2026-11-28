@@ -67,3 +67,8 @@
 
 #ad-score-form{max-width:640px;margin-bottom:18px}
 #ad-score-form textarea{width:100%}
+
+#ad-msg-form{max-width:640px;margin-bottom:18px}
+#ad-msg-form textarea{width:100%}
+.ad-msg-tipo{display:flex;flex-wrap:wrap;gap:8px 18px;margin:8px 0 12px}
+.ad-msg-tipo label{display:flex;align-items:center;gap:6px}
