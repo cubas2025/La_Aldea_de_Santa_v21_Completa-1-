@@ -112,14 +112,14 @@ const pools = {
     'Ayúdenme a llegar a la meta del en vivo: toquen la pantalla y sigan la cuenta. ¡Gracias!',
   ],
   nombres: [
-    '¡Pregunta importante! ¿Enviamos la actualización de los nombres a Santa? Escriban su nombre y su país en los comentarios y Estelvia los lleva a Santa Claus.',
-    'Estelvia, la guardiana de las cartas, está lista para enviar la actualización de nombres a Santa. ¡Escriban su nombre completo y desde dónde nos ven!',
-    '¿Quién quiere que su nombre llegue hoy al Polo Norte? Escríbanlo en el chat con su ciudad. ¡Enviamos la actualización de los nombres a Santa!',
-    'Miren abajo del quiz: ahí aparecen los nombres que Estelvia ya envió a Santa. ¿Quieren estar ahí? ¡Escriban su nombre y su país!',
-    'Estelvia me pregunta: ¿enviamos la actualización de los nombres a Santa? ¡Escriban «sí» en el chat y su nombre completo!',
-    'Los nombres que escriben en los comentarios van directo al bolso de cartas viajeras de Estelvia. ¡No olviden su ciudad!',
-    'Hoy Santa quiere conocer muchos nombres nuevos. ¡Escriban el suyo y el de sus hermanos en los comentarios!',
-    '¿Ya enviaron su nombre a Santa? Escríbanlo con su país y pronto aparecerá abajo del quiz.',
+    '¡Pregunta importante! ¿Enviamos la actualización de los nombres a Santa? Apóyenme con un regalito y su nombre entra a la Lista de los buenos: Estelvia lo lleva directo a Santa Claus.',
+    'Estelvia, la guardiana de las cartas, está lista para enviar la actualización de nombres a Santa. Con un regalito, su nombre pasa por la cinta dorada y se guarda en el Archivo mágico.',
+    '¿Quién quiere que su nombre llegue hoy al Polo Norte? Envíen un regalito y formen parte de la Lista de los buenos. ¡Muchas gracias por su apoyo!',
+    'Miren abajo del quiz: ahí pasan en letras doradas los nombres que entran a la Lista de los buenos. ¿Quieren estar ahí? ¡Apóyenme con un regalito!',
+    'Estelvia me pregunta: ¿enviamos la actualización de los nombres a Santa? Cada regalito suma un nombre a la Lista de los buenos.',
+    'Cada regalito es una cartita para Santa: Estelvia la sella con lacre y la guarda en el Archivo mágico. ¡Gracias de corazón!',
+    'Hoy Santa quiere conocer muchos nombres nuevos. Con un regalito, su nombre y su país entran a la Lista de los buenos.',
+    '¿Ya forman parte de la Lista de los buenos? Apóyenme con un regalito y muy pronto su nombre pasará por la cinta dorada.',
   ],
   animo: [
     'Recuerden: cada nuevo aprendizaje enciende una estrella en su corazón. ¡Y hoy vamos a encender muchas!',
@@ -221,7 +221,7 @@ const TIPOS = { apertura: '🎅 Sabelín te saluda', bienvenida: '👋 Bienvenid
   hora: '🕒 Hora de la aldea', reglas: '📜 Reglas', curioso: '💡 Dato curioso', nombres: '📝 Nombres para Santa', animo: '✨ Ánimo', regalos: '🎁 Regalitos',
   metas: '❤️ Meta del en vivo', final: '🚀 ¡A jugar!' };
 /* Bienvenidas cortas para el cintillo durante las preguntas. */
-const cintillo = ['👋 ¡Bienvenidos a los que se van uniendo al Quiz Navideño!', '📝 Escribe tu nombre y tu país: Estelvia los envía a Santa',
+const cintillo = ['👋 ¡Bienvenidos a los que se van uniendo al Quiz Navideño!', '🎁 Apóyame con tu regalito y forma parte de la Lista de los buenos',
   '🏆 Cuenta tus aciertos: al final de cada partida escribe tu puntaje', '📲 Comparte el en vivo con tu familia y amigos',
   '❤️ Toca la pantalla: ¡vamos por la meta de corazones!', '🎁 Gracias por cada regalito: así seguimos día y noche',
   '🌎 Escribe desde qué ciudad juegas y Sabelín te saluda'];
