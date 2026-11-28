@@ -339,3 +339,36 @@ body.embed .yt-controls{display:none}
 .yt-stage.vertical .ys-pop-card{margin:0 40px;padding:30px 32px}
 .yt-stage.vertical .ys-pop-text{font-size:52px}
 .yt-stage.vertical .ys-pop-champs span{font-size:38px}
+
+/* Cinta de nombres: pasan una sola vez de derecha a izquierda */
+.ys-names-move.once{animation:ys-once linear 1 forwards;padding-left:0}
+@keyframes ys-once{from{transform:translateX(var(--from,1400px))}to{transform:translateX(-100%)}}
+
+/* Cuentos en audio: avatar narrador y película de imágenes */
+.ys-av-frame{position:absolute;left:90px;top:170px;width:760px;height:760px;border-radius:28px;overflow:hidden;border:4px solid #ffe7b0;box-shadow:0 24px 60px #000b,0 0 40px #ffd65c44}
+.ys-av{position:absolute;inset:0}
+.ys-av video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .35s}
+.ys-av .ys-av-talk{opacity:0}.ys-av .ys-av-talk.on{opacity:1}
+.ys-av.mini{inset:auto;left:18px;bottom:18px;width:190px;height:190px;border-radius:50%;overflow:hidden;border:4px solid #ffd65c;box-shadow:0 10px 30px #000a,0 0 24px #ffd65c88;z-index:3}
+.ys-film{position:absolute;left:150px;top:140px;width:500px;height:880px;border-radius:26px;overflow:hidden;border:4px solid #ffe7b0;box-shadow:0 24px 60px #000c,0 0 50px #ffd65c44;background:#000}
+.ys-film img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.4s ease-in-out;will-change:transform,opacity}
+.ys-film img.on{opacity:1}
+.ys-film img.kb0{animation:kb0 14s ease-out both}.ys-film img.kb1{animation:kb1 14s ease-out both}.ys-film img.kb2{animation:kb2 14s ease-out both}.ys-film img.kb3{animation:kb3 14s ease-out both}
+@keyframes kb0{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.16) translate(-2%,-2%)}}
+@keyframes kb1{from{transform:scale(1.16) translate(2%,1%)}to{transform:scale(1.03) translate(0,0)}}
+@keyframes kb2{from{transform:scale(1.05) translate(0,3%)}to{transform:scale(1.15) translate(0,-3%)}}
+@keyframes kb3{from{transform:scale(1.12) translate(-2%,0)}to{transform:scale(1.04) translate(2%,0)}}
+.ys-film-glow{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 55%,#000a 100%),linear-gradient(180deg,#0000 70%,#0008);pointer-events:none;z-index:1}
+.ys-film-dust{position:absolute;inset:0;z-index:2;pointer-events:none;background-image:radial-gradient(2px 2px at 20% 30%,#fff8 50%,transparent),radial-gradient(2px 2px at 70% 60%,#ffe7b0aa 50%,transparent),radial-gradient(1.5px 1.5px at 40% 80%,#fff9 50%,transparent),radial-gradient(2px 2px at 85% 20%,#fff7 50%,transparent),radial-gradient(1.5px 1.5px at 55% 45%,#ffd65c99 50%,transparent);background-size:300px 300px;animation:ys-dust 18s linear infinite}
+@keyframes ys-dust{from{background-position:0 0}to{background-position:-300px 600px}}
+.ys-astory.film .ys-text{left:720px;right:auto;top:170px;width:1080px}
+.ys-astory .ys-text p{font-size:38px}
+.ys-prog{margin-top:22px;height:8px;border-radius:9px;background:#3a1a2022;overflow:hidden}
+.ys-prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#b9142b,#ffd65c);transition:width .3s linear}
+.ys-astory:not(.film) .ys-text{left:900px;right:auto;width:930px}
+.yt-stage.vertical .ys-av-frame{left:50%;top:230px;width:820px;height:820px;transform:translateX(-50%)}
+.yt-stage.vertical .ys-film{left:50%;top:200px;width:700px;height:1060px;transform:translateX(-50%)}
+.yt-stage.vertical .ys-astory.film .ys-text,.yt-stage.vertical .ys-astory:not(.film) .ys-text{left:50%;right:auto;top:auto;bottom:110px;width:980px;transform:translateX(-50%)}
+.yt-stage.vertical .ys-astory .ys-text p{font-size:33px}
+.yt-stage.vertical .ys-astory.film .ys-text h2{font-size:40px}
+.yt-stage.vertical .ys-av.mini{width:160px;height:160px}
