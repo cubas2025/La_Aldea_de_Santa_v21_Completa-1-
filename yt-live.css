@@ -322,3 +322,20 @@ body.embed .yt-controls{display:none}
 
 /* Episodios: pantalla limpia. Arriba solo «EN VIVO»; abajo los cuadros del contador y la hora */
 .yt-stage.episode .yt-ep,.yt-stage.episode .yt-brand,.yt-stage.episode .yt-from{display:none!important}
+
+/* Avisos al aire: campeones, frases y preguntas enviadas desde /admin */
+.ys-pop{position:absolute;inset:0;z-index:9;display:grid;place-items:center;background:radial-gradient(closest-side,#0008,#0004 70%,transparent);animation:ys-in .5s ease-out;pointer-events:none}
+.ys-pop.out{opacity:0;transition:opacity .6s}
+.ys-pop-card{max-width:1300px;margin:0 60px;padding:34px 48px;border-radius:30px;background:linear-gradient(160deg,#fffaf0f8,#fff1dcf5);color:#3a1a20;border:4px solid #ffd65c;box-shadow:0 30px 80px #000c,0 0 60px #ffd65c66;text-align:center;animation:ys-popin .7s cubic-bezier(.2,1.4,.4,1)}
+@keyframes ys-popin{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+.ys-pop-card .ys-chip{font-size:26px}
+.ys-pop-text{margin:18px 0 0;font-size:58px;font-weight:800;line-height:1.2}
+.ys-pop-foot{margin:18px 0 0;font-size:32px;font-weight:900;color:#b9142b}
+.ys-pop-champs{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 18px;margin-top:22px}
+.ys-pop-champs span{padding:10px 24px;border-radius:999px;background:linear-gradient(135deg,#7a0d1d,#b9142b);color:#fff;font-size:42px;font-weight:800}
+.ys-pop-champs b{color:#ffd65c}
+.ys-pop-champs small{font-size:26px;color:#ffe7b0}
+.ys-pop-preg .ys-pop-card{border-color:#5fd18b;box-shadow:0 30px 80px #000c,0 0 60px #5fd18b66}
+.yt-stage.vertical .ys-pop-card{margin:0 40px;padding:30px 32px}
+.yt-stage.vertical .ys-pop-text{font-size:52px}
+.yt-stage.vertical .ys-pop-champs span{font-size:38px}

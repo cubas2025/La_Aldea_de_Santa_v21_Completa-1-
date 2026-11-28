@@ -154,6 +154,15 @@ $('#ad-air-form').addEventListener('submit',async e=>{
   f.nombre.value='';st.textContent=`✓ Enviado${rows.length>1?`s ${rows.length} nombres`:''}. Santa lo dirá en el en vivo.`;loadAir();f.nombre.focus();
 });
 
+/* Frases y preguntas para el público: salen al instante y se leen en voz alta. */
+$('#ad-msg-form').addEventListener('submit',async e=>{
+  e.preventDefault();const f=e.target,st=$('#ad-msg-status'),texto=f.texto.value.trim().slice(0,300),tipo=f.tipo.value==='pregunta'?'pregunta':'frase';
+  if(!texto){st.textContent='Escribe la frase o la pregunta.';return;}
+  st.textContent='Enviando…';const {error}=await sb.from('mensajes_aire').insert({texto,tipo});
+  if(error){st.textContent='No se pudo enviar. ¿Ejecutaste supabase/actualizacion-mensajes.sql?';return;}
+  f.texto.value='';st.textContent=`✓ ${tipo==='pregunta'?'Pregunta enviada':'Frase enviada'}: ya está saliendo en la transmisión.`;toast('Enviado al aire.');
+});
+
 /* Campeones de la partida: «Nombre — puntaje» o «Nombre — puntaje — lugar», uno por línea. */
 $('#ad-score-form').addEventListener('submit',async e=>{
   e.preventDefault();const f=e.target,st=$('#ad-score-status');
@@ -162,7 +171,7 @@ $('#ad-score-form').addEventListener('submit',async e=>{
   if(!rows.length){st.textContent='Escribe una línea por persona: «María López — 9».';return;}
   st.textContent='Enviando…';const {error}=await sb.from('puntajes_quiz').insert(rows);
   if(error){st.textContent='No se pudo enviar. ¿Ejecutaste supabase/actualizacion-puntajes.sql?';return;}
-  f.puntajes.value='';st.textContent=`✓ ${rows.length===1?'Enviado':`Enviados ${rows.length} campeones`}. Sabelín los felicitará en vivo.`;toast('Campeones enviados.');
+  f.puntajes.value='';st.textContent=`✓ ${rows.length===1?'Enviado':`Enviados ${rows.length} campeones`}. Ya están saliendo en la transmisión.`;toast('Campeones enviados.');
 });
 
 /* Actualización de nombres con Estelvia: una línea por persona, «Nombre — Lugar». */
